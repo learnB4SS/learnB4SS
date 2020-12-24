@@ -1,0 +1,93 @@
+---
+title: "How to install brms and dependecies"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{How to install brms and dependecies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE, eval = FALSE
+)
+```
+
+# Introduction
+
+When you fit a model with brms, the package calls [Rstan](https://mc-stan.org/users/interfaces/rstan) which is an R interface to the statistical programming language [Stan](https://mc-stan.org).
+
+The nice thing about brms is that it uses a syntax for specifying model formulae that is based on the syntax of the commonly known lme4 package.
+The lme4-like syntax of brms is converted into Stan code automatically, so you won't have to learn Stan.^[brms is *very* flexible, but if you need to fit highly customised models (e.g., ...), then learning Stan is recommended. It is possible to get the Stan code from the brms syntax and modify it to your liking before running it, all from within R.]
+
+Stan is built in the programming language C++ and models have to be compiled using C++ to be run.
+This is all taken care of by brms, so you just need to run `brm(...)` and brms will do its magic.
+
+However, since the models have to be compiled in C++, you need to set up your computer so that it can use C++.
+This has to be done only once, before installing brms, and the procedure depends on your operating system.
+
+The following sections explain, for different OSs, how to:
+
+1. Configure the C++ toolchain.
+2. Install Rstan (and Stan).
+3. Install brms.
+
+# macOS
+
+## Configure the C++ toolchain
+
+<https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac>
+
+<https://github.com/rmacoslib/r-macos-rtools>
+
+## Install Rstan
+
+```{r}
+remove.packages("rstan")
+if (file.exists(".RData")) file.remove(".RData")
+```
+
+Restart R.
+
+If you are using R 3.x, you need to build Rstan from source:
+
+<https://github.com/stan-dev/rstan/wiki/Installing-RStan-from-Source#mac>
+
+If you are using R 4.x (recommended), just run:
+
+```{r}
+install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
+```
+
+Now, verify the installation by running:
+
+```{r}
+example(stan_model, package = "rstan", run.dontrun = TRUE)
+```
+
+If the model compiles and samples, you are set.
+In case you get the following warning, it is safe to ignore.
+
+```{r}
+Warning message:
+In system(paste(CXX, ARGS), ignore.stdout = TRUE, ignore.stderr = TRUE) :
+  'C:/rtools40/usr/mingw_/bin/g++' not found
+```
+
+## Install brms
+
+Install brms from CRAN simply with:
+
+```{r}
+install.packages("brms")
+```
+
+
+# Windows
+
+# Linux
