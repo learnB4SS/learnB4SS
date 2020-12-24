@@ -37,6 +37,9 @@ The following sections explain, for different OSs, how to:
 2. Install Rstan (and Stan).
 3. Install brms.
 
+We **strongly** recommend you to update R to 4.x and RStudio to the latest release.
+This combo will ensure a smoother installation process and use.
+
 # macOS
 
 ## Configure the C++ toolchain
@@ -47,6 +50,8 @@ The following sections explain, for different OSs, how to:
 
 ## Install Rstan
 
+Just in case you previously tried to install Rstan without success, run the following code to clean installations and configuration files.
+
 ```{r}
 remove.packages("rstan")
 if (file.exists(".RData")) file.remove(".RData")
@@ -54,11 +59,10 @@ if (file.exists(".RData")) file.remove(".RData")
 
 Restart R.
 
-If you are using R 3.x, you need to build Rstan from source:
+**If you are using R 3.x**, you need to build Rstan from source.
+You can do that by following the instructions at this address: <https://github.com/stan-dev/rstan/wiki/Installing-RStan-from-Source#mac>.
 
-<https://github.com/stan-dev/rstan/wiki/Installing-RStan-from-Source#mac>
-
-If you are using R 4.x (recommended), just run:
+**If you are using R 4.x (recommended)**, just run:
 
 ```{r}
 install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
@@ -70,8 +74,8 @@ Now, verify the installation by running:
 example(stan_model, package = "rstan", run.dontrun = TRUE)
 ```
 
-If the model compiles and samples, you are set.
-In case you get the following warning, it is safe to ignore.
+If the model compiles and starts sampling, you are set.
+In case you get the following warning, it is safe to ignore it.
 
 ```{r}
 Warning message:
@@ -87,6 +91,7 @@ Install brms from CRAN simply with:
 install.packages("brms")
 ```
 
+The end.
 
 # Windows
 
