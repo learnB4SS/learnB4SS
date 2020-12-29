@@ -44,9 +44,7 @@ This combo will ensure a smoother installation process and use.
 
 ## Configure the C++ toolchain
 
-<https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac>
-
-<https://github.com/rmacoslib/r-macos-rtools>
+To configure the C++ toolchain, see: <https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac>.
 
 ## Install Rstan
 
@@ -95,4 +93,68 @@ The end.
 
 # Windows
 
+## Configure the C++ toolchain
+
+To configure the C++ toolchain, follow the instructions here for you R version (3.6 or 4.0): <https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Windows>.
+
+## Install Rstan
+
+Just in case you previously tried to install Rstan without success, run the following code to clean installations and configuration files.
+
+```{r}
+remove.packages("rstan")
+if (file.exists(".RData")) file.remove(".RData")
+```
+
+Restart R.
+
+Then just run:
+
+```{r}
+install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
+```
+
+Now, verify the installation by running:
+
+```{r}
+example(stan_model, package = "rstan", run.dontrun = TRUE)
+```
+
+If the model compiles and starts sampling, you are set.
+In case you get the following warning, it is safe to ignore it.
+
+```{r}
+# Warning message:
+# In system(paste(CXX, ARGS), ignore.stdout = TRUE, ignore.stderr = TRUE) :
+#  'C:/rtools40/usr/mingw_/bin/g++' not found
+```
+
+## Install brms
+
+Install brms from CRAN simply with:
+
+```{r}
+install.packages("brms")
+```
+
+The end.
+
 # Linux
+
+## Install Rstan and configure the C++ toolchain
+
+On Linux, you have the option to install a pre-built Rstan binary or to build it from source.
+
+If you decide to install the **pre-built binary**, follow the instructions here: <https://github.com/stan-dev/rstan/wiki/Configuring-C-Toolchain-for-Linux>, and you will have Rstan.
+
+If you would rather **build it from source**, then:
+
+- follow the instructions here (as above): <https://github.com/stan-dev/rstan/wiki/Configuring-C-Toolchain-for-Linux>- and then build from source by following the instructions here: <https://github.com/stan-dev/rstan/wiki/Installing-RStan-from-Source#linux>
+
+## Install brms
+
+Install brms from CRAN simply with:
+
+```{r}
+install.packages("brms")
+```
