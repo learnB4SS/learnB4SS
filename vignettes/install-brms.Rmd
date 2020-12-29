@@ -78,9 +78,9 @@ If the model compiles and starts sampling, you are set.
 In case you get the following warning, it is safe to ignore it.
 
 ```{r}
-Warning message:
-In system(paste(CXX, ARGS), ignore.stdout = TRUE, ignore.stderr = TRUE) :
-  'C:/rtools40/usr/mingw_/bin/g++' not found
+# Warning message:
+# In system(paste(CXX, ARGS), ignore.stdout = TRUE, ignore.stderr = TRUE) :
+#  'C:/rtools40/usr/mingw_/bin/g++' not found
 ```
 
 ## Install brms
