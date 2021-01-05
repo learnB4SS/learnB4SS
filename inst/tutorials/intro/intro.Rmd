@@ -7,34 +7,64 @@ runtime: shiny_prerendered
 ```{r setup, include=FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(brms)
+library(bayes.handson)
+data("songs")
 ```
 
 
-## Topic 1
+## Fit your first Bayesian regression
 
-### Exercise 
+### Taking the leap
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+<!-- TODO: a few sentences about what skills you need and what you already know (like lme4 syntax, etc...) -->
 
-Write the R code required to add two plus two:
+Welcome! Here...
 
-```{r two-plus-two, exercise=TRUE}
+<!-- <a href="#" data-toggle="tooltip" title="Hooray!">Hover over me</a> -->
+<!-- <a href="#" data-toggle="popover" data-trigger="hover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a> -->
 
+### Dance to the tune 
+
+Since the complexity of Bayesian statistics can be intimidating at first, we would like to show you, in fact, how straightforward it is to fit a Bayesian regression with brms.
+
+To this aim, we will use a dataset from the Spotify Web API containing musical attributes of tracks released between 1921 and 2020.
+
+```{r songs}
+songs
 ```
 
-### Exercise with Code
+The `songs` dataframe contains a sample of 5000 songs.
+Each song is given two scores:
 
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+- speechiness: amount of spoken/sung words in the song. A value between 0 and 1.
+- danceability: degree of suitability of the song for dancing. A value between 0 and 1.
 
-Now write a function that adds any two numbers and then call it:
+You can find more info with `?songs`.
 
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
+What we want to know is whether speechiness and danceability are correlated.
+In the frequentist world you would proceed by fitting a linear regression, like:
+
+```{r songs-lm, eval=FALSE, include=TRUE}
+lm(danceability ~ speechiness, data = songs)
 ```
 
-## Topic 2
+If you wanna turn Bayesian, it's easy!
+The next section will show you how.
+
+### Fit the model with `brm()`
+
+If you want to run a Bayesian regression model, just replace `lm()` with `brm()` from the brms package!
+
+```{r songs-bm, exercise=TRUE}
+songs_bm <- lm(danceability ~ speechiness, data = songs)
+# this won't wok for now, it's just an example
+```
+
+
+
+## Exercises examples
 
 ### Exercise with Hint
 
@@ -72,3 +102,13 @@ quiz(
   )
 )
 ```
+
+
+<!-- <script> -->
+<!-- $(document).ready(function(){ -->
+<!--   $('[data-toggle="popover"]').popover();  -->
+<!-- }); -->
+<!-- $(document).ready(function(){ -->
+<!--   $('[data-toggle="tooltip"]').tooltip();  -->
+<!-- }); -->
+<!-- </script> -->
