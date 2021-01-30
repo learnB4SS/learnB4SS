@@ -59,7 +59,6 @@ brm <- function(formula, data) {
   for (line in brm_msg) {
     cat(line)
     cat("\n")
-    Sys.sleep(1)
   }
 }
 ```
