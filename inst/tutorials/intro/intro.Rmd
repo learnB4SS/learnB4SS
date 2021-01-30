@@ -9,8 +9,9 @@ library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(brms)
-library(bayes.handson)
-data("songs")
+library(learnB4SS)
+data("dataset")
+brm_msg <- read_lines(system.file("extdata/brm-sampling.txt", package = "learnB4SS"))
 ```
 
 
@@ -29,25 +30,21 @@ Welcome! Here...
 
 Since the complexity of Bayesian statistics can be intimidating at first, we would like to show you, in fact, how straightforward it is to fit a Bayesian regression with brms.
 
-To this aim, we will use a dataset from the Spotify Web API containing musical attributes of tracks released between 1921 and 2020.
+To this aim, we will use a dataset from .
 
-```{r songs}
-songs
+```{r dataset}
+dataset
 ```
 
-The `songs` dataframe contains a sample of 5000 songs.
-Each song is given two scores:
+The `dataset` dataframe contains .
 
-- speechiness: amount of spoken/sung words in the song. A value between 0 and 1.
-- danceability: degree of suitability of the song for dancing. A value between 0 and 1.
+You can find more info with `?dataset`.
 
-You can find more info with `?songs`.
+What we want to know is whether .
+In the frequentist world, you would proceed by fitting a linear regression, like:
 
-What we want to know is whether speechiness and danceability are correlated.
-In the frequentist world you would proceed by fitting a linear regression, like:
-
-```{r songs-lm, eval=FALSE, include=TRUE}
-lm(danceability ~ speechiness, data = songs)
+```{r attitude-lm, exercise=TRUE}
+attitude_lm <- lm(f0mn ~ attitude, data = dataset)
 ```
 
 If you wanna turn Bayesian, it's easy!
@@ -57,9 +54,20 @@ The next section will show you how.
 
 If you want to run a Bayesian regression model, just replace `lm()` with `brm()` from the brms package!
 
-```{r songs-bm, exercise=TRUE}
-songs_bm <- lm(danceability ~ speechiness, data = songs)
-# this won't wok for now, it's just an example
+```{r include=FALSE}
+brm <- function(formula, data) {
+  for (line in brm_msg) {
+    cat(line)
+    cat("\n")
+    Sys.sleep(1)
+  }
+}
+```
+
+
+```{r attitude-bm, exercise=TRUE}
+attitude_bm <- brm(f0mn ~ attitude, data = dataset)
+
 ```
 
 
