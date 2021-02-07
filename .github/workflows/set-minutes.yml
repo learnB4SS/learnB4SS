@@ -24,5 +24,5 @@ jobs:
       if: |
         contains(github.event.issue.title, 'Minutes')
       with:
-        project: 'https://github.com/stefanocoretta/bayes.handson/projects/1'
+        project: 'https://github.com/learnB4SS/learnB4SS/projects/1'
         column_name: 'Current'
