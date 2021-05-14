@@ -1,0 +1,50 @@
+name: Manage issues
+
+on:
+  issues:
+    types: [opened, labeled, assigned]
+
+jobs:
+  set-meeting-label:
+    name: Set label of Meeting issues to meetings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Naturalclar/issue-action@v2.0.2
+        if: github.event.action == 'opened'
+        with:
+          title-or-body: "title"
+          parameters: '[ {"keywords": ["Meeting"], "labels": ["meeting"]}]'
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+  set-meeting-project:
+    name: Set project of Meeting issues to Meetings
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: srggrs/assign-one-project-github-action@1.2.0
+        if: |
+          github.event.action == 'opened' &&
+          contains(github.event.issue.title, 'Meeting')
+        with:
+          # CHANGE PROJECT URL
+          project: 'https://github.com/many-speech-analyses/many_analyses/projects/1'
+          column_name: 'Next'
+
+  set-task-project:
+    name: Set project of Task issues to Task board Triage
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: srggrs/assign-one-project-github-action@1.2.0
+        if: |
+          github.event.action == 'labeled' &&
+          (
+            contains(github.event.issue.labels.*.name, 'todo') ||
+            contains(github.event.issue.labels.*.name, 'discussion')
+          )
+        with:
+          # CHANGE PROJECT URL
+          project: 'https://github.com/learnB4SS/learnB4SS/projects/2'
+          column_name: 'Assigned'
