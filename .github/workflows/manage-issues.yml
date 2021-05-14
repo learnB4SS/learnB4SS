@@ -47,4 +47,4 @@ jobs:
         with:
           # CHANGE PROJECT URL
           project: 'https://github.com/learnB4SS/learnB4SS/projects/2'
-          column_name: 'Assigned'
+          column_name: 'Triage'
