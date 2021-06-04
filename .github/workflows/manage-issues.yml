@@ -28,7 +28,7 @@ jobs:
           contains(github.event.issue.title, 'Meeting')
         with:
           # CHANGE PROJECT URL
-          project: 'https://github.com/many-speech-analyses/many_analyses/projects/1'
+          project: 'https://github.com/orgs/learnB4SS/projects/2'
           column_name: 'Next'
 
   set-task-project:
@@ -46,5 +46,5 @@ jobs:
           )
         with:
           # CHANGE PROJECT URL
-          project: 'https://github.com/learnB4SS/learnB4SS/projects/2'
-          column_name: 'Triage'
+          project: 'https://github.com/orgs/learnB4SS/projects/1'
+          column_name: 'To do'
