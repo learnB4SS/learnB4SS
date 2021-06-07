@@ -1,11 +1,15 @@
 Package: learnB4SS
 Type: Package
-Title: Workshop materials for learnB4SS
+Title: Learning materials for the learnB4SS Workshop
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Date: 2021-06-07
+Authors@R:
+    person(given = "Stefano",
+           family = "Coretta",
+           role = c("aut", "cre"),
+           email = paste0("stefano.coretta", "@", "gmail.com"),
+           comment = c(ORCID = "0000-0001-9627-5532"))
+Description: Learn Bayesian analysis for the Speech Sciences in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
