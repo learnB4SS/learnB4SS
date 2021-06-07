@@ -19,7 +19,7 @@ jobs:
   set-meeting-project:
     name: Set project of Meeting issues to Meetings
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - uses: srggrs/assign-one-project-github-action@1.2.0
@@ -34,7 +34,7 @@ jobs:
   set-task-project:
     name: Set project of Task issues to Task board Triage
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
       - uses: srggrs/assign-one-project-github-action@1.2.0
