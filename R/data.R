@@ -4,8 +4,34 @@
 #'
 #' @format A \code{\link[tibble]{tibble}} with 224 rows and 29 variables:
 #'   \describe{
-#'     \item{index}{...}
+#'     \item{index}{Index of trial.}
 #'     \item{subject}{Subject ID.}
+#'     \item{gender}{Gender.}
+#'     \item{birthplace}{Birth place.}
+#'     \item{musicstudent}{Is the subject a student of music?}
+#'     \item{years_in_ger}{Years spent in Germany.}
+#'     \item{scenario}{}
+#'     \item{task}{}
+#'     \item{attitude}{Attitude (\code{pol}ite vs \code{inf}ormal).}
+#'     \item{total_duration}{}
+#'     \item{articulation_rate}{}
+#'     \item{f0mn}{}
+#'     \item{f0sd}{}
+#'     \item{f0range}{}
+#'     \item{inmn}{}
+#'     \item{insd}{}
+#'     \item{inrange}{}
+#'     \item{shimmer}{}
+#'     \item{jitter}{}
+#'     \item{HNRmn}{}
+#'     \item{H1H2}{}
+#'     \item{breath_count}{}
+#'     \item{filler_count}{}
+#'     \item{hiss_count}{}
+#'     \item{nasal_count}{}
+#'     \item{sil_count}{}
+#'     \item{ya_count}{}
+#'     \item{yey_count}{}
 #'  }
 #' @source ...
 #'
