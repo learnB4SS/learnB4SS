@@ -37,14 +37,45 @@ The following sections explain, for different OSs, how to:
 2. Install Rstan (and Stan).
 3. Install brms.
 
-We **strongly** recommend you to update R to 4.x and RStudio to the latest release.
+⚠️ **IMPORTANT!** We <u>**very strongly**</u> recommend you to **update R to 4.x and RStudio to the latest** release.
 This combo will ensure a smoother installation process and use.
+We will not be able to provide support for R versions earlier than 4.0.
+
+**If you get stuck** at any point in the installation process, please contact us at learb4ss@gmail.com as soon as possible.
+<u>*It is of out-most importance that by the start of the workshop everything works fine on your computer*</u>, so we very strongly recommend to go through the installation process as early as possible (e.g. at least two weeks prior to the workshop).
+
 
 # macOS
 
 ## Configure the C++ toolchain
 
-To configure the C++ toolchain, see: <https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac>.
+To configure the C++ toolchain on macOS, you just need to install the Xcode Command Line Tools and `gfortran`.
+
+First, if you have the files `~/.R/Makevars` and/or `~/.Renviron`, save a copy in a different location (like your desktop) and delete them.
+If you have important configurations you want to keep, you can try to put the files back **after** you completed the installation of brms and checked that everything works fine.
+
+To install the **Xcode Command Line Tools**, run the following in the terminal:
+
+```
+xcode-select --install
+```
+
+macOS will download and install the Xcode CLT (it will take a while, make sure you have a stable internet connection).
+
+You need to install **gfortran v8.2** (for Mojave) <u>**independent of your macOS version**</u>.
+You can download the installer from <https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/8.2>.
+
+Now you can set some compiler optimisations to improve compilation speed.
+In the R console, run:
+
+```r
+dotR <- file.path(Sys.getenv("HOME"), ".R")
+if (!file.exists(dotR)) dir.create(dotR)
+M <- file.path(dotR, "Makevars")
+if (!file.exists(M)) file.create(M)
+cat("\nCXX14FLAGS += -O3 -mtune=native -arch x86_64 -ftemplate-depth-256",
+    file = M, sep = "\n", append = FALSE)
+```
 
 ## Install Rstan
 
@@ -55,12 +86,9 @@ remove.packages("rstan")
 if (file.exists(".RData")) file.remove(".RData")
 ```
 
-Restart R.
+<u>Restart R</u>.
 
-**If you are using R 3.x**, you need to build Rstan from source.
-You can do that by following the instructions at this address: <https://github.com/stan-dev/rstan/wiki/Installing-RStan-from-Source#mac>.
-
-**If you are using R 4.x (recommended)**, just run:
+Assuming you are using R 4.0 or later, just run in the R console:
 
 ```{r}
 install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
