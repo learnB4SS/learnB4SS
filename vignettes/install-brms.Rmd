@@ -37,6 +37,8 @@ The following sections explain, for different OSs, how to:
 2. Install Rstan (and Stan).
 3. Install brms.
 
+# Prerequisites and help
+
 ⚠️ **IMPORTANT!** We <u>**very strongly**</u> recommend you to **update R to 4.x and RStudio to the latest** release.
 This combo will ensure a smoother installation process and use.
 We will not be able to provide support for R versions earlier than 4.0.
@@ -52,9 +54,13 @@ We will not be able to provide support for R versions earlier than 4.0.
 To configure the C++ toolchain on macOS, you just need to install the Xcode Command Line Tools and `gfortran`.
 
 First, if you have the files `~/.R/Makevars` and/or `~/.Renviron`, save a copy in a different location (like your desktop) and delete them.
+
+If you don't know what these files are or if you have them, go to `Finder > Go > Home`, which takes you to your home directory, and press `SHIFT + CMD + .` to show hidden files (i.e. files starting with a full stop `.`) if you can't see them already.
+Now search among the hidden files and if you see a folder named `.R/` and/or a file `.Renviron`, copy them to your desktop and delete the original copies from your home directory.
+
 If you have important configurations you want to keep, you can try to put the files back **after** you completed the installation of brms and checked that everything works fine.
 
-To install the **Xcode Command Line Tools**, run the following in the terminal:
+To install the **Xcode Command Line Tools**, run the following in the Terminal (open `Finder > Applications > Terminal`, type in the following command and press `ENTER`):
 
 ```
 xcode-select --install
@@ -65,7 +71,7 @@ macOS will download and install the Xcode CLT (it will take a while, make sure y
 You need to install **gfortran v8.2** (for Mojave) <u>**independent of your macOS version**</u>.
 You can download the installer from <https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/8.2>.
 
-Now you can set some compiler optimisations to improve compilation speed.
+Now you can set some compiler optimisations to improve compilation speed (optional).
 In the R console, run:
 
 ```r
@@ -86,7 +92,7 @@ remove.packages("rstan")
 if (file.exists(".RData")) file.remove(".RData")
 ```
 
-<u>Restart R</u>.
+Restart R.
 
 Assuming you are using R 4.0 or later, just run in the R console:
 
@@ -100,7 +106,13 @@ Now, verify the installation by running:
 example(stan_model, package = "rstan", run.dontrun = TRUE)
 ```
 
-If the model compiles and starts sampling, you are set.
+If the model compiles and starts sampling like in the gif below, you are set.
+
+```{r rstan-gif, echo=FALSE, out.width="400px", eval=TRUE, fig.align='center'}
+knitr::include_graphics("rstan.gif")
+```
+
+
 In case you get the following warning, it is safe to ignore it.
 
 ```{r}
@@ -117,13 +129,13 @@ Install brms from CRAN simply with:
 install.packages("brms")
 ```
 
-The end.
+🎉 Congrats! You are now ready to run Bayesian regressions.
 
 # Windows
 
 ## Configure the C++ toolchain
 
-To configure the C++ toolchain, follow the instructions here for you R version (3.6 or 4.0): <https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Windows>.
+To configure the C++ toolchain, follow the instructions here for your R version (3.6 or 4.0): <https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Windows>.
 
 ## Install Rstan
 
@@ -148,7 +160,12 @@ Now, verify the installation by running:
 example(stan_model, package = "rstan", run.dontrun = TRUE)
 ```
 
-If the model compiles and starts sampling, you are set.
+If the model compiles and starts sampling like in the gif below, you are set.
+
+```{r rstan-gif-2, echo=FALSE, out.width="400px", eval=TRUE, fig.align='center'}
+knitr::include_graphics("rstan.gif")
+```
+
 In case you get the following warning, it is safe to ignore it.
 
 ```{r}
@@ -165,7 +182,7 @@ Install brms from CRAN simply with:
 install.packages("brms")
 ```
 
-The end.
+🎉 Congrats! You are now ready to run Bayesian regressions.
 
 # Linux
 
@@ -186,3 +203,5 @@ Install brms from CRAN simply with:
 ```{r}
 install.packages("brms")
 ```
+
+🎉 Congrats! You are now ready to run Bayesian regressions.
