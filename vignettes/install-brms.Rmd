@@ -30,22 +30,31 @@ This is all taken care of by brms, so you just need to run `brm(...)` and brms w
 
 However, since the models have to be compiled in C++, you need to set up your computer so that it can use C++.
 This has to be done only once, before installing brms, and the procedure depends on your operating system.
+Continue reading for detailed instructions.
 
-The following sections explain, for different OSs, how to:
+# Getting help
 
-1. Configure the C++ toolchain.
-2. Install Rstan (and Stan).
-3. Install brms.
+**If you get stuck** at any point in the installation process, please contact us at learb4ss@gmail.com as soon as possible.
+<u>*It is of out-most importance that by the start of the workshop everything works fine on your computer*</u>, so we very strongly recommend to go through the installation process as early as possible (e.g. at least two weeks prior to the workshop).
 
-# Prerequisites and help
+# R and RStudio
 
 ⚠️ **IMPORTANT!** We <u>**very strongly**</u> recommend you to **update R to 4.x and RStudio to the latest** release.
 This combo will ensure a smoother installation process and use.
 We will not be able to provide support for R versions earlier than 4.0.
 
-**If you get stuck** at any point in the installation process, please contact us at learb4ss@gmail.com as soon as possible.
-<u>*It is of out-most importance that by the start of the workshop everything works fine on your computer*</u>, so we very strongly recommend to go through the installation process as early as possible (e.g. at least two weeks prior to the workshop).
+To **install/update R**, find the installation disk depending on your operating system here: <https://cloud.r-project.org>.
 
+We also highly recommend installing RStudio, as we will provide you with interactive RMarkdown files as additional resources that are best viewed and used in RStudio.
+Please, **download RStudio** or update it to the latest version: <https://www.rstudio.com/products/rstudio/download/#download>.
+
+The following sections explain how to configure and install further software that will be necessary for workshop activities.
+The instructions vary depending on your operating system, so check out the section that is relevant to you.
+You will perform the following steps:
+
+1. Configure the C++ toolchain (needed for Stan).
+2. Install Rstan (and Stan).
+3. Install brms.
 
 # macOS
 
