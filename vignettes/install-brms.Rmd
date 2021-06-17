@@ -43,7 +43,7 @@ Continue reading for detailed instructions.
 This combo will ensure a smoother installation process and use.
 We will not be able to provide support for R versions earlier than 4.0.
 
-To **install/update R**, find the installation disk depending on your operating system here: <https://cloud.r-project.org>.
+To **install/update R**, find the installation disk depending on your operating system here: <https://cloud.r-project.org>. (If you have macOS with an M1 chip, make sure to install R 4.1.0 for arm64)
 
 We also highly recommend installing RStudio, as we will provide you with interactive RMarkdown files as additional resources that are best viewed and used in RStudio.
 Please, **download RStudio** or update it to the latest version: <https://www.rstudio.com/products/rstudio/download/#download>.
@@ -77,8 +77,10 @@ xcode-select --install
 
 macOS will download and install the Xcode CLT (it will take a while, make sure you have a stable internet connection).
 
-You need to install **gfortran v8.2** (for Mojave) <u>**independent of your macOS version**</u>.
+If your Mac has an Intel chip, you need to install **gfortran v8.2** (for Mojave) <u>**independent of your macOS version**</u>.
 You can download the installer from <https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/8.2>.
+
+If your Mac has an Apple M1 chip, you will need to install **gfortran v11**. You can download it from here: <https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/11-arm-alpha2> (download the `.pkg` package listed under Assets at the bottom of the page).
 
 Now you can set some compiler optimisations to improve compilation speed (optional).
 In the R console, run:
@@ -106,7 +108,7 @@ Restart R.
 Assuming you are using R 4.0 or later, just run in the R console:
 
 ```{r}
-install.packages("rstan", repos = "https://cloud.r-project.org/", dependencies = TRUE)
+install.packages("rstan")
 ```
 
 Now, verify the installation by running:
