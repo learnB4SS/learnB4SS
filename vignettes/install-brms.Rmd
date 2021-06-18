@@ -34,7 +34,7 @@ Continue reading for detailed instructions.
 
 # Getting help
 
-**If you get stuck** at any point in the installation process, please contact us at learb4ss@gmail.com as soon as possible.
+**If you get stuck** at any point in the installation process, please contact us at learnb4ss@gmail.com as soon as possible.
 <u>*It is of out-most importance that by the start of the workshop everything works fine on your computer*</u>, so we very strongly recommend to go through the installation process as early as possible (e.g. at least two weeks prior to the workshop).
 
 # R and RStudio
