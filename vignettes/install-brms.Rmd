@@ -226,4 +226,6 @@ If you do not have them, please install them once you have finished the steps ou
 install.packages("tidyverse")
 install.packages("tidybayes")
 install.packages("bayesTestR")
+install.packages("parameters")
+install.packages("see")
 ```
