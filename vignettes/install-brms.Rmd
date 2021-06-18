@@ -216,3 +216,14 @@ install.packages("brms")
 ```
 
 🎉 Congrats! You are now ready to run Bayesian regressions.
+
+## Additional packages
+
+These are some additional packages that we will be using. 
+If you do not have them, please install them once you have finished the steps outlined above. 
+
+```{r}
+install.packages("tidyverse")
+install.packages("tidybayes")
+install.packages("bayesTestR")
+```
