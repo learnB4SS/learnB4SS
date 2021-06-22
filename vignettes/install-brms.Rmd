@@ -56,6 +56,8 @@ You will perform the following steps:
 2. Install Rstan (and Stan).
 3. Install brms.
 
+If you have already installed brms and its dependencies before, then you can skip the installation and just check that everything works by running `example(stan_model, package = "rstan", run.dontrun = TRUE)` in the console.
+
 # macOS
 
 ## Configure the C++ toolchain
