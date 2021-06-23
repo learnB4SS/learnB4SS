@@ -1,6 +1,6 @@
-#' Dataset title.
+#' The phonetic profile of Korean formal and infromal speech registers.
 #'
-#' A tibble ...
+#' This tibble contains data from the study discussed in Winter and Grawunder 2012.
 #'
 #' @format A \code{\link[tibble]{tibble}} with 224 rows and 29 variables:
 #'   \describe{
@@ -8,10 +8,13 @@
 #'     \item{gender}{Gender of subject [categorical].}
 #'     \item{birthplace}{Birth place of subject [categorical].}
 #'     \item{musicstudent}{Does the subject have music training? [binary: yes, no]}
-#'     \item{scenario}{}
-#'     \item{task}{}
-#'     \item{attitude}{Attitude (binary: \code{pol}ite vs \code{inf}ormal).}
-#'     \item{total_duration}{}
+#'     \item{scenario}{Unique identifier of different items.}
+#'     \item{task}{Task type [categorical: \code{not} = mailbox task vs
+#'        \code{dct} = discourse completion task]. In the mailbox task people
+#'        left a note on somebody's mailbox, while in the discourse completion
+#'        task they were prompted to role-play the start of a conversation.}
+#'     \item{attitude}{Attitude [binary: \code{pol}ite vs \code{inf}ormal].}
+#'     \item{total_duration}{Total duration of utterances in seconds [numeric].}
 #'     \item{articulation_rate}{Number of syllables per second [numeric].}
 #'     \item{f0mn}{Mean fundamental frequency (f0) [numeric].}
 #'     \item{f0sd}{Stadard deviation of fundamental frequency [numeric].}
@@ -31,6 +34,8 @@
 #'     \item{ya_count}{Number of occurences of interjection "ya" (informal) [count].}
 #'     \item{yey_count}{Number of occurences of interjection "yey" (polite) [count].}
 #'  }
-#' @source ...
+#' @source Bodo Winter, Sven Grawunder. 2012. The phonetic profile of Korean
+#'     formal and informal speech registers, Journal of Phonetics 40(6). 808-815.
+#'     https://doi.org/10.1016/j.wocn.2012.08.006
 #'
-"dataset"
+"b4ss_data"

@@ -1,0 +1,20 @@
+---
+title: "Application to regression II - The prior and Bayesian updating"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Application to regression II - The prior and Bayesian updating}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(learnB4SS)
+```
+

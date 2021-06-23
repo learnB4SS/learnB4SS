@@ -1,11 +1,11 @@
 library(tidyverse)
 
-# Dataset ----
+# B4SS data ----
 
-dataset <- read_csv(here::here("data-raw/dataset.csv")) %>%
+b4ss_data <- read_csv(here::here("data-raw/dataset.csv")) %>%
   arrange(index) %>%
   select(-index, -years_in_ger)
 
-usethis::use_data(dataset, overwrite = TRUE)
+usethis::use_data(b4ss_data, overwrite = TRUE)
 
 
