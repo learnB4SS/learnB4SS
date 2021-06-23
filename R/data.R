@@ -1,4 +1,4 @@
-#' The phonetic profile of Korean formal and infromal speech registers.
+#' The phonetic profile of Korean formal and informal speech registers.
 #'
 #' This tibble contains data from the study discussed in Winter and Grawunder 2012.
 #'
@@ -38,4 +38,4 @@
 #'     formal and informal speech registers, Journal of Phonetics 40(6). 808-815.
 #'     https://doi.org/10.1016/j.wocn.2012.08.006
 #'
-"b4ss_data"
+"polite"

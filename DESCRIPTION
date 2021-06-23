@@ -16,6 +16,9 @@ LazyData: true
 RoxygenNote: 7.1.1
 URL: https://github.com/learnB4SS/learnB4SS
 BugReports: https://github.com/learnB4SS/learnB4SS/issues
+Imports: glue,
+    usethis,
+    utils
 Suggests: 
     learnr,
     knitr,
