@@ -10,11 +10,79 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
+# Load data
+
+Let's load the data we are going to use.
+
 ```{r setup}
+library(brms)
 library(learnB4SS)
+data("polite")
 ```
+
+
+# Which priors?
+
+Depending on the type of model you are running and the nature of the included predictors, you will have to specify a certain set of priors.
+
+You can easily learn which priors you can specify in a model by using the function `brms::get_prior()`. You will try it out in a second.
+
+We are trying to find out what kind of effect politeness has (if any) on articulation rate.
+
+As a first approximation, we could start with the following model:
+
+```{r model}
+# Don't run me yet!
+m1 <- brm(
+  formula = articulation_rate ~ attitude,
+  data = polite
+)
+```
+
+To find out which priors are available in this model, you just need to specify the model formula *and* the data in the `get_prior()` function.
+
+Go ahead and fill in the following code snippet and run it when you're done to get a list of priors!
+You'll learn how to interpret the output in the next section.
+
+```{r get-prior}
+get_prior(
+ formula =  ,
+ data = 
+)
+```
+
+# Understand the syntax
+
+When you run `get_prior()`, a table is returned with a few columns.
+Each row corresponds to one prior (and to one model parameter).
+
+For now, you can focus just on the first three (`prior`, `class`, `coef`).
+
+## `prior`
+
+The column `prior` tells you which prior probability distributions are set as default by brms.
+For our model, the first two default priors are `(flat)`, i.e. uniform distributions (all values are equally probable).
+The other two priors are Student-*t* distributions.
+(more on prior specification below).
+
+But we will want to change them all to something more appropriate (we will talk about what makes an appropriate prior tomorrow).
+
+## `class`
+
+The columns `class` and `coef` are the ones you should check.
+`class` indicates the type of model parameter: `b` indicates a slope term, `Intercept` the model intercept, and `sigma` the model residual standard deviation.
+
+## `coef`
+
+The third column, `coef` indicates to which model predictor the prior is assigned.
+In our model above, there's only one predictor (`attitude`), and that's what you can see in the `get_prior()` output.
+
+Since `attitude` has only two levels (`inf` and `pol`), we only have one parameter for the second level `pol` (the level `inf` is included in the `Intercept`).
+
+# Specify your priors
 
