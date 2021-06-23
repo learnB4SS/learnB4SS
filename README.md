@@ -16,6 +16,9 @@ For now, you can have a look at the FAQs below and make sure you have
 gone through the installation of brms
 [here](https://learnb4ss.github.io/learnB4SS/articles/install-brms.html).
 
+If you wish and haven’t done it yet. you can join us on **Slack** (link
+and instructions have been provided via email).
+
 ## FAQs
 
 ### I live in an inconvenient time-zone. Will I be able to attend at a different time?
