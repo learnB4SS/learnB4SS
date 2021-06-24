@@ -19,7 +19,11 @@ BugReports: https://github.com/learnB4SS/learnB4SS/issues
 Imports: brms,
     glue,
     usethis,
-    utils
+    utils, 
+    tidybayes,
+    bayestestR,
+    parameters,
+    see
 Suggests: 
     learnr,
     knitr,
