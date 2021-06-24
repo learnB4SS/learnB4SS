@@ -191,13 +191,6 @@
       "Repository": "CRAN",
       "Hash": "2f01e16ff9571fe70381c7b9ae560dc4"
     },
-    "brm": {
-      "Package": "brm",
-      "Version": "1.1.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d1d1a79bbccc7fba430bb9ccd0b4f3ac"
-    },
     "brms": {
       "Package": "brms",
       "Version": "2.15.0",
