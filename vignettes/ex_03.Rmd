@@ -36,7 +36,7 @@ We are trying to find out what kind of effect politeness has (if any) on articul
 
 As a first approximation, we could start with the following model:
 
-```{r model}
+```r 
 # Don't run me yet!
 m1 <- brm(
   formula = articulation_rate ~ attitude,
@@ -51,8 +51,8 @@ You'll learn how to interpret the output in the next section.
 
 ```{r get-prior}
 get_prior(
- formula =  ,
- data = 
+ formula = ...,
+ data = ...
 )
 ```
 
@@ -85,4 +85,54 @@ In our model above, there's only one predictor (`attitude`), and that's what you
 Since `attitude` has only two levels (`inf` and `pol`), we only have one parameter for the second level `pol` (the level `inf` is included in the `Intercept`).
 
 # Specify your priors
+
+It's quite easy to specify priors with brms.
+You just need to use the function `prior()`!
+
+Since we need to specify more than one prior, we need multiple calls to `prior()`, concatenated with `c()`.
+Like in the following example:
+
+```r
+my_priors <- c(
+  prior(...),
+  prior(...),
+  prior(...)
+)
+```
+
+Within the function `prior()`, you need to specify the prior distribution with its parameters, the prior class (`class`), and the prior coefficient (`coef`) if any.
+
+For our simple model above, we need three priors:
+
+- The prior of the `Intercept`.
+- The prior of the slope for `attitudepol`.
+- The prior for the standard deviation `sigma`.
+
+Remember that `get_prior()` also lists class-generic priors (in our case, the prior for `class = b`), but you don't need to specify those if you specify the prior for the coefficient (in our case, `class = b, coef = attitudepol`).
+
+We'll give you a head start by telling you which priors we can use in this model:
+
+- `Intercept`: a Normal distribution with mean = 0 and sd = 15.
+- `attitudepol`: a Normal distribution with mean = 0 and sd = 10.
+- `sigma`: a Half-Cauchy distribution with mean = 0 and sd = 1.
+
+Go ahead and fill in the following code snippet with the right parameters and arguments:
+
+```{r set-priors}
+my_priors <- c(
+  prior(normal(..., ...), class = Intercept),
+  prior(normal(..., ...), class = b, coef = ...),
+  prior(cauchy(0, ...), class = ...)
+)
+```
+
+And now let's fit the model using our priors!
+
+```{r fit}
+m1 <- brm(
+  articulation_rate ~ attitude,
+  data = polite,
+  prior = my_priors
+)
+```
 
