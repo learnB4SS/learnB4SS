@@ -1,0 +1,29 @@
+.navbar-default .navbar-link {
+    color: #fff;
+}
+
+.label-default {
+    background-color: #fff;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #8970FF;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.navbar-default {
+    background-color: #8970FF;
+    border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #fff;
+}
