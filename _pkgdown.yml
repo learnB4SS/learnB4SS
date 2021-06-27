@@ -1,3 +1,56 @@
 template:
   bootstrap: 4
   bootswatch: flatly
+navbar:
+  structure:
+    left: [home, get-started, slides, articles, reference, faqs]
+    right: [github]
+  components:
+    get-started:
+      text: Get started
+      menu:
+      - text: Install brms and dependencies
+        href: articles/install-brms.html
+      - text: Install the learnB4SS package
+    slides:
+      text: Slides
+      menu:
+      - text: "Day 1"
+      - text: 0. Introduction
+        href: https://learnb4ss.github.io/slides/00_intro/index.html
+      - text: 1. Application to regression I — Demo
+        href: https://learnb4ss.github.io/slides/01_a2r_initial_demo/index.html
+      - text: 2. Bayes theorem — How does it work?
+        href: https://learnb4ss.github.io/slides/02_bayes_theorem/index.html
+      - text: 3. Application to regression II — Priors and Bayesian updating
+        href: https://learnb4ss.github.io/slides/03_a2r_prior_and_bayesian_updating/index.html
+      - text: 4. NHST vs. Bayesian inference
+        href: https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/index.html
+      - text: -------
+      - text: "Day 2"
+      - text: 5. Interim review
+        href: https://learnb4ss.github.io/slides/05_review/index.html
+      - text: 6. Application to regression III — More Bayesian inference
+        href: https://learnb4ss.github.io/slides/06_a2r_inference_over_posterior/index.html
+      - text: 7. Application to regression IV — Leveling up
+        href: https://learnb4ss.github.io/slides/07_a2r_leveling_up/index.html
+      - text: 8. More on priors
+        href: https://learnb4ss.github.io/slides/08_more_priors_likelihoods/index.html
+      - text: 9. Sampling from the posterior
+        href: https://learnb4ss.github.io/slides/09_sample_the_posterior/index.html
+      - text: 10. Wrap up
+        href: https://learnb4ss.github.io/slides/10_wrap_up/index.html
+    articles:
+      text: Exercises
+      menu:
+      - text: "Day 1"
+      - text: 3. Application to regression II — Priors and Bayesian updating
+        href: articles/ex_03.html
+      - text: -------
+      - text: "Day 2"
+    reference:
+      text: Package
+      href: reference/index.html
+    faqs:
+      text: FAQs
+      href: articles/faqs.html
