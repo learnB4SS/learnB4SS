@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# learnB4SS
+# learnB4SS <img src='man/figures/Logo.png' align="right" height="120" />
 
 <!-- badges: start -->
 <!-- badges: end -->
