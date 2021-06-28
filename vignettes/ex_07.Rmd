@@ -10,7 +10,9 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  echo = TRUE,
+  eval = FALSE
 )
 ```
 
@@ -22,12 +24,14 @@ library(tidybayes)
 polite <- learnB4SS::polite
 ```
 
-## 1. Walkthrough
+# Walkthrough
 
-# Introduction
+## Introduction
+
 Until now, we have only dealt with very simple models, most of which are just not particularly relevant for what we actually do in our research, right? So in this section, we will level up. We will add additional parameters to our regression in the form of fixed effects and random effect. Sounds much more like the stuff you want to do, right? We are going to estimate these parameters and specify appropriate priors for them. After this session you will be much closer to being an operational Bayesian for your actual research.
 
-# A simple model
+## A simple model
+
 Okay let's think about this. Here is the model and its priors that we have so far looked at:
 
 ```{r simpleModel, message = F}
@@ -95,7 +99,7 @@ post_simple_plot2
 
 ```
 
-# Adding predictors 
+## Adding predictors 
 
 This model estimates the effect of `attitude` on articulation rate (`articulation_rate`). That-is-it. But what if we also want to estimate the differences between attitude across different experimental tasks? Let's add `task` as a predictor and add a prior for it as well. Let's stick to weakly informative priors again, centered on zero (we expect no difference of articulation rate between different tasks and acknowledge the possibility of some variance around that value).
 
@@ -154,7 +158,7 @@ post_multiple_attitude + post_multiple_task
 
 ```
 
-# Adding random effects
+## Adding random effects
 
 So running Bayesian regression models is really not much different from running frequentist regression models. Practically, the only difference so far is that we specify prior knowledge. Conceptually, we obviously interpret the output differently in terms of the inference we draw, but practically this should be business as usual for you.
 
@@ -239,7 +243,7 @@ summary(complex_model)
 
 There we go. We have run a linear mixed effects model within the Bayesian framework. We specified priors for both random and fixed effects. What is left is interpreting the output.
 
-```{r multiple_model_post, message = F}
+```{r complexModel_post, message = F}
 
 # Extract posterior coefficient politeness
 post_complex <- complex_model %>%
@@ -252,11 +256,13 @@ post_complex
 
 ```
 
-# Making inference
+## Making inference
+
 Now let's use these posteriors to draw inferences. 
 
 
-## 2. Exercise
+# Exercise
+
 Now it's your turn: Our goal is it to run the following model: `f0mn ~ attitude + gender + (1 | subject) + (0 + attitude | subject)`
 
 (a) First, see which parameters we need to specify with priors using the `get_prior()` function. (If you are unsure, see our code examples above)
@@ -277,7 +283,7 @@ get_prior(
 
 (b) Now specify weakly informative priors for all parameters. For the intercept, chose a normal prior with mean = 0 and sd = 300. For fixed effects, random effects and residual variance go with something like a normal prior with mean = 0 and sd = 100.
 
-```{r get_prior_ex, message = F}
+```{r get_prior_ex_1, message = F}
 
 # specify priors
 priors_ex <- c(
@@ -299,7 +305,7 @@ priors_ex <- c(
 
 (c) Now run the model with your specified priors. Use `seed = 999` in order for all of you to get the same results.
 
-```{r get_prior_ex, message = F}
+```{r get_prior_ex_2, message = F}
 
 # Run model
 ex_model <- brm(
@@ -320,7 +326,7 @@ summary(ex_model)
 
 (d) extract the posteriors for the coefficient attitudepol and plot it.
 
-```{r multiple_model_post, message = F}
+```{r ex_model_post, message = F}
 
 # Extract posterior coefficient politeness
 ex_plot <- ex_model %>%
