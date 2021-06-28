@@ -211,6 +211,7 @@ priors_complex <- c(
   # specify weakly informative prior for the random effects (intercepts)
   prior(normal(0, 10), class = sd, group = subject),
    # specify weakly informative prior for the random effects (slopes)
+  prior(normal(0, 10), class = sd, coef = Intercept, group = subject)
   prior(normal(0, 10), class = sd, coef = attitudeinf, group = subject),
   prior(normal(0, 10), class = sd, coef = attitudepol, group = subject),
   # specify weakly informative prior for the correlation between random intercept and slope
@@ -267,7 +268,7 @@ get_prior(
  formula = 
    f0mn ~ 
    attitude + gender +
-   + (1 | subject) + 
+   (1 | subject) + 
    (0 + attitude | subject),
   data = polite
 )
@@ -286,6 +287,7 @@ priors_ex <- c(
   # specify weakly informative prior for the random effects (intercepts)
   prior(normal(0, 100), class = sd, group = subject),
    # specify weakly informative prior for the random effects (slopes)
+  prior(normal(0, 100), class = sd, coef = Intercept, group = subject),
   prior(normal(0, 100), class = sd, coef = attitudeinf, group = subject),
   prior(normal(0, 100), class = sd, coef = attitudepol, group = subject),
   # specify weakly informative prior for the correlation between random intercept and slope
