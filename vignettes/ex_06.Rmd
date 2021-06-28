@@ -142,7 +142,7 @@ priors_simple <- c(
 
 # Fit model
 b_mod_01 <- brm(
-  articulation_rate ~ attitude,
+  formula = articulation_rate ~ attitude,
   data = polite,
   prior = priors_simple
 )
@@ -356,8 +356,52 @@ plot(rope_on_mod02)
 ## Your turn!
 
 Now let's take some of these tools and use them to test different hypotheses using the `polite` dataset. 
-Specifically, you can think of your own hypotheses to test or try some of the ones below. 
-Use your favorite method (CI, PD, ROPE) or all of them. 
 
+Let's fit the following model: `articulation_rate ~ musicstudent`
 
+To simplify, you can use the same priors from above. 
+Here is a hint, but you need to fill in the details. 
 
+```{r, practical1, eval=F}
+# Specify priors
+priors_simple <- c(
+  prior(normal(0, 15), class = Intercept),
+  prior(normal(0, 10), class = b),
+  prior(cauchy(0, 1), class = sigma)
+)
+
+b_mod_02 <- brm(
+  formula = ???, 
+  prior = ???, 
+  data = polite
+)
+
+```
+
+1. Using a credible interval, determine whether or not there is compelling evidence that the articulation rate between non-music students and music students is non-zero. 
+
+```{r, ex1, eval=F}
+hdi(b_mod_02)
+```
+
+2. What is the probability that the estimate of the difference between non-music students and music students, i.e., `musicstudentyes`, is negative?
+
+```{r, ex2, eval=F}
+p_direction(b_mod_02)
+```
+
+3. Again, consider the non-music/music student difference, but quantify your uncertainty using a ROPE (use a range and CI width of your choice). 
+Plot the result. 
+
+```{r, ex3, eval=F}
+ex3 <- rope(b_mod_02, range = c(-0.15, 0.15), ci = 0.95)
+plot(ex3)
+```
+
+**Hint**:  
+You can calculate all of these metrics with a single function! 
+Try `describe_posterior`. 
+
+```{r, describe-posterior-func, eval=F}
+describe_posterior(b_mod_02, rope_range = c(-0.15, 0.15), ci = 0.99)
+```
