@@ -17,10 +17,15 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+
+# libraries
 library(learnB4SS)
 library(brms)
 library(tidyverse)
 library(tidybayes)
+library(bayestestR)
+
+# data
 polite <- learnB4SS::polite
 ```
 
@@ -212,10 +217,8 @@ priors_complex <- c(
   prior(normal(0, 15), class = Intercept),
   prior(normal(0, 10), class = b, coef = attitudepol),
   prior(normal(0, 10), class = b, coef = tasknot),
-  # specify weakly informative prior for the random effects (intercepts)
-  prior(normal(0, 10), class = sd, group = subject),
-   # specify weakly informative prior for the random effects (slopes)
-  prior(normal(0, 10), class = sd, coef = Intercept, group = subject)
+  # specify weakly informative prior for the random effects (slopes)
+  prior(normal(0, 10), class = sd, coef = Intercept, group = subject),
   prior(normal(0, 10), class = sd, coef = attitudeinf, group = subject),
   prior(normal(0, 10), class = sd, coef = attitudepol, group = subject),
   # specify weakly informative prior for the correlation between random intercept and slope
@@ -247,18 +250,31 @@ There we go. We have run a linear mixed effects model within the Bayesian framew
 
 # Extract posterior coefficient politeness
 post_complex <- complex_model %>%
-  spread_draws(b_attitudepol, b_tasknot) %>% 
-  ggplot(.) + 
-    stat_halfeye(aes(x = b_attitudepol)) +
-  labs(x = "articulation rate")
+  spread_draws(b_attitudepol, b_tasknot) 
 
-post_complex
+# plot
+ggplot(post_complex) + 
+  stat_halfeye(aes(x = b_attitudepol)) +
+  labs(x = "articulation rate")
 
 ```
 
 ## Making inference
 
-Now let's use these posteriors to draw inferences. 
+Now let's use these posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
+
+```{r p_direction, message = F}
+
+# extract 95% HDI
+hdi(post_complex$b_attitudepol)
+
+# extract probability of direction
+p_direction(post_complex$b_attitudepol)
+
+```
+
+Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.80, -0.01] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still a posibility, given the data, the model, and the priors. 
+
 
 
 # Exercise
@@ -329,12 +345,25 @@ summary(ex_model)
 ```{r ex_model_post, message = F}
 
 # Extract posterior coefficient politeness
-ex_plot <- ex_model %>%
-  spread_draws(b_attitudepol) %>% 
-  ggplot(.) + 
-    stat_halfeye(aes(x = b_attitudepol)) +
+ex_post <- ex_model %>%
+  spread_draws(b_attitudepol)
+
+# plot
+ggplot(ex_post) + 
+  stat_halfeye(aes(x = b_attitudepol)) +
   labs(x = "fundamental frequency in Hz")
 
-ex_plot
+
+```
+
+(e) Now let's use the posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
+
+```{r p_direction, message = F}
+
+# extract 95% HDI
+hdi(ex_post$b_attitudepol)
+
+# extract probability of direction
+p_direction(ex_post$b_attitudepol)
 
 ```
