@@ -358,7 +358,7 @@ ggplot(ex_post) +
 
 (e) Now let's use the posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
 
-```{r p_direction, message = F}
+```{r ex_inference, message = F}
 
 # extract 95% HDI
 hdi(ex_post$b_attitudepol)
