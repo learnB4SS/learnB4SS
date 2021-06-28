@@ -87,6 +87,8 @@ This means we can wrap the `plot()` function around our `hdi` object, like this:
 plot(hdi_ex1)
 ```
 
+<br>
+
 Beautiful!  
 
 Now let's repeat this using a real posterior from a model object. 
@@ -124,6 +126,7 @@ Let's plot this as well.
 plot(hdi_ex2)
 ```
 
+<br>
 
 Now we repeat this process with yesterdays model that included the predictor `attitude`. 
 
@@ -170,6 +173,8 @@ Let's take a look at a plot.
 plot(hdi_ex3)
 ```
 
+<br>
+
 This is helpful. 
 We can see that the 95% HDI does not encompass 0, but there is some posterior mass that is positive (in blue).  
 In other words, positive values are still a possibility, given the data, the model, and our prior assumptions.
@@ -191,6 +196,7 @@ hdi_on_mod <- hdi(b_mod_01)
 plot(hdi_on_mod, show_intercept = T)
 ```
 
+<br>
 
 
 
@@ -223,9 +229,6 @@ on posterior samples taken from a model object,
 ```{r, p-direction-2}
 # PD of intercept-only model
 p_direction(post_00$b_Intercept)
-
-# PD of b_attitudepol parameter
-p_direction(post_01$b_attitudepol)
 ```
 
 and directly on a model object: 
@@ -243,11 +246,14 @@ pd_on_mod <- p_direction(b_mod_01)
 plot(pd_on_mod, show_intercept = T)
 ```
 
+<br>
+
 To build intuition about how the probability of direction corresponds with a frequentist p-value we can use the `pd_to_p` and `p_to_pd` functions to convert between the two (not recommended). 
 
 ```{r, p-direction-5}
 # Calculate p-value from PD
 pd_to_p(0.987)
+
 # Calculate PD from p-value
 p_to_pd(0.01)
 ```
@@ -270,6 +276,10 @@ tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
     theme(legend.position = c(0.8, 0.8))
 ```
 
+<br>
+
+
+
 
 
 
@@ -289,53 +299,65 @@ tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
 
 ## ROPEs
 
+The next tool we are going to talk about combines the highest density credible interval with a *region of practical equivalence*, or a ROPE
+We can use the ROPE to calculate the proportion of the HDI of a posterior distribution that lies within its bounds. 
+ROPEs are useful because they allow the researcher to define a range of values which they consider to be practically equivalent to a null effect
 
-```{r, rope-ex, include=F, eval=F}
-# Like before, we can operate on a single distribution stored in a vector
-# The `rope` function will calculate the proportion of the posterior that falls 
-# within our rope range. 
+We will again use the `rope` function from the `basyestestR` package. 
+By default, the `rope` function will calculate the proportion of the 95% CI that falls 
+within our ROPE range. 
+Like before, we can operate on a single distribution stored in a vector
+
+```{r, rope-1}
+# Calculate % of HDI within rope using simulated data
 rope(posterior)
+```
 
-# We can set the rope_range and the size of the CI
-rope(posterior, rope_range = c(-0.1, 0.1), ci = 0.95)
+We can set the range of the ROPE and the size of the HDI using the arguments `range` and `ci`, respectively. 
 
-# The default is set to 95% and +/-0.1, unless the input is a Bayesian model
-# In that case, the function `rope_range` is used to calculate a ROPE 
-# (following Kruschke 2018, see ?rope_range). 
+```{r, rope-2}
+# Calculate % of HDI within rope w/ specific settings
+rope(posterior, range = c(-0.1, 0.1), ci = 0.99)
+```
+
+The default sets the CI to 95% and the ROPE range to &pm;0.1, unless the input is a Bayesian model. 
+In that case, the function `rope_range` is used to calculate a ROPE (following Kruschke 2018, see `?rope_range`).
+
+$$\color{black}{\frac{\mu_{1} - \mu_{2}}{\sqrt{\frac{\sigma^2_{1} + \sigma^2_{2}}{2}}}}$$
+
+```{r, rope-3}
+# Calculate an appropriate ROPE following Kruschke 2018
 rope_range(b_mod_01)
 
-# Let's run it on our model
-rope_on_mod01 <- rope(b_mod_01, ci = 0.95)
+# Run it on our model
+rope_on_mod01 <- rope(b_mod_01, range = c(-0.2, 0.2), ci = 0.95)
 rope_on_mod01
+```
 
-# There are printing methods for rope objects
+And again there are also print methods for rope objects.
+
+```{r, rope-4}
 plot(rope_on_mod01, show_intercept = T)
+```
 
-# We can also set multiple ROPEs
-rope_on_mod02 <- rope(b_mod_01, ci = c(0.8, 0.85, 0.9, 0.95))
+<br>
+
+We can also use a ROPE with multiple CIs. 
+
+```{r, rope-5}
+# Set more strict ROPE and several HDIs
+rope_on_mod02 <- rope(b_mod_01, range = c(-0.2, 0.2), ci = c(0.9, 0.95, 0.99))
 rope_on_mod02
 plot(rope_on_mod02)
 ```
 
+<br>
+
+## Your turn!
+
+Now let's take some of these tools and use them to test different hypotheses using the `polite` dataset. 
+Specifically, you can think of your own hypotheses to test or try some of the ones below. 
+Use your favorite method (CI, PD, ROPE) or all of them. 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-PRACTICAL (longer): Run model on Bodo’s data with prepared RMarkdown
-
-think of new hypotheses to test, use your favorite method (or all of them)
-
-Here are a few examples: 
---> 
 
