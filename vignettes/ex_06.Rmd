@@ -33,6 +33,8 @@ library("bayestestR")
 
 # Data
 data(polite)
+mod_00 <- system.file("extdata/b_mod_00.rds", package = "learnB4SS")
+mod_01 <- system.file("extdata/b_mod_01.rds", package = "learnB4SS")
 ```
 
 ```{r, plot-setup, include=F}
@@ -98,7 +100,7 @@ Recall that we fit this intercept-only model previously:
 ```{r, credible-intervals-hide1, include=F}
 # Intercept-only model
 b_mod_00 <- brm(articulation_rate ~ 1, data = polite, 
-  file = here::here("./vignettes/b_mod_00"))
+  file = mod_00)
 ```
 
 ```{r, credible-intervals-mod00, eval=F}
@@ -153,7 +155,7 @@ post_01 <- posterior_samples(b_mod_01)
 
 
 ```{r, credible-intervals-hide2, include=F}
-b_mod_01 <- readRDS(here::here("./vignettes/b_mod_01.rds"))
+b_mod_01 <- readRDS(mod_01)
 post_01 <- posterior_samples(b_mod_01)
 ```
 
