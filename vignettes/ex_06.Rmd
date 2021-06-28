@@ -1,0 +1,213 @@
+---
+title: "Application to regression III - Bayesian inference"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Application to regression III - Bayesian inference}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  message = F, 
+  warning = F
+)
+```
+
+```{r setup}
+library("learnB4SS")
+library("dplyr")
+library("ggplot2")
+library("brms")
+library("bayestestR")
+```
+
+
+
+
+<!--
+CI Practical: Describe posteriors as a way to do inference
+USE MODEL FROM STEFs EXAMPLE FROM PREVIOUS DAY
+-->
+
+```{r, credible-intervals, include=F}
+
+# Fake posterior (for ex.)
+posterior <- rnorm(n = 1000, mean = 5, sd = 3)
+
+# Base r example of getting quantile of distribution
+quantile(posterior, c(0.025, 0.975))
+
+# bayesTestR::hdi to simplify
+hdi_ex1 <- hdi(posterior)
+hdi_ex1
+
+# We can also generate a plot from the hdi object
+plot(hdi_ex1)
+
+
+
+
+# Now we will repeat this with a real posterior from a model object
+# Fit model
+b_mod_00 <- brm(articulation_rate ~ 1, data = polite, 
+  file = here::here("./vignettes/b_mod_00"))
+
+# Get posterior samples
+post_00 <- posterior_samples(b_mod_00)
+
+# Manually calculates CI
+quantile(post_00$b_Intercept, c(0.025, 0.975))
+
+# Use hdi function
+hdi_ex2 <- hdi(post_00$b_Intercept)
+hdi_ex2
+
+# Plot it
+plot(hdi_ex2)
+
+
+
+
+
+# Now we repeat this process with yesterdays model
+b_mod_01 <- readRDS(here::here("./vignettes/b_mod_01.rds"))
+post_01 <- posterior_samples(b_mod_01)
+
+quantile(post_01$b_attitudepol, c(0.025, 0.975))
+hdi_ex3 <- hdi(post_01$b_attitudepol)
+hdi_ex3
+plot(hdi_ex3)
+
+
+# We can also use the function directly on the model object
+hdi(b_mod_01)
+hdi_on_mod <- hdi(b_mod_01)
+plot(hdi_on_mod, show_intercept = T)
+
+```
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, p-direction, include=F}
+# We can use the p_direction function to calculate the PD (PME) on a vector
+p_direction(posterior)
+
+# On a single column (parameter) from the posterior
+p_direction(post_00$b_Intercept)
+p_direction(post_01$b_attitudepol)
+
+# And also on the model object itself
+p_direction(b_mod_01)
+
+# There are also print methods
+pd_on_mod <- p_direction(b_mod_01)
+plot(pd_on_mod, show_intercept = T)
+
+
+# To build intuition about how the PD corresponds with a frequentist p-value
+# we can use pd_to_p and p_to_pd to convert between the two (not recommended)
+pd_to_p(0.987)
+p_to_pd(0.01)
+
+```
+
+
+
+```{r, pd-p-comparison, fig.width=14, fig.height=8, echo=F, include=F}
+tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
+  mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
+  ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
+    geom_rect(aes(xmin = 0, xmax = 0.05, ymin = -Inf, ymax = Inf), 
+      fill = "lightblue", alpha = 0.01) + 
+    geom_line() + 
+    geom_point(aes(fill = `p-value` < 0.05), 
+      size = 5, pch = 21, color = "white", stroke = 2) + 
+    scale_fill_manual(name = "p-value < 0.05", 
+      values = c("#8970FF", "#FFA70B")) + 
+    scale_x_continuous(breaks = seq(0.0, 0.1, 0.01))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, rope-ex, include=F}
+# Like before, we can operate on a single distribution stored in a vector
+# The `rope` function will calculate the proportion of the posterior that falls 
+# within our rope range. 
+rope(posterior)
+
+# We can set the rope_range and the size of the CI
+rope(posterior, rope_range = c(-0.1, 0.1), ci = 0.95)
+
+# The default is set to 95% and +/-0.1, unless the input is a Bayesian model
+# In that case, the function `rope_range` is used to calculate a ROPE 
+# (following Kruschke 2018, see ?rope_range). 
+rope_range(b_mod_01)
+
+# Let's run it on our model
+rope_on_mod01 <- rope(b_mod_01, ci = 0.95)
+rope_on_mod01
+
+# There are printing methods for rope objects
+plot(rope_on_mod01, show_intercept = T)
+
+# We can also set multiple ROPEs
+rope_on_mod02 <- rope(b_mod_01, ci = c(0.8, 0.85, 0.9, 0.95))
+rope_on_mod02
+plot(rope_on_mod02)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+PRACTICAL (longer): Run model on Bodo’s data with prepared RMarkdown
+
+think of new hypotheses to test, use your favorite method (or all of them)
+
+Here are a few examples: 
+--> 
+
