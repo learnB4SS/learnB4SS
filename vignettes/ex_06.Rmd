@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
   comment = "#>", 
   message = F, 
   warning = F, 
-  fig.retina = 2
+  fig.retina = 2, 
+  fig.width = 5, 
+  fig.align="center"
 )
 ```
 
@@ -33,6 +35,13 @@ library("bayestestR")
 data(polite)
 ```
 
+```{r, plot-setup, include=F}
+theme_set(theme_bw(base_size = 12))
+theme_update(
+  panel.grid.minor = element_line(colour = "grey90", size = 0.1), 
+  panel.grid.major = element_line(colour = "grey90", size = 0.1) 
+  )
+```
 
 ## Credible intervals
 
@@ -73,7 +82,7 @@ For our purposes we will stick with the HDI.
 One advantage to using the `hdi` function from the `bayestestR` package is that it also has print methods. 
 This means we can wrap the `plot()` function around our `hdi` object, like this: 
 
-```{r, credible-intervals3, out.width="100%"}
+```{r, credible-intervals3}
 # Generate a plot from the hdi object
 plot(hdi_ex1)
 ```
@@ -121,25 +130,65 @@ Now we repeat this process with yesterdays model that included the predictor `at
 Here is the model again, just in case: 
 
 ```
-MODEL here
+# Specify priors
+priors_simple <- c(
+  prior(normal(0, 15), class = Intercept),
+  prior(normal(0, 10), class = b, coef = attitudepol),
+  prior(cauchy(0, 1), class = sigma)
+)
+
+# Fit model
+b_mod_01 <- brm(
+  articulation_rate ~ attitude,
+  data = polite,
+  prior = priors_simple
+)
+
+# Get posterior samples
+post_01 <- posterior_samples(b_mod_01)
 ```
 
 
-```
+```{r, credible-intervals-hide2, include=F}
 b_mod_01 <- readRDS(here::here("./vignettes/b_mod_01.rds"))
 post_01 <- posterior_samples(b_mod_01)
+```
 
-quantile(post_01$b_attitudepol, c(0.025, 0.975))
+Let's calculate the CI for the parameter `b_attitudepol`. 
+
+```{r, credible-intervals-mod01-1}
+# Calculate HDI
 hdi_ex3 <- hdi(post_01$b_attitudepol)
 hdi_ex3
+```
+
+It looks like the 95% CI does not encompass 0. 
+Let's take a look at a plot.
+
+```{r, credible-intervals-mod01-2, out.width="100%"}
+# Plot it
 plot(hdi_ex3)
+```
 
+This is helpful. 
+We can see that the 95% HDI does not encompass 0, but there is some posterior mass that is positive (in blue).  
+In other words, positive values are still a possibility, given the data, the model, and our prior assumptions.
 
-# We can also use the function directly on the model object
+**Bonus**:  
+
+We can also use the `hdi` function directly on a model object. 
+
+```{r, credible-intervals-mod01-3}
+# Get HDI of all paramters of model
 hdi(b_mod_01)
+```
+
+And, like before, we can use the built-in print methods to quickly generate a plot:
+
+```{r, credible-intervals-mod01-4, out.width="100%"}
+# Assign hdi to object and plot
 hdi_on_mod <- hdi(b_mod_01)
 plot(hdi_on_mod, show_intercept = T)
-
 ```
 
 
@@ -154,43 +203,71 @@ plot(hdi_on_mod, show_intercept = T)
 
 
 
-```{r, p-direction, include=F, eval=F}
-# We can use the p_direction function to calculate the PD (PME) on a vector
+
+## Probability of direction
+
+Another tool we have for decision making is the `probability of direction`, also known as the *maximum probability of effect*. 
+The probability of direction tells us the proportion of the posterior that has the same sign (that is, if its + or -) as the median of the distribution. 
+This value can range from 50% to 100% (0.5 - 1.0). 
+
+To calculate the probability of direction we will again resort to the `bayestestR` package and use the `p_direction` function. 
+The function will calculate the probability of direction on a vector, 
+
+```{r, p-direction-1}
+# "Fake" posterior example 
 p_direction(posterior)
+```
 
-# On a single column (parameter) from the posterior
+on posterior samples taken from a model object, 
+
+```{r, p-direction-2}
+# PD of intercept-only model
 p_direction(post_00$b_Intercept)
+
+# PD of b_attitudepol parameter
 p_direction(post_01$b_attitudepol)
+```
 
-# And also on the model object itself
+and directly on a model object: 
+
+```{r, p-direction-3}
+# PD for all parameters in b_mod_01
 p_direction(b_mod_01)
+```
 
-# There are also print methods
+Again, we can take advantage of the print methods and quickly generate a plot: 
+
+```{r, p-direction-4}
+# Assign PD to object and print
 pd_on_mod <- p_direction(b_mod_01)
 plot(pd_on_mod, show_intercept = T)
-
-
-# To build intuition about how the PD corresponds with a frequentist p-value
-# we can use pd_to_p and p_to_pd to convert between the two (not recommended)
-pd_to_p(0.987)
-p_to_pd(0.01)
-
 ```
 
+To build intuition about how the probability of direction corresponds with a frequentist p-value we can use the `pd_to_p` and `p_to_pd` functions to convert between the two (not recommended). 
 
+```{r, p-direction-5}
+# Calculate p-value from PD
+pd_to_p(0.987)
+# Calculate PD from p-value
+p_to_pd(0.01)
+```
 
-```{r, pd-p-comparison, fig.width=14, fig.height=8, echo=F, include=F, eval=F}
+This plot shows the linear relationship between the probability of direction and a frequentist p-value. 
+
+```{r, pd-p-comparison, echo=F, out.width="100%"}
 tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
   mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
   ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
     geom_rect(aes(xmin = 0, xmax = 0.05, ymin = -Inf, ymax = Inf), 
-      fill = "lightblue", alpha = 0.01) + 
+      fill = "lightgrey", alpha = 0.01) + 
+    geom_hline(yintercept = p_to_pd(0.05), lty = 3, size = 0.5) + 
     geom_line() + 
     geom_point(aes(fill = `p-value` < 0.05), 
-      size = 5, pch = 21, color = "white", stroke = 2) + 
+      size = 3, pch = 21, color = "white", stroke = 1.5) + 
     scale_fill_manual(name = "p-value < 0.05", 
       values = c("#8970FF", "#FFA70B")) + 
-    scale_x_continuous(breaks = seq(0.0, 0.1, 0.01))
+    scale_x_continuous(breaks = seq(0.0, 0.1, 0.01)) + 
+    theme(legend.position = c(0.8, 0.8))
 ```
 
 
@@ -210,7 +287,7 @@ tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
 
 
 
-
+## ROPEs
 
 
 ```{r, rope-ex, include=F, eval=F}
