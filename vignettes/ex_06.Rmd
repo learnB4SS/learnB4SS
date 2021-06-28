@@ -12,67 +12,120 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
   message = F, 
-  warning = F
+  warning = F, 
+  fig.retina = 2
 )
 ```
 
+## Get set up
+
+First, let's load the packages and data we will be using. 
+
 ```{r setup}
+# Packages
 library("learnB4SS")
 library("dplyr")
 library("ggplot2")
 library("brms")
 library("bayestestR")
+
+# Data
+data(polite)
 ```
 
 
+## Credible intervals
 
+The first tool we will consider for making statistical inferences in a Bayesian framework is the credible interval. 
+If you have heard of Bayesian inference before, there is a good chance you have also heard of credible intervals. 
+We could describe them as the Bayesian counterpart to confidence intervals under a frequentist framework. 
 
-<!--
-CI Practical: Describe posteriors as a way to do inference
-USE MODEL FROM STEFs EXAMPLE FROM PREVIOUS DAY
--->
+All we need to calculate a credible interval is a probability distribution. 
+In R, this can be as simple as a vector of values. 
+We'll illustrate by sampling fake data and calculating a CI using base R.
 
-```{r, credible-intervals, include=F}
-
-# Fake posterior (for ex.)
+```{r, credible-intervals1}
+# Generate 'fake' posterior by sampling values from a normal distribution with 
+# mean of 5 and SD of 3
 posterior <- rnorm(n = 1000, mean = 5, sd = 3)
 
-# Base r example of getting quantile of distribution
+# Use quantile function on posterior
 quantile(posterior, c(0.025, 0.975))
+```
 
-# bayesTestR::hdi to simplify
+We can see that the 95% CI for our posterior is `r quantile(posterior, c(0.025, 0.975))`. 
+
+We can simplify the process even more using the `hdi` function from the `bayestestR` package. 
+This has some other benefits that we will see in a bit.
+
+```{r, credible-intervals2}
+# bayesTestR::hdi
 hdi_ex1 <- hdi(posterior)
 hdi_ex1
+```
 
-# We can also generate a plot from the hdi object
+Notice that the ranges are slightly different. 
+This is because the HDI, highest density interval, is a special type of credible interval. 
+There are several methods for calculating a CI, but we won't go into that now. 
+For our purposes we will stick with the HDI. 
+
+
+One advantage to using the `hdi` function from the `bayestestR` package is that it also has print methods. 
+This means we can wrap the `plot()` function around our `hdi` object, like this: 
+
+```{r, credible-intervals3, out.width="100%"}
+# Generate a plot from the hdi object
 plot(hdi_ex1)
+```
 
+Beautiful!  
 
+Now let's repeat this using a real posterior from a model object. 
 
+Recall that we fit this intercept-only model previously: 
 
-# Now we will repeat this with a real posterior from a model object
-# Fit model
+```{r, credible-intervals-hide1, include=F}
+# Intercept-only model
 b_mod_00 <- brm(articulation_rate ~ 1, data = polite, 
   file = here::here("./vignettes/b_mod_00"))
+```
 
+```{r, credible-intervals-mod00, eval=F}
+# Intercept-only model
+b_mod_00 <- brm(articulation_rate ~ 1, data = polite)
+```
+
+Let's get the posterior distribution and calculate the HDI of the intercept. 
+
+```{r, credible-intervals-mod00-1}
 # Get posterior samples
 post_00 <- posterior_samples(b_mod_00)
 
-# Manually calculates CI
-quantile(post_00$b_Intercept, c(0.025, 0.975))
-
-# Use hdi function
+# Calculate HDI
 hdi_ex2 <- hdi(post_00$b_Intercept)
 hdi_ex2
+```
 
+So we are 95% certain that the value of the intercept falls between about 6.5 and 6.8. 
+Cool. 
+Let's plot this as well.
+
+```{r, credible-intervals-mod00-2, out.width="100%"}
 # Plot it
 plot(hdi_ex2)
+```
 
 
+Now we repeat this process with yesterdays model that included the predictor `attitude`. 
+
+Here is the model again, just in case: 
+
+```
+MODEL here
+```
 
 
-
-# Now we repeat this process with yesterdays model
+```
 b_mod_01 <- readRDS(here::here("./vignettes/b_mod_01.rds"))
 post_01 <- posterior_samples(b_mod_01)
 
@@ -89,7 +142,6 @@ plot(hdi_on_mod, show_intercept = T)
 
 ```
 
----
 
 
 
@@ -102,8 +154,7 @@ plot(hdi_on_mod, show_intercept = T)
 
 
 
-
-```{r, p-direction, include=F}
+```{r, p-direction, include=F, eval=F}
 # We can use the p_direction function to calculate the PD (PME) on a vector
 p_direction(posterior)
 
@@ -128,7 +179,7 @@ p_to_pd(0.01)
 
 
 
-```{r, pd-p-comparison, fig.width=14, fig.height=8, echo=F, include=F}
+```{r, pd-p-comparison, fig.width=14, fig.height=8, echo=F, include=F, eval=F}
 tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
   mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
   ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
@@ -162,7 +213,7 @@ tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
 
 
 
-```{r, rope-ex, include=F}
+```{r, rope-ex, include=F, eval=F}
 # Like before, we can operate on a single distribution stored in a vector
 # The `rope` function will calculate the proportion of the posterior that falls 
 # within our rope range. 
