@@ -17,12 +17,14 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+
 # libraries
 library(learnB4SS)
 library(brms)
 library(tidyverse)
 library(tidybayes)
 library(bayestestR)
+
 # data
 polite <- learnB4SS::polite
 ```
@@ -38,12 +40,15 @@ Until now, we have only dealt with very simple models, most of which are just no
 Okay let's think about this. Here is the model and its priors that we have so far looked at:
 
 ```{r simpleModel, message = F}
+
 # specify priors
 priors_simple <- c(
   prior(normal(0, 15), class = Intercept),
   prior(normal(0, 10), class = b, coef = attitudepol),
   prior(cauchy(0, 1), class = sigma)
 )
+
+
 # CHANGE ACCORDINGLY
 simple_model <- brm(
   articulation_rate ~ 
@@ -51,11 +56,13 @@ simple_model <- brm(
     data = polite,
     prior = priors_simple
   )
+
 ```
 
 Let us briefly remind ourselves, what the results look like. 
 
 ```{r simpleModel_post, message = F}
+
 # Extract posterior coefficient and plot
 post_simple_plot <- posterior_samples(simple_model) %>% 
   # select the columns with the relevant regression coefficients
@@ -64,12 +71,15 @@ post_simple_plot <- posterior_samples(simple_model) %>%
     stat_halfeye() +
     geom_vline(xintercept = 0, lty = "dashed") +
   labs(x = "articulation rate")
+
 post_simple_plot
+
 ```
 
 If you want to plot something more traditional, i.e. the estimated values for polite and informal speech productions, we need to indulge in some more data wrangling. The information is all there, but needs to be extracted with a hand full of tidyverse functions. Let's wrangle the posteriors such that we can plot the posterior distribution for polite and informal productions: 
 
 ```{r traditional_plotting, message = F}
+
 # Extract posterior coefficient
 post_simple2 <- posterior_samples(simple_model) %>% 
   # select the columns with the relevant regression coefficients
@@ -83,12 +93,15 @@ post_simple2 <- posterior_samples(simple_model) %>%
   # make tidy long format
   pivot_longer(cols = c(polite, informal), 
                names_to = "coef", values_to = "posterior" )
+
 # Plot posteriors
 post_simple_plot2 <- post_simple2 %>%
   ggplot(., aes(x = posterior, group = coef,fill = coef)) + 
            stat_halfeye(alpha = 0.5) +
   labs(x = "articulation rate")
+
 post_simple_plot2
+
 ```
 
 ## Adding predictors 
@@ -96,12 +109,14 @@ post_simple_plot2
 This model estimates the effect of `attitude` on articulation rate (`articulation_rate`). That-is-it. But what if we also want to estimate the differences between attitude across different experimental tasks? Let's add `task` as a predictor and add a prior for it as well. Let's stick to weakly informative priors again, centered on zero (we expect no difference of articulation rate between different tasks and acknowledge the possibility of some variance around that value).
 
 ```{r multiple_model, message = F}
+
 # get prior
 get_prior(
  formula = 
    articulation_rate ~ attitude + task,
   data = polite
 )
+
 # specify priors
 priors_multiple <- c(
   prior(normal(0, 15), class = Intercept),
@@ -109,13 +124,17 @@ priors_multiple <- c(
   prior(normal(0, 10), class = b, coef = tasknot),
   prior(normal(0, 10), class = sigma)
 )
+
+
 # Run model
 multiple_model <- brm(
   articulation_rate ~ 
     attitude + task,
   data = polite,
   prior = priors_multiple)
+
 summary(multiple_model)
+
 ```
 
 Looking at the summary of the model, we get a table with two coefficients for the population parameters `attitudepol` and `tasknot`. Let's remind ourselves that these reflect the change in articulation rate from the reference level (attitude = informal (`inf`), task = dialog completion task (`dct`)) to attitude = polite (`attitudepol`) and to task = note (`tasknot`), respectively.
@@ -123,6 +142,7 @@ Looking at the summary of the model, we get a table with two coefficients for th
 We can inspect posteriors for both predictors just like we did before:
 
 ```{r multiple_model_post, message = F}
+
 # Extract posterior coefficient attitudepol
 post_multiple_attitude <- multiple_model %>%
   spread_draws(b_attitudepol, b_tasknot) %>% 
@@ -136,9 +156,11 @@ post_multiple_task <- multiple_model %>%
   ggplot(.) + 
     stat_halfeye(aes(x = b_tasknot)) +
     labs(x = "articulation rate")
+
 # plot
 library(patchwork)
 post_multiple_attitude + post_multiple_task
+
 ```
 
 ## Adding random effects
@@ -150,6 +172,7 @@ Now, we all know that this model is not taking into account the fact that data p
 We can write down the code to run this model easily, because we are all familiar with the `lme4` syntax. `brms` syntax handles random effect structure exactly like `lme4` like so:
 
 ```{r complexModel, f}
+
 # CHANGE ACCORDINGLY
 complex_model <- brm(
   articulation_rate ~ 
@@ -162,7 +185,9 @@ complex_model <- brm(
    prior = priors_complex,
    seed = 999
 )
+
 summary(complex_model)
+
 ```
 
 Looks familiar? 
@@ -176,6 +201,7 @@ But what about priors? Do we need to specify priors for these new elements as we
 Generally, we encourage you to specify priors for all elements of your model, so let us try this as well. We need to specify the four parameters for the Group-Level Effects.
 
 ```{r complexModel_priors, f}
+
 # get prior
 get_prior(
  formula = 
@@ -185,6 +211,7 @@ get_prior(
     (0 + attitude | subject),  
    data = polite
 )
+
 # specify priors
 priors_complex <- c(
   prior(normal(0, 15), class = Intercept),
@@ -198,6 +225,8 @@ priors_complex <- c(
   prior(lkj_corr_cholesky(2), class = L, group = subject),
   prior(normal(0, 10), class = sigma)
 )
+
+
 # Run model
 complex_model <- brm(
   articulation_rate ~ 
@@ -210,19 +239,24 @@ complex_model <- brm(
    prior = priors_complex,
    seed = 999
 )
+
 summary(complex_model)
+
 ```
 
 There we go. We have run a linear mixed effects model within the Bayesian framework. We specified priors for both random and fixed effects. What is left is interpreting the output.
 
 ```{r complexModel_post, message = F}
+
 # Extract posterior coefficient politeness
 post_complex <- complex_model %>%
   spread_draws(b_attitudepol, b_tasknot) 
+
 # plot
 ggplot(post_complex) + 
   stat_halfeye(aes(x = b_attitudepol)) +
   labs(x = "articulation rate")
+
 ```
 
 ## Making inference
@@ -230,10 +264,13 @@ ggplot(post_complex) +
 Now let's use these posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
 
 ```{r p_direction, message = F}
+
 # extract 95% HDI
 hdi(post_complex$b_attitudepol)
+
 # extract probability of direction
 p_direction(post_complex$b_attitudepol)
+
 ```
 
 Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.80, -0.01] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still a posibility, given the data, the model, and the priors. 
@@ -247,6 +284,7 @@ Now it's your turn: Our goal is it to run the following model: `f0mn ~ attitude 
 (a) First, see which parameters we need to specify with priors using the `get_prior()` function. (If you are unsure, see our code examples above)
 
 ```{r get_prior_ex, message = F}
+
 # get prior
 get_prior(
  formula = 
@@ -256,11 +294,13 @@ get_prior(
    (0 + attitude | subject),
   data = polite
 )
+
 ```
 
 (b) Now specify weakly informative priors for all parameters. For the intercept, chose a normal prior with mean = 0 and sd = 300. For fixed effects, random effects and residual variance go with something like a normal prior with mean = 0 and sd = 100.
 
 ```{r get_prior_ex_1, message = F}
+
 # specify priors
 priors_ex <- c(
   prior(normal(0, 300), class = Intercept),
@@ -276,11 +316,13 @@ priors_ex <- c(
   prior(lkj_corr_cholesky(2), class = L, group = subject),
   prior(normal(0, 100), class = sigma)
 )
+
 ```
 
 (c) Now run the model with your specified priors. Use `seed = 999` in order for all of you to get the same results.
 
 ```{r get_prior_ex_2, message = F}
+
 # Run model
 ex_model <- brm(
   f0mn ~ 
@@ -293,26 +335,35 @@ ex_model <- brm(
    prior = priors_ex,
    seed = 999
 )
+
 summary(ex_model)
+
 ```
 
 (d) extract the posteriors for the coefficient attitudepol and plot it.
 
 ```{r ex_model_post, message = F}
+
 # Extract posterior coefficient politeness
 ex_post <- ex_model %>%
   spread_draws(b_attitudepol)
+
 # plot
 ggplot(ex_post) + 
   stat_halfeye(aes(x = b_attitudepol)) +
   labs(x = "fundamental frequency in Hz")
+
+
 ```
 
 (e) Now let's use the posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
 
-```{r ex_inference, message = F}
+```{r p_direction, message = F}
+
 # extract 95% HDI
 hdi(ex_post$b_attitudepol)
+
 # extract probability of direction
 p_direction(ex_post$b_attitudepol)
+
 ```
