@@ -13,15 +13,30 @@
 #' open_slides(0)
 #' }
 open_slides <- function(session) {
+  num <- stringr::str_pad(session, 2, pad = '0')
   sesh <- session + 1
 
-  utils::browseURL(slides[sesh])
+  if (sesh > 0 & sesh < 11) {
+    utils::browseURL(slides[sesh])
+  } else {
+    cli::cli_alert_danger(
+      glue::glue("I'm sorry, I am not aware of Session {num}! I only know Session 00 to 10...")
+    )
+  }
 }
 
 #' Open exercise file.
 #'
 #' Call this function with the session number as argument and the exercise
 #' file will be copied in the working directory and opened in the editor.
+#'
+#' The following sessions have exercises:
+#'
+#' - Session 03.
+#'
+#' - Session 07.
+#'
+#' - Session 08.
 #'
 #' @param session Session number as a number.
 #'
@@ -30,18 +45,24 @@ open_slides <- function(session) {
 #'
 #' @examples
 #' \dontrun{
-#' open_exercise(1)
+#' open_exercise(3)
 #' }
-#' # The exercise of Session 01 will open for editing.
+#' # The exercise of Session 03 will open for editing.
 open_exercise <- function(session) {
+  num <- stringr::str_pad(session, 2, pad = '0')
   ex_num <- glue::glue("ex_{stringr::str_pad(session, 2, pad = '0')}")
 
-  v_path <- get_vignette_path(ex_num, package = "learnB4SS")
+  if (!(ex_num %in% c("03", "07", "08"))) {
+    cli::cli_alert_danger(
+      glue::glue("Session {num} does not have exercises! Choose Session 03, 07, or 08."))
+  } else {
+    v_path <- get_vignette_path(ex_num, package = "learnB4SS")
 
-  # The file is not copied if it already exists in the working dir.
-  file.copy(v_path, ".")
+    # The file is not copied if it already exists in the working dir.
+    file.copy(v_path, ".")
 
-  usethis::edit_file(glue::glue("./{ex_num}.Rmd"))
+    usethis::edit_file(glue::glue("./{ex_num}.Rmd"))
+  }
 }
 
 

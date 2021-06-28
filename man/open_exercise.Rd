@@ -16,9 +16,18 @@ Nothing. Used for its side effects.
 Call this function with the session number as argument and the exercise
 file will be copied in the working directory and opened in the editor.
 }
+\details{
+The following sessions have exercises:
+
+- Session 03.
+
+- Session 07.
+
+- Session 08.
+}
 \examples{
 \dontrun{
-open_exercise(1)
+open_exercise(3)
 }
-# The exercise of Session 01 will open for editing.
+# The exercise of Session 03 will open for editing.
 }
