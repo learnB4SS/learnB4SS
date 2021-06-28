@@ -8,6 +8,9 @@
       }
     ]
   },
+  "Bioconductor": {
+    "Version": "3.13"
+  },
   "Packages": {
     "BH": {
       "Package": "BH",
@@ -15,6 +18,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "e4c04affc2cac20c8fec18385cd14691"
+    },
+    "BiocManager": {
+      "Package": "BiocManager",
+      "Version": "1.30.16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2fdca0877debdd4668190832cdee4c31"
     },
     "Brobdingnag": {
       "Package": "Brobdingnag",
@@ -155,6 +165,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "644043219fc24e190c2f620c1a380a69"
+    },
+    "badger": {
+      "Package": "badger",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "014f2c614d8456059504955a322b9999"
     },
     "base64enc": {
       "Package": "base64enc",
@@ -408,6 +425,13 @@
       "Repository": "CRAN",
       "Hash": "046f2e782ce27c4d08b02e101aa5fee3"
     },
+    "dlstats": {
+      "Package": "dlstats",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7fa98978434fd311584e3aef5b7b3abe"
+    },
     "downlit": {
       "Package": "downlit",
       "Version": "0.2.1",
@@ -484,6 +508,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "77bd60a6157420d4ffa93b27cf6a58b8"
+    },
+    "flipdownr": {
+      "Package": "flipdownr",
+      "Version": "0.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "ecc0a4280891cc8b79fbff3af26af602"
     },
     "forcats": {
       "Package": "forcats",
@@ -1212,6 +1243,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "06c85365a03fdaf699966cc1d3cf53ea"
+    },
+    "rvcheck": {
+      "Package": "rvcheck",
+      "Version": "0.1.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "11ebf2d3d4990e8bb9f28d5ab0c204fc"
     },
     "rversions": {
       "Package": "rversions",
