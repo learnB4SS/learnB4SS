@@ -22,7 +22,7 @@ library(tidybayes)
 polite <- learnB4SS::polite
 ```
 
-## Walkthrough
+## 1. Walkthrough
 
 # Introduction
 Until now, we have only dealt with very simple models, most of which are just not particularly relevant for what we actually do in our research, right? So in this section, we will level up. We will add additional parameters to our regression in the form of fixed effects and random effect. Sounds much more like the stuff you want to do, right? We are going to estimate these parameters and specify appropriate priors for them. After this session you will be much closer to being an operational Bayesian for your actual research.
@@ -255,3 +255,78 @@ post_complex
 Now let's use these posteriors to draw inferences. 
 
 
+## 2. Exercise
+Now it's your turn: Our goal is it to run the following model: `f0mn ~ attitude + gender + (1 | subject) + (0 + attitude | subject)`
+
+(a) First, see which parameters we need to specify with priors using the `get_prior()` function. (If you are unsure, see our code examples above)
+
+```{r get_prior_ex, message = F}
+
+# get prior
+get_prior(
+ formula = 
+   f0mn ~ 
+   attitude + gender +
+   + (1 | subject) + 
+   (0 + attitude | subject),
+  data = polite
+)
+
+```
+
+(b) Now specify weakly informative priors for all parameters. For the intercept, chose a normal prior with mean = 0 and sd = 300. For fixed effects, random effects and residual variance go with something like a normal prior with mean = 0 and sd = 100.
+
+```{r get_prior_ex, message = F}
+
+# specify priors
+priors_ex <- c(
+  prior(normal(0, 300), class = Intercept),
+  prior(normal(0, 100), class = b, coef = attitudepol),
+  prior(normal(0, 100), class = b, coef = genderM),
+  # specify weakly informative prior for the random effects (intercepts)
+  prior(normal(0, 100), class = sd, group = subject),
+   # specify weakly informative prior for the random effects (slopes)
+  prior(normal(0, 100), class = sd, coef = attitudeinf, group = subject),
+  prior(normal(0, 100), class = sd, coef = attitudepol, group = subject),
+  # specify weakly informative prior for the correlation between random intercept and slope
+  prior(lkj_corr_cholesky(2), class = L, group = subject),
+  prior(normal(0, 100), class = sigma)
+)
+
+```
+
+(c) Now run the model with your specified priors. Use `seed = 999` in order for all of you to get the same results.
+
+```{r get_prior_ex, message = F}
+
+# Run model
+ex_model <- brm(
+  f0mn ~ 
+    attitude + gender +
+    # add random intercept
+    (1 | subject) +
+    # add random slope
+    (0 + attitude | subject),  
+   data = polite,
+   prior = priors_ex,
+   seed = 999
+)
+
+summary(ex_model)
+
+```
+
+(d) extract the posteriors for the coefficient attitudepol and plot it.
+
+```{r multiple_model_post, message = F}
+
+# Extract posterior coefficient politeness
+ex_plot <- ex_model %>%
+  spread_draws(b_attitudepol) %>% 
+  ggplot(.) + 
+    stat_halfeye(aes(x = b_attitudepol)) +
+  labs(x = "fundamental frequency in Hz")
+
+ex_plot
+
+```
