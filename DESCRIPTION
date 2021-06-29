@@ -1,8 +1,8 @@
 Package: learnB4SS
 Type: Package
 Title: Learning materials for the learnB4SS Workshop
-Version: 0.1.0
-Date: 2021-06-07
+Version: 1.0.0
+Date: 2021-06-29
 Authors@R: c(
     person(given = "Stefano",
            family = "Coretta",
@@ -17,7 +17,8 @@ Authors@R: c(
            family = "Roettger",
            role = c("aut"),
            comment = c(ORCID = "0000-0003-1400-2739")))
-Description: Learn Bayesian analysis for the Speech Sciences in R.
+Description: It provides the learning materials from the workshop 'Learn Bayesian
+    Analysis for the Speech Sciences'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -44,4 +45,4 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
