@@ -1,11 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Learn Bayesian Analysis for Speech Sciences
+# Learn Bayesian Analysis for the Speech Sciences
 
 <!-- badges: start -->
 
-![](https://img.shields.io/badge/version-0.1.0-FFA70B.svg)
+![](https://img.shields.io/badge/version-1.0.0-FFA70B.svg)
 <!-- badges: end -->
 
 <img src='man/figures/Logo.png' align="right" height="200" /> Here you
