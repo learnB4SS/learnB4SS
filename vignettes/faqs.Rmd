@@ -14,11 +14,31 @@ knitr::opts_chunk$set(
 )
 ```
 
+## 1. General
+
+### Do I need to know how to use R in order to participate?
+
+Yes. While we will guide you through the process of running a Bayesian analysis with a lot of examples, we won't go over the basics of R.
+
+If you wish to brush up your R skills, we recommend the interactive tool `swiRl`, which you can find here: <http://swirlstats.com/>.
+
+### Do I need to know basic statistics in order to participate?
+
+Yes. We will give you the necessary notions to understand and perform a Bayesian analysis, and we will revise a few concepts from non-Bayesian statistics, but we expect you to have familiarity with linear regressions.
+
+In particular, we won't cover topics such as interpreting regression coefficients, understanding interactions, including random effects, or coding factors.
+
+For an easy-to-follow introduction, we highly recommend Bodo Winter's book *Statistics for linguists: An introduction using R* (which also includes a chapter on basic R).
+
+## 2. Practicalities
+
 ### I live in an inconvenient time-zone. Will I be able to attend at a different time?
 
 We are sorry we could not accommodate all time-zones, but we will provide you with captioned recordings so that you can watch them and follow along.
 
 We are still finalising the practical aspects of how we will share the recordings and in what form. We will update this FAQ as soon as possible.
+
+## 3. Software
 
 ### On macOS, I get errors related to the Command Line Tools. What can I do?
 
@@ -30,16 +50,16 @@ sudo rm -rf /usr/local/include
 xcode-select --install
 ```
 
-### Do I need to know how to use R in order to participate?
+If you have recently updated macOS, you have to update the CLTs and the easiest way to do it is to run in the Terminal:
 
-Yes. While we will guide you through the process of running a Bayesian analysis with a lot of examples, we won't go over the basics of R.
+```shell
+sudo rm -rf /Library/Developer/CommandLineTools
+xcode-select --install
+```
 
-If you wish to brush up your R skills, we recommend the interactive tool `swiRl`, which you can find here: <http://swirlstats.com/>.
+## On Linux/Ubuntu I get dependency issues when installing Rstan.
 
-### Do I need a basic knowledge of statistics?
+Some users reported [this solution](https://github.com/stan-dev/rstan/issues/863#issuecomment-716032652) to have worked.
+Also using [rrutter 4.0](https://launchpad.net/~c2d4u.team/+archive/ubuntu/c2d4u4.0+) instead of rrutter 3.5 seems to help.
 
-Yes. We will give you the necessary notions to understand and perform a Bayesian analysis, and we will revise a few concepts from non-Bayesian statistics, but we expect you to have familiarity with linear regressions.
-
-In particular, we won't cover topics such as interpreting regression coefficients, understanding interactions, including random effects, or coding factors.
-
-For an easy-to-follow introduction, we highly recommend Bodo Winter's book *Statistic for linguists: An introduction using R* (which also includes a chapter on basic R).
+<br>
