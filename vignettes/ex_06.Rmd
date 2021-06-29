@@ -1,0 +1,407 @@
+---
+title: "Application to regression III - Bayesian inference"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Application to regression III - Bayesian inference}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>", 
+  message = F, 
+  warning = F, 
+  fig.retina = 2, 
+  fig.width = 5, 
+  fig.align="center"
+)
+```
+
+## Get set up
+
+First, let's load the packages and data we will be using. 
+
+```{r setup}
+# Packages
+library("learnB4SS")
+library("dplyr")
+library("ggplot2")
+library("brms")
+library("bayestestR")
+
+# Data
+data(polite)
+```
+
+```{r, plot-setup, include=F}
+theme_set(theme_bw(base_size = 12))
+theme_update(
+  panel.grid.minor = element_line(colour = "grey90", size = 0.1), 
+  panel.grid.major = element_line(colour = "grey90", size = 0.1) 
+  )
+```
+
+## Credible intervals
+
+The first tool we will consider for making statistical inferences in a Bayesian framework is the credible interval. 
+If you have heard of Bayesian inference before, there is a good chance you have also heard of credible intervals. 
+We could describe them as the Bayesian counterpart to confidence intervals under a frequentist framework. 
+
+All we need to calculate a credible interval is a probability distribution. 
+In R, this can be as simple as a vector of values. 
+We'll illustrate by sampling fake data and calculating a CI using base R.
+
+```{r, credible-intervals1}
+# Generate 'fake' posterior by sampling values from a normal distribution with 
+# mean of 5 and SD of 3
+posterior <- rnorm(n = 1000, mean = 5, sd = 3)
+
+# Use quantile function on posterior
+quantile(posterior, c(0.025, 0.975))
+```
+
+We can see that the 95% CI for our posterior is `r quantile(posterior, c(0.025, 0.975))`. 
+
+We can simplify the process even more using the `hdi` function from the `bayestestR` package. 
+This has some other benefits that we will see in a bit.
+
+```{r, credible-intervals2}
+# bayesTestR::hdi
+hdi_ex1 <- hdi(posterior)
+hdi_ex1
+```
+
+Notice that the ranges are slightly different. 
+This is because the HDI, highest density interval, is a special type of credible interval. 
+There are several methods for calculating a CI, but we won't go into that now. 
+For our purposes we will stick with the HDI. 
+
+
+One advantage to using the `hdi` function from the `bayestestR` package is that it also has print methods. 
+This means we can wrap the `plot()` function around our `hdi` object, like this: 
+
+```{r, credible-intervals3}
+# Generate a plot from the hdi object
+plot(hdi_ex1)
+```
+
+<br>
+
+Beautiful!  
+
+Now let's repeat this using a real posterior from a model object. 
+
+Recall that we fit this intercept-only model previously: 
+
+```{r, credible-intervals-hide1, include=F}
+# Intercept-only model
+b_mod_00 <- brm(articulation_rate ~ 1, data = polite, 
+  file = here::here("./vignettes/b_mod_00"))
+```
+
+```{r, credible-intervals-mod00, eval=F}
+# Intercept-only model
+b_mod_00 <- brm(articulation_rate ~ 1, data = polite)
+```
+
+Let's get the posterior distribution and calculate the HDI of the intercept. 
+
+```{r, credible-intervals-mod00-1}
+# Get posterior samples
+post_00 <- posterior_samples(b_mod_00)
+
+# Calculate HDI
+hdi_ex2 <- hdi(post_00$b_Intercept)
+hdi_ex2
+```
+
+So we are 95% certain that the value of the intercept falls between about 6.5 and 6.8. 
+Cool. 
+Let's plot this as well.
+
+```{r, credible-intervals-mod00-2, out.width="100%"}
+# Plot it
+plot(hdi_ex2)
+```
+
+<br>
+
+Now we repeat this process with yesterdays model that included the predictor `attitude`. 
+
+Here is the model again, just in case: 
+
+```
+# Specify priors
+priors_simple <- c(
+  prior(normal(0, 15), class = Intercept),
+  prior(normal(0, 10), class = b, coef = attitudepol),
+  prior(cauchy(0, 1), class = sigma)
+)
+
+# Fit model
+b_mod_01 <- brm(
+  formula = articulation_rate ~ attitude,
+  data = polite,
+  prior = priors_simple
+)
+
+# Get posterior samples
+post_01 <- posterior_samples(b_mod_01)
+```
+
+
+```{r, credible-intervals-hide2, include=F}
+b_mod_01 <- readRDS(here::here("./vignettes/b_mod_01.rds"))
+post_01 <- posterior_samples(b_mod_01)
+```
+
+Let's calculate the CI for the parameter `b_attitudepol`. 
+
+```{r, credible-intervals-mod01-1}
+# Calculate HDI
+hdi_ex3 <- hdi(post_01$b_attitudepol)
+hdi_ex3
+```
+
+It looks like the 95% CI does not encompass 0. 
+Let's take a look at a plot.
+
+```{r, credible-intervals-mod01-2, out.width="100%"}
+# Plot it
+plot(hdi_ex3)
+```
+
+<br>
+
+This is helpful. 
+We can see that the 95% HDI does not encompass 0, but there is some posterior mass that is positive (in blue).  
+In other words, positive values are still a possibility, given the data, the model, and our prior assumptions.
+
+**Bonus**:  
+
+We can also use the `hdi` function directly on a model object. 
+
+```{r, credible-intervals-mod01-3}
+# Get HDI of all paramters of model
+hdi(b_mod_01)
+```
+
+And, like before, we can use the built-in print methods to quickly generate a plot:
+
+```{r, credible-intervals-mod01-4, out.width="100%"}
+# Assign hdi to object and plot
+hdi_on_mod <- hdi(b_mod_01)
+plot(hdi_on_mod, show_intercept = T)
+```
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Probability of direction
+
+Another tool we have for decision making is the `probability of direction`, also known as the *maximum probability of effect*. 
+The probability of direction tells us the proportion of the posterior that has the same sign (that is, if its + or -) as the median of the distribution. 
+This value can range from 50% to 100% (0.5 - 1.0). 
+
+To calculate the probability of direction we will again resort to the `bayestestR` package and use the `p_direction` function. 
+The function will calculate the probability of direction on a vector, 
+
+```{r, p-direction-1}
+# "Fake" posterior example 
+p_direction(posterior)
+```
+
+on posterior samples taken from a model object, 
+
+```{r, p-direction-2}
+# PD of intercept-only model
+p_direction(post_00$b_Intercept)
+```
+
+and directly on a model object: 
+
+```{r, p-direction-3}
+# PD for all parameters in b_mod_01
+p_direction(b_mod_01)
+```
+
+Again, we can take advantage of the print methods and quickly generate a plot: 
+
+```{r, p-direction-4}
+# Assign PD to object and print
+pd_on_mod <- p_direction(b_mod_01)
+plot(pd_on_mod, show_intercept = T)
+```
+
+<br>
+
+To build intuition about how the probability of direction corresponds with a frequentist p-value we can use the `pd_to_p` and `p_to_pd` functions to convert between the two (not recommended). 
+
+```{r, p-direction-5}
+# Calculate p-value from PD
+pd_to_p(0.987)
+
+# Calculate PD from p-value
+p_to_pd(0.01)
+```
+
+This plot shows the linear relationship between the probability of direction and a frequentist p-value. 
+
+```{r, pd-p-comparison, echo=F, out.width="100%"}
+tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
+  mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
+  ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
+    geom_rect(aes(xmin = 0, xmax = 0.05, ymin = -Inf, ymax = Inf), 
+      fill = "lightgrey", alpha = 0.01) + 
+    geom_hline(yintercept = p_to_pd(0.05), lty = 3, size = 0.5) + 
+    geom_line() + 
+    geom_point(aes(fill = `p-value` < 0.05), 
+      size = 3, pch = 21, color = "white", stroke = 1.5) + 
+    scale_fill_manual(name = "p-value < 0.05", 
+      values = c("#8970FF", "#FFA70B")) + 
+    scale_x_continuous(breaks = seq(0.0, 0.1, 0.01)) + 
+    theme(legend.position = c(0.8, 0.8))
+```
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## ROPEs
+
+The next tool we are going to talk about combines the highest density credible interval with a *region of practical equivalence*, or a ROPE
+We can use the ROPE to calculate the proportion of the HDI of a posterior distribution that lies within its bounds. 
+ROPEs are useful because they allow the researcher to define a range of values which they consider to be practically equivalent to a null effect
+
+We will again use the `rope` function from the `basyestestR` package. 
+By default, the `rope` function will calculate the proportion of the 95% CI that falls 
+within our ROPE range. 
+Like before, we can operate on a single distribution stored in a vector
+
+```{r, rope-1}
+# Calculate % of HDI within rope using simulated data
+rope(posterior)
+```
+
+We can set the range of the ROPE and the size of the HDI using the arguments `range` and `ci`, respectively. 
+
+```{r, rope-2}
+# Calculate % of HDI within rope w/ specific settings
+rope(posterior, range = c(-0.1, 0.1), ci = 0.99)
+```
+
+The default sets the CI to 95% and the ROPE range to &pm;0.1, unless the input is a Bayesian model. 
+In that case, the function `rope_range` is used to calculate a ROPE (following Kruschke 2018, see `?rope_range`).
+
+$$\color{black}{\frac{\mu_{1} - \mu_{2}}{\sqrt{\frac{\sigma^2_{1} + \sigma^2_{2}}{2}}}}$$
+
+```{r, rope-3}
+# Calculate an appropriate ROPE following Kruschke 2018
+rope_range(b_mod_01)
+
+# Run it on our model
+rope_on_mod01 <- rope(b_mod_01, range = c(-0.2, 0.2), ci = 0.95)
+rope_on_mod01
+```
+
+And again there are also print methods for rope objects.
+
+```{r, rope-4}
+plot(rope_on_mod01, show_intercept = T)
+```
+
+<br>
+
+We can also use a ROPE with multiple CIs. 
+
+```{r, rope-5}
+# Set more strict ROPE and several HDIs
+rope_on_mod02 <- rope(b_mod_01, range = c(-0.2, 0.2), ci = c(0.9, 0.95, 0.99))
+rope_on_mod02
+plot(rope_on_mod02)
+```
+
+<br>
+
+## Your turn!
+
+Now let's take some of these tools and use them to test different hypotheses using the `polite` dataset. 
+
+Let's fit the following model: `articulation_rate ~ musicstudent`
+
+To simplify, you can use the same priors from above. 
+Here is a hint, but you need to fill in the details. 
+
+```{r, practical1, eval=F}
+# Specify priors
+priors_simple <- c(
+  prior(normal(0, 15), class = Intercept),
+  prior(normal(0, 10), class = b),
+  prior(cauchy(0, 1), class = sigma)
+)
+
+b_mod_02 <- brm(
+  formula = ???, 
+  prior = ???, 
+  data = polite
+)
+
+```
+
+1. Using a credible interval, determine whether or not there is compelling evidence that the articulation rate between non-music students and music students is non-zero. 
+
+```{r, ex1, eval=F}
+hdi(b_mod_02)
+```
+
+2. What is the probability that the estimate of the difference between non-music students and music students, i.e., `musicstudentyes`, is negative?
+
+```{r, ex2, eval=F}
+p_direction(b_mod_02)
+```
+
+3. Again, consider the non-music/music student difference, but quantify your uncertainty using a ROPE (use a range and CI width of your choice). 
+Plot the result. 
+
+```{r, ex3, eval=F}
+ex3 <- rope(b_mod_02, range = c(-0.15, 0.15), ci = 0.95)
+plot(ex3)
+```
+
+**Hint**:  
+You can calculate all of these metrics with a single function! 
+Try `describe_posterior`. 
+
+```{r, describe-posterior-func, eval=F}
+describe_posterior(b_mod_02, rope_range = c(-0.15, 0.15), ci = 0.99)
+```
