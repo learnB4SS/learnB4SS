@@ -57,7 +57,7 @@ sudo rm -rf /Library/Developer/CommandLineTools
 xcode-select --install
 ```
 
-## On Linux/Ubuntu I get dependency issues when installing Rstan.
+### On Linux/Ubuntu I get dependency issues when installing Rstan.
 
 Some users reported [this solution](https://github.com/stan-dev/rstan/issues/863#issuecomment-716032652) to have worked.
 Also using [rrutter 4.0](https://launchpad.net/~c2d4u.team/+archive/ubuntu/c2d4u4.0+) instead of rrutter 3.5 seems to help.
