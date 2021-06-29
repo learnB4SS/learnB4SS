@@ -12,6 +12,7 @@ navbar:
       - text: Install brms and dependencies
         href: articles/install-brms.html
       - text: Install the learnB4SS package
+        href: articles/install-learnb4ss.html
     slides:
       text: Slides
       menu:
@@ -23,7 +24,7 @@ navbar:
       - text: 2. Bayes theorem — How does it work?
         href: https://learnb4ss.github.io/slides/02_bayes_theorem/index.html
       - text: 3. Application to regression II — Priors and Bayesian updating
-        href: https://learnb4ss.github.io/slides/03_a2r_prior_and_bayesian_updating/index.html
+        href: https://learnb4ss.github.io/slides/03_a2r_priors_and_bayesian_updating/index.html
       - text: 4. NHST vs. Bayesian inference
         href: https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/index.html
       - text: -------
@@ -32,10 +33,10 @@ navbar:
         href: https://learnb4ss.github.io/slides/05_review/index.html
       - text: 6. Application to regression III — More Bayesian inference
         href: https://learnb4ss.github.io/slides/06_a2r_inference_over_posterior/index.html
-      - text: 7. Application to regression IV — Leveling up
-        href: https://learnb4ss.github.io/slides/07_a2r_leveling_up/index.html
-      - text: 8. More on priors
-        href: https://learnb4ss.github.io/slides/08_more_priors_likelihoods/index.html
+      - text: 7. More on priors
+        href: https://learnb4ss.github.io/slides/07_more_priors/index.html
+      - text: 8. Application to regression IV — Leveling up
+        href: https://learnb4ss.github.io/slides/08_a2r_leveling_up/index.html
       - text: 9. Sampling from the posterior
         href: https://learnb4ss.github.io/slides/09_sample_the_posterior/index.html
       - text: 10. Wrap up
@@ -48,9 +49,9 @@ navbar:
         href: articles/ex_03.html
       - text: -------
       - text: "Day 2"
-      - text: 6. Application to regression II — Priors and Bayesian updating
+      - text: 6. Application to regression III - More Bayesian inference
         href: articles/ex_06.html
-      - text: 7. Application to regression II — Priors and Bayesian updating
+      - text: 7. Application to regression IV - Leveling up to hierarchical models
         href: articles/ex_07.html
     reference:
       text: Package
