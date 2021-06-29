@@ -12,11 +12,11 @@ Authors@R: c(
     person(given = "Joseph V.",
            family = "Casillas",
            role = c("aut" ),
-           comment = c(ORCID = "0000-0001-8735-9910"))),
+           comment = c(ORCID = "0000-0001-8735-9910")),
     person(given = "Timo",
            family = "Roettger",
            role = c("aut"),
-           comment = c(ORCID = "0000-0003-1400-2739"))
+           comment = c(ORCID = "0000-0003-1400-2739")))
 Description: Learn Bayesian analysis for the Speech Sciences in R.
 License: MIT + file LICENSE
 Encoding: UTF-8
