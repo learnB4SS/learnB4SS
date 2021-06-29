@@ -1,8 +1,8 @@
 ---
-title: "Application to regression II - The prior and Bayesian updating"
+title: "Application to regression II - Priors and Bayesian updating"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Application to regression II - The prior and Bayesian updating}
+  %\VignetteIndexEntry{Application to regression II - Priors and Bayesian updating}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -75,7 +75,7 @@ But we will want to change them all to something more appropriate (we will talk 
 ## `class`
 
 The columns `class` and `coef` are the ones you should check.
-`class` indicates the type of model parameter: `b` indicates a slope term, `Intercept` the model intercept, and `sigma` the model residual standard deviation.
+`class` indicates the type of model parameter: `Intercept` is the model intercept,`b` indicates a predictor term, and `sigma` the model's residual standard deviation.
 
 ## `coef`
 
@@ -135,4 +135,84 @@ m1 <- brm(
   prior = my_priors
 )
 ```
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+Solutions to exercise 03.
+
+get_prior(
+ formula = articulation_rate ~ attitude,
+ data = polite
+)
+
+my_priors <- c(
+  prior(normal(0, 15), class = Intercept),
+  prior(normal(0, 10), class = b, coef = attitudepol),
+  prior(cauchy(0, 1), class = sigma)
+)
+-->
+
 

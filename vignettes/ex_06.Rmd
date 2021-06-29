@@ -1,8 +1,8 @@
 ---
-title: "Application to regression III - Bayesian inference"
+title: "Application to regression III - More Bayesian inference"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Application to regression III - Bayesian inference}
+  %\VignetteIndexEntry{Application to regression III - More Bayesian inference}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -415,3 +415,4 @@ Try `describe_posterior`.
 ```{r, describe-posterior-func, eval=F}
 describe_posterior(b_mod_02, rope_range = c(-0.15, 0.15), ci = 0.99)
 ```
+
