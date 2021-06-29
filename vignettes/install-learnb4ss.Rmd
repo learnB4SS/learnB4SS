@@ -1,0 +1,62 @@
+---
+title: "How to install the learnB4SS package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to install the learnB4SS package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+All the workshop materials can be conveniently installed as an R package.
+
+To install the learnB4SS package, you need to install the remotes package first, if not already installed.
+
+```{r remotes}
+install.packages("remotes")
+```
+
+Then, simply ran the following line.
+
+```{r learnb4ss}
+remotes::install_github("learnB4SS/learnB4SS@v1.0.0")
+```
+
+🎉 You are now ready for your Bayesian adventure!
+
+## Usage
+
+During the workshop, you will be able to follow along by attaching the package learnB4SS:
+
+```{r attach}
+library(learnB4SS)
+```
+
+Now you can use the function `open_slides()` to open the session slides in your browser and `open_exercise()` to open the exercise files.
+
+```{r open}
+# Open slides of session 00
+open_slides(00)
+
+# Open exercise of session 03
+open_exercise(03)
+```
+
+We will use the `polite` data throughout the workshop.
+
+You can load the data with:
+
+```{r data}
+data("polite")
+
+# Learn about the data
+?polite
+```
+
