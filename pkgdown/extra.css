@@ -27,3 +27,27 @@
 .navbar-default .navbar-nav > li > a {
     color: #fff;
 }
+
+.navbar-default .navbar-link:hover {
+    color: #4D34C3;
+}
+
+.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover {
+    color: #4D34C3;
+    background-color: transparent;
+}
+
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+    color: #fff;
+    background-color: #4D34C3;
+}
+
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+    color: #fff;
+    background-color: #4D34C3;
+}
+
+a {
+    color: #FFA70B;
+    text-decoration: none;
+}

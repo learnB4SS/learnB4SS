@@ -48,6 +48,10 @@ navbar:
         href: articles/ex_03.html
       - text: -------
       - text: "Day 2"
+      - text: 6. Application to regression II — Priors and Bayesian updating
+        href: articles/ex_06.html
+      - text: 7. Application to regression II — Priors and Bayesian updating
+        href: articles/ex_07.html
     reference:
       text: Package
       href: reference/index.html
