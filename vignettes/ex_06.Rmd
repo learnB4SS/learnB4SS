@@ -121,7 +121,7 @@ So we are 95% certain that the value of the intercept falls between about 6.5 an
 Cool. 
 Let's plot this as well.
 
-```{r, credible-intervals-mod00-2, out.width="100%"}
+```{r, credible-intervals-mod00-2}
 # Plot it
 plot(hdi_ex2)
 ```
@@ -168,7 +168,7 @@ hdi_ex3
 It looks like the 95% CI does not encompass 0. 
 Let's take a look at a plot.
 
-```{r, credible-intervals-mod01-2, out.width="100%"}
+```{r, credible-intervals-mod01-2}
 # Plot it
 plot(hdi_ex3)
 ```
@@ -190,7 +190,7 @@ hdi(b_mod_01)
 
 And, like before, we can use the built-in print methods to quickly generate a plot:
 
-```{r, credible-intervals-mod01-4, out.width="100%"}
+```{r, credible-intervals-mod01-4}
 # Assign hdi to object and plot
 hdi_on_mod <- hdi(b_mod_01)
 plot(hdi_on_mod, show_intercept = T)
@@ -260,7 +260,7 @@ p_to_pd(0.01)
 
 This plot shows the linear relationship between the probability of direction and a frequentist p-value. 
 
-```{r, pd-p-comparison, echo=F, out.width="100%"}
+```{r, pd-p-comparison, echo=F, out.width="90%"}
 tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
   mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
   ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
@@ -378,25 +378,33 @@ b_mod_02 <- brm(
 
 ```
 
+<!--
+b_mod_02 <- brm(
+  formula = articulation_rate ~ musicstudent, 
+  prior = priors_simple, 
+  data = polite
+)
+-->
+
 1. Using a credible interval, determine whether or not there is compelling evidence that the articulation rate between non-music students and music students is non-zero. 
 
-```{r, ex1, eval=F}
+<!--
 hdi(b_mod_02)
-```
+-->
 
 2. What is the probability that the estimate of the difference between non-music students and music students, i.e., `musicstudentyes`, is negative?
 
-```{r, ex2, eval=F}
+<!--
 p_direction(b_mod_02)
-```
+-->
 
 3. Again, consider the non-music/music student difference, but quantify your uncertainty using a ROPE (use a range and CI width of your choice). 
 Plot the result. 
 
-```{r, ex3, eval=F}
+<!--
 ex3 <- rope(b_mod_02, range = c(-0.15, 0.15), ci = 0.95)
 plot(ex3)
-```
+-->
 
 **Hint**:  
 You can calculate all of these metrics with a single function! 
