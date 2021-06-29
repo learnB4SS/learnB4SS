@@ -5,7 +5,7 @@
 
 <!-- badges: start -->
 
-![](https://img.shields.io/badge/version-0.1.0-orange.svg)
+![](https://img.shields.io/badge/version-0.1.0-FFA70B.svg)
 <!-- badges: end -->
 
 <img src='man/figures/Logo.png' align="right" height="200" /> Here you
