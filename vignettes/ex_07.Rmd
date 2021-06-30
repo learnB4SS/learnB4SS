@@ -409,31 +409,6 @@ p_direction(...)
 
 ```
 
-(f) But is the model appropriate for the data. 
-Run a posterior predictive checknad see what is going on.
-
-```{r ex_pp_check, message = F}
-
-# posterior predictive check
-...
-
-```
-
-(g) What is wrong with the fit? 
-Why could it look like the way it does? 
-How can you fix it?
-
-```{r ex_refit, message = F}
-
-ex_model_refit <- brm(
-  formular = ...,
-  data = ...,
-  prior = ...,
-  seed = 1111
-)
-
-```
-
 <br>
 
 
@@ -542,24 +517,3 @@ ggplot(ex_post) +
 hdi(ex_post$b_attitudepol)
 p_direction(ex_post$b_attitudepol)
 -->
-
-<!-- (f)
-pp_check(ex_model, nsamples = 100)
--->
-
-<!-- (g) The model does not seem to capture a bimodality very well. 
-This bimodality is likely from two different types of speakers, those that identified themselves as females vs. those that identified themselves as male. We should add gender as a predictor.
-
-ex_model_refit <- brm(
-  f0mn ~ 
-    attitude + gender +
-    (1 | subject) +
-    (0 + attitude | subject),  
-   data = polite,
-   prior = priors_ex,
-   seed = 1111
-)
-
-pp_check(ex_model_refit, nsamples = 100)
--->
-
