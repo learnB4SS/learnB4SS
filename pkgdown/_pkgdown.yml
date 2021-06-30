@@ -51,10 +51,10 @@ navbar:
       - text: "Day 2"
       - text: 6. Application to regression III - More Bayesian inference
         href: articles/ex_06.html
-      - text: 7. Application to regression IV - Leveling up to hierarchical models
-        href: articles/ex_07.html
+      - text: 8. Application to regression IV - Leveling up to hierarchical models
+        href: articles/ex_08.html
     reference:
-      text: Package
+      text: Documentation
       href: reference/index.html
     faqs:
       text: FAQs

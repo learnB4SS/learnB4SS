@@ -8,7 +8,7 @@
 ![](https://img.shields.io/badge/version-1.0.0-FFA70B.svg)
 <!-- badges: end -->
 
-<img src='man/figures/Logo.png' align="right" height="200" /> Here you
+<img src='man/figures/logo.png' align="right" height="200" /> Here you
 can find the learning materials for the workshop **Learn Bayesian
 Analysis for the Speech Sciences** (learnB4SS), in the form of an R
 package.

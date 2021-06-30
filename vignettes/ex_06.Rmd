@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
@@ -37,7 +37,7 @@ mod_00 <- system.file("extdata/b_mod_00.rds", package = "learnB4SS")
 mod_01 <- system.file("extdata/b_mod_01.rds", package = "learnB4SS")
 ```
 
-```{r, plot-setup, include=F}
+```{r plot-setup, include=F}
 theme_set(theme_bw(base_size = 12))
 theme_update(
   panel.grid.minor = element_line(colour = "grey90", size = 0.1), 
@@ -55,7 +55,7 @@ All we need to calculate a credible interval is a probability distribution.
 In R, this can be as simple as a vector of values. 
 We'll illustrate by sampling fake data and calculating a CI using base R.
 
-```{r, credible-intervals1}
+```{r credible-intervals1}
 # Generate 'fake' posterior by sampling values from a normal distribution with 
 # mean of 5 and SD of 3
 posterior <- rnorm(n = 1000, mean = 5, sd = 3)
@@ -69,7 +69,7 @@ We can see that the 95% CI for our posterior is `r quantile(posterior, c(0.025, 
 We can simplify the process even more using the `hdi` function from the `bayestestR` package. 
 This has some other benefits that we will see in a bit.
 
-```{r, credible-intervals2}
+```{r credible-intervals2}
 # bayesTestR::hdi
 hdi_ex1 <- hdi(posterior)
 hdi_ex1
@@ -84,7 +84,7 @@ For our purposes we will stick with the HDI.
 One advantage to using the `hdi` function from the `bayestestR` package is that it also has print methods. 
 This means we can wrap the `plot()` function around our `hdi` object, like this: 
 
-```{r, credible-intervals3}
+```{r credible-intervals3}
 # Generate a plot from the hdi object
 plot(hdi_ex1)
 ```
@@ -97,20 +97,20 @@ Now let's repeat this using a real posterior from a model object.
 
 Recall that we fit this intercept-only model previously: 
 
-```{r, credible-intervals-hide1, include=F}
+```{r credible-intervals-hide1, include=F}
 # Intercept-only model
 b_mod_00 <- brm(articulation_rate ~ 1, data = polite, 
   file = mod_00)
 ```
 
-```{r, credible-intervals-mod00, eval=F}
+```{r credible-intervals-mod00, eval=F}
 # Intercept-only model
 b_mod_00 <- brm(articulation_rate ~ 1, data = polite)
 ```
 
 Let's get the posterior distribution and calculate the HDI of the intercept. 
 
-```{r, credible-intervals-mod00-1}
+```{r credible-intervals-mod00-1}
 # Get posterior samples
 post_00 <- posterior_samples(b_mod_00)
 
@@ -123,7 +123,7 @@ So we are 95% certain that the value of the intercept falls between about 6.5 an
 Cool. 
 Let's plot this as well.
 
-```{r, credible-intervals-mod00-2}
+```{r credible-intervals-mod00-2}
 # Plot it
 plot(hdi_ex2)
 ```
@@ -154,14 +154,14 @@ post_01 <- posterior_samples(b_mod_01)
 ```
 
 
-```{r, credible-intervals-hide2, include=F}
+```{r credible-intervals-hide2, include=F}
 b_mod_01 <- readRDS(mod_01)
 post_01 <- posterior_samples(b_mod_01)
 ```
 
 Let's calculate the CI for the parameter `b_attitudepol`. 
 
-```{r, credible-intervals-mod01-1}
+```{r credible-intervals-mod01-1}
 # Calculate HDI
 hdi_ex3 <- hdi(post_01$b_attitudepol)
 hdi_ex3
@@ -170,7 +170,7 @@ hdi_ex3
 It looks like the 95% CI does not encompass 0. 
 Let's take a look at a plot.
 
-```{r, credible-intervals-mod01-2}
+```{r credible-intervals-mod01-2}
 # Plot it
 plot(hdi_ex3)
 ```
@@ -185,14 +185,14 @@ In other words, positive values are still a possibility, given the data, the mod
 
 We can also use the `hdi` function directly on a model object. 
 
-```{r, credible-intervals-mod01-3}
+```{r credible-intervals-mod01-3}
 # Get HDI of all paramters of model
 hdi(b_mod_01)
 ```
 
 And, like before, we can use the built-in print methods to quickly generate a plot:
 
-```{r, credible-intervals-mod01-4}
+```{r credible-intervals-mod01-4}
 # Assign hdi to object and plot
 hdi_on_mod <- hdi(b_mod_01)
 plot(hdi_on_mod, show_intercept = T)
@@ -221,28 +221,28 @@ This value can range from 50% to 100% (0.5 - 1.0).
 To calculate the probability of direction we will again resort to the `bayestestR` package and use the `p_direction` function. 
 The function will calculate the probability of direction on a vector, 
 
-```{r, p-direction-1}
+```{r p-direction-1}
 # "Fake" posterior example 
 p_direction(posterior)
 ```
 
 on posterior samples taken from a model object, 
 
-```{r, p-direction-2}
+```{r p-direction-2}
 # PD of intercept-only model
 p_direction(post_00$b_Intercept)
 ```
 
 and directly on a model object: 
 
-```{r, p-direction-3}
+```{r p-direction-3}
 # PD for all parameters in b_mod_01
 p_direction(b_mod_01)
 ```
 
 Again, we can take advantage of the print methods and quickly generate a plot: 
 
-```{r, p-direction-4}
+```{r p-direction-4}
 # Assign PD to object and print
 pd_on_mod <- p_direction(b_mod_01)
 plot(pd_on_mod, show_intercept = T)
@@ -252,7 +252,7 @@ plot(pd_on_mod, show_intercept = T)
 
 To build intuition about how the probability of direction corresponds with a frequentist p-value we can use the `pd_to_p` and `p_to_pd` functions to convert between the two (not recommended). 
 
-```{r, p-direction-5}
+```{r p-direction-5}
 # Calculate p-value from PD
 pd_to_p(0.987)
 
@@ -262,7 +262,7 @@ p_to_pd(0.01)
 
 This plot shows the linear relationship between the probability of direction and a frequentist p-value. 
 
-```{r, pd-p-comparison, echo=F, out.width="90%"}
+```{r pd-p-comparison, echo=F, out.width="90%"}
 tibble(`Prob. of direction` = seq(0.95, 1.0, 0.0025)) %>%
   mutate(., `p-value` = pd_to_p(`Prob. of direction`)) %>% 
   ggplot(., aes(x = `p-value`, y = `Prob. of direction`)) + 
@@ -310,14 +310,14 @@ By default, the `rope` function will calculate the proportion of the 95% CI that
 within our ROPE range. 
 Like before, we can operate on a single distribution stored in a vector
 
-```{r, rope-1}
+```{r rope-1}
 # Calculate % of HDI within rope using simulated data
 rope(posterior)
 ```
 
 We can set the range of the ROPE and the size of the HDI using the arguments `range` and `ci`, respectively. 
 
-```{r, rope-2}
+```{r rope-2}
 # Calculate % of HDI within rope w/ specific settings
 rope(posterior, range = c(-0.1, 0.1), ci = 0.99)
 ```
@@ -327,7 +327,7 @@ In that case, the function `rope_range` is used to calculate a ROPE (following K
 
 $$\color{black}{\frac{\mu_{1} - \mu_{2}}{\sqrt{\frac{\sigma^2_{1} + \sigma^2_{2}}{2}}}}$$
 
-```{r, rope-3}
+```{r rope-3}
 # Calculate an appropriate ROPE following Kruschke 2018
 rope_range(b_mod_01)
 
@@ -338,7 +338,7 @@ rope_on_mod01
 
 And again there are also print methods for rope objects.
 
-```{r, rope-4}
+```{r rope-4}
 plot(rope_on_mod01, show_intercept = T)
 ```
 
@@ -346,7 +346,7 @@ plot(rope_on_mod01, show_intercept = T)
 
 We can also use a ROPE with multiple CIs. 
 
-```{r, rope-5}
+```{r rope-5}
 # Set more strict ROPE and several HDIs
 rope_on_mod02 <- rope(b_mod_01, range = c(-0.2, 0.2), ci = c(0.9, 0.95, 0.99))
 rope_on_mod02
@@ -364,7 +364,7 @@ Let's fit the following model: `articulation_rate ~ musicstudent`
 To simplify, you can use the same priors from above. 
 Here is a hint, but you need to fill in the details. 
 
-```{r, practical1, eval=F}
+```{r practical1, eval=F}
 # Specify priors
 priors_simple <- c(
   prior(normal(0, 15), class = Intercept),
@@ -412,7 +412,7 @@ plot(ex3)
 You can calculate all of these metrics with a single function! 
 Try `describe_posterior`. 
 
-```{r, describe-posterior-func, eval=F}
+```{r describe-posterior-func, eval=F}
 describe_posterior(b_mod_02, rope_range = c(-0.15, 0.15), ci = 0.99)
 ```
 

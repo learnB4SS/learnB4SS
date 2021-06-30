@@ -20,8 +20,11 @@ knitr::opts_chunk$set(
 Let's load the data we are going to use.
 
 ```{r setup}
+# Packages
 library(brms)
 library(learnB4SS)
+
+# Data
 data("polite")
 ```
 

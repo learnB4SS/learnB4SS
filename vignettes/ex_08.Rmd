@@ -17,15 +17,15 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-# libraries
+# Packages
 library(learnB4SS)
 library(brms)
 library(tidyverse)
 library(tidybayes)
 library(bayestestR)
 
-# data
-polite <- learnB4SS::polite
+# Data
+data(polite)
 ```
 
 # Walkthrough
@@ -52,12 +52,10 @@ priors_simple <- c(
 
 # specify model
 simple_model <- brm(
-  articulation_rate ~ 
-    attitude,  
-    data = polite,
-    prior = priors_simple
-  )
-
+  articulation_rate ~ attitude,  
+  data = polite,
+  prior = priors_simple
+)
 ```
 
 Let us briefly remind ourselves, what the results look like. 
@@ -74,7 +72,6 @@ post_simple_plot <- posterior_samples(simple_model) %>%
   labs(x = "articulation rate")
 
 post_simple_plot
-
 ```
 
 If you want to plot something more traditional, i.e. the estimated values for polite and informal speech productions, we need to indulge in some more data wrangling. The information is all there, but needs to be extracted with a hand full of tidyverse functions. Let's wrangle the posteriors such that we can plot the posterior distribution for polite and informal productions: 
@@ -101,7 +98,6 @@ post_simple_plot2 <- post_simple2 %>%
   labs(x = "articulation rate")
 
 post_simple_plot2
-
 ```
 
 ## Adding predictors 
@@ -111,8 +107,7 @@ This model estimates the effect of `attitude` on articulation rate (`articulatio
 ```{r multiple_model, message = F}
 # get prior
 get_prior(
- formula = 
-   articulation_rate ~ attitude + task,
+ formula = articulation_rate ~ attitude + task,
   data = polite
 )
 
@@ -127,13 +122,12 @@ priors_multiple <- c(
 
 # Run model
 multiple_model <- brm(
-  articulation_rate ~ 
-    attitude + task,
+  articulation_rate ~ attitude + task,
   data = polite,
-  prior = priors_multiple)
+  prior = priors_multiple
+)
 
 summary(multiple_model)
-
 ```
 
 Looking at the summary of the model, we get a table with two coefficients for the population parameters `attitudepol` and `tasknot`. Let's remind ourselves that these reflect the change in articulation rate from the reference level (attitude = informal (`inf`), task = dialog completion task (`dct`)) to attitude = polite (`attitudepol`) and to task = note (`tasknot`), respectively.
@@ -160,7 +154,6 @@ post_multiple_task <- multiple_model %>%
 # plot
 library(patchwork)
 post_multiple_attitude + post_multiple_task
-
 ```
 
 ## Adding random effects
@@ -174,8 +167,7 @@ We can write down the code to run this model easily, because we are all familiar
 ```{r complexModel, f}
 # CHANGE ACCORDINGLY
 complex_model <- brm(
-  articulation_rate ~ 
-    attitude + task +
+  articulation_rate ~ attitude + task +
     # add random intercept
     (1 | subject) +
     # add random slope
@@ -186,7 +178,6 @@ complex_model <- brm(
 )
 
 summary(complex_model)
-
 ```
 
 Looks familiar? 
@@ -202,12 +193,10 @@ Generally, we encourage you to specify priors for all elements of your model, so
 ```{r complexModel_priors, f}
 # get prior
 get_prior(
- formula = 
-   articulation_rate ~ 
-    attitude + task +
+  articulation_rate ~ attitude + task +
     (1 | subject) +
     (0 + attitude | subject),  
-   data = polite
+  data = polite
 )
 
 # specify priors
@@ -227,8 +216,7 @@ priors_complex <- c(
 
 # Run model
 complex_model <- brm(
-  articulation_rate ~ 
-    attitude + task +
+  articulation_rate ~ attitude + task +
     # add random intercept
     (1 | subject) +
     # add random slope
@@ -239,7 +227,6 @@ complex_model <- brm(
 )
 
 summary(complex_model)
-
 ```
 
 There we go. We have run a linear mixed effects model within the Bayesian framework. We specified priors for both random and fixed effects. What is left is interpreting the output.
@@ -253,7 +240,6 @@ post_complex <- complex_model %>%
 ggplot(post_complex) + 
   stat_halfeye(aes(x = b_attitudepol)) +
   labs(x = "articulation rate")
-
 ```
 
 ## Making inference
@@ -266,7 +252,6 @@ hdi(post_complex$b_attitudepol)
 
 # extract probability of direction
 p_direction(post_complex$b_attitudepol)
-
 ```
 
 Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.80, -0.01] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still a posibility, given the data, the model, and the priors. 
@@ -285,7 +270,6 @@ get_prior(
  formula = ...,
  data = ...
 )
-
 ```
 
 (b) Now specify weakly informative priors for all parameters. For the intercept, chose a normal prior with mean = 0 and sd = 300. For fixed effects, random effects and residual variance go with something like a normal prior with mean = 0 and sd = 100.
@@ -295,7 +279,6 @@ get_prior(
 priors_ex <- c(
   ...
 )
-
 ```
 
 (c) Now run the model with your specified priors. Use `seed = 999` in order for all of you to get the same results.
@@ -308,7 +291,6 @@ ex_model <- brm(
   prior = ...,
   seed = 999
 )
-
 ```
 
 (d) extract the posteriors for the coefficient attitudepol and plot it.
@@ -321,8 +303,6 @@ ex_post <- ex_model %>%
 # plot
 ggplot(...) +
   ...
-
-
 ```
 
 (e) Now let's use the posteriors to draw probability inferences. What is the 95% credible interval for the `attitudepol` coefficient and what is its probability of direction?
@@ -333,7 +313,6 @@ hdi(...)
 
 # extract probability of direction
 p_direction(...)
-
 ```
 
 

@@ -21,7 +21,7 @@ The following sessions have exercises:
 
 - Session 03.
 
-- Session 07.
+- Session 06.
 
 - Session 08.
 }

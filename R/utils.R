@@ -34,7 +34,7 @@ open_slides <- function(session) {
 #'
 #' - Session 03.
 #'
-#' - Session 07.
+#' - Session 06.
 #'
 #' - Session 08.
 #'
@@ -52,9 +52,9 @@ open_exercise <- function(session) {
   num <- stringr::str_pad(session, 2, pad = '0')
   ex_num <- glue::glue("ex_{stringr::str_pad(session, 2, pad = '0')}")
 
-  if (!(num %in% c("03", "07", "08"))) {
+  if (!(num %in% c("03", "06", "08"))) {
     cli::cli_alert_danger(
-      glue::glue("Session {num} does not have exercises! Choose Session 03, 07, or 08."))
+      glue::glue("Session {num} does not have exercises! Choose Session 03, 06, or 08."))
   } else {
     v_path <- get_vignette_path(ex_num, package = "learnB4SS")
 

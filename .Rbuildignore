@@ -9,3 +9,5 @@
 ^pkgdown$
 ^\.github$
 ^data-raw$
+^doc$
+^Meta$
