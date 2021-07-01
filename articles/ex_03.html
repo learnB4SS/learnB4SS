@@ -265,7 +265,7 @@
 <span class="op">)</span></code></pre></div>
 <p>And now let’s fit the model using our priors!</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">b_mod_01</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span>,
   data <span class="op">=</span> <span class="va">polite</span>,
   prior <span class="op">=</span> <span class="va">my_priors</span>

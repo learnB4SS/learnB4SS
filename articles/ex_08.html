@@ -344,7 +344,7 @@
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudeinf</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudepol</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
   <span class="co"># specify weakly informative prior for the correlation between random intercept and slope</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">lkj</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">L</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">lkj</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">cor</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
 <span class="op">)</span>
 
@@ -382,7 +382,7 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># extract 95% HDI</span>
 <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/point_interval.html">hdi</a></span><span class="op">(</span><span class="va">post_complex</span><span class="op">$</span><span class="va">b_attitudepol</span><span class="op">)</span>
-
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span>
 <span class="co"># extract probability of direction</span>
 <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/p_direction.html">p_direction</a></span><span class="op">(</span><span class="va">post_complex</span><span class="op">$</span><span class="va">b_attitudepol</span><span class="op">)</span></code></pre></div>
 <p>Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.12, 0.00] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still plausible, given the data, the model, and the priors.</p>
@@ -461,7 +461,7 @@ priors_ex <- c(
   prior(normal(0, 100), class = sd, coef = attitudeinf, group = subject),
   prior(normal(0, 100), class = sd, coef = attitudepol, group = subject),
   # specify weakly informative prior for the correlation between random intercept and slope
-  prior(lkj(2), class = L, group = subject),
+  prior(lkj(2), class = cor, group = subject),
   prior(normal(0, 100), class = sigma)
 )
 -->

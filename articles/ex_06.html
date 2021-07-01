@@ -198,15 +198,15 @@
 
 <span class="co"># Use quantile function on posterior</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">posterior</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;       2.5%      97.5% </span>
-<span class="co">#&gt; -0.8053489 10.5262031</span></code></pre></div>
-<p>We can see that the 95% CI for our posterior is -0.8053489, 10.5262031.</p>
+<span class="co">#&gt;      2.5%     97.5% </span>
+<span class="co">#&gt; -1.092069 10.518609</span></code></pre></div>
+<p>We can see that the 95% CI for our posterior is -1.0920685, 10.5186088.</p>
 <p>We can simplify the process even more using the <code>hdi</code> function from the <code>bayestestR</code> package. This has some other benefits that we will see in a bit.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># bayesTestR::hdi</span>
 <span class="va">hdi_ex1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span>
 <span class="va">hdi_ex1</span>
-<span class="co">#&gt; 95% HDI: [-0.42, 10.83]</span></code></pre></div>
+<span class="co">#&gt; 95% HDI: [-1.26, 10.30]</span></code></pre></div>
 <p>Notice that the ranges are slightly different. This is because the HDI, highest density interval, is a special type of credible interval. There are several methods for calculating a CI, but we won’t go into that now. For our purposes we will stick with the HDI.</p>
 <p>One advantage to using the <code>hdi</code> function from the <code>bayestestR</code> package is that it also has print methods. This means we can wrap the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function around our <code>hdi</code> object, like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -228,7 +228,7 @@
 <span class="co"># Calculate HDI</span>
 <span class="va">hdi_ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">post_00</span><span class="op">$</span><span class="va">b_Intercept</span><span class="op">)</span>
 <span class="va">hdi_ex2</span>
-<span class="co">#&gt; 95% HDI: [6.53, 6.83]</span></code></pre></div>
+<span class="co">#&gt; 95% HDI: [6.52, 6.83]</span></code></pre></div>
 <p>So we are 95% certain that the value of the intercept falls between about 6.5 and 6.8. Cool. Let’s plot this as well.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Plot it</span>
@@ -258,7 +258,7 @@ post_01 &lt;- posterior_samples(b_mod_01)</code></pre>
 <code class="sourceCode R"><span class="co"># Calculate HDI</span>
 <span class="va">hdi_ex3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">post_01</span><span class="op">$</span><span class="va">b_attitudepol</span><span class="op">)</span>
 <span class="va">hdi_ex3</span>
-<span class="co">#&gt; 95% HDI: [-0.70, -0.10]</span></code></pre></div>
+<span class="co">#&gt; 95% HDI: [-0.71, -0.13]</span></code></pre></div>
 <p>It looks like the 95% CI does not encompass 0. Let’s take a look at a plot.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Plot it</span>
@@ -276,8 +276,8 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Parameter   |        95% HDI</span>
 <span class="co">#&gt; ----------------------------</span>
-<span class="co">#&gt; (Intercept) | [ 6.67,  7.10]</span>
-<span class="co">#&gt; attitudepol | [-0.70, -0.10]</span></code></pre></div>
+<span class="co">#&gt; (Intercept) | [ 6.68,  7.09]</span>
+<span class="co">#&gt; attitudepol | [-0.71, -0.13]</span></code></pre></div>
 <p>And, like before, we can use the built-in print methods to quickly generate a plot:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Assign hdi to object and plot</span>
@@ -309,7 +309,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; Parameter   |     pd</span>
 <span class="co">#&gt; --------------------</span>
 <span class="co">#&gt; (Intercept) |   100%</span>
-<span class="co">#&gt; attitudepol | 99.52%</span></code></pre></div>
+<span class="co">#&gt; attitudepol | 99.70%</span></code></pre></div>
 <p>Again, we can take advantage of the print methods and quickly generate a plot:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Assign PD to object and print</span>
@@ -342,7 +342,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; </span>
 <span class="co">#&gt; inside ROPE</span>
 <span class="co">#&gt; -----------</span>
-<span class="co">#&gt; 0.63 %</span></code></pre></div>
+<span class="co">#&gt; 0.42 %</span></code></pre></div>
 <p>We can set the range of the ROPE and the size of the HDI using the arguments <code>range</code> and <code>ci</code>, respectively.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Calculate % of HDI within rope w/ specific settings</span>
@@ -351,7 +351,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; </span>
 <span class="co">#&gt; inside ROPE</span>
 <span class="co">#&gt; -----------</span>
-<span class="co">#&gt; 0.61 %</span></code></pre></div>
+<span class="co">#&gt; 0.40 %</span></code></pre></div>
 <p>The default sets the CI to 95% and the ROPE range to ±0.1, unless the input is a Bayesian model. In that case, the function <code>rope_range</code> is used to calculate a ROPE (following Kruschke 2018, see <code><a href="https://easystats.github.io/bayestestR/reference/rope_range.html">?rope_range</a></code>).</p>
 <p><span class="math display">\[\color{black}{\frac{\mu_{1} - \mu_{2}}{\sqrt{\frac{\sigma^2_{1} + \sigma^2_{2}}{2}}}}\]</span></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -367,7 +367,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; Parameter   | inside ROPE</span>
 <span class="co">#&gt; -------------------------</span>
 <span class="co">#&gt; Intercept   |      0.00 %</span>
-<span class="co">#&gt; attitudepol |      6.92 %</span></code></pre></div>
+<span class="co">#&gt; attitudepol |      5.60 %</span></code></pre></div>
 <p>And again there are also print methods for rope objects.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">rope_on_mod01</span>, show_intercept <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
@@ -385,7 +385,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; Parameter   | inside ROPE</span>
 <span class="co">#&gt; -------------------------</span>
 <span class="co">#&gt; Intercept   |      0.00 %</span>
-<span class="co">#&gt; attitudepol |      4.39 %</span>
+<span class="co">#&gt; attitudepol |      3.55 %</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ROPE for the 95% HDI:</span>
@@ -393,7 +393,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; Parameter   | inside ROPE</span>
 <span class="co">#&gt; -------------------------</span>
 <span class="co">#&gt; Intercept   |      0.00 %</span>
-<span class="co">#&gt; attitudepol |      6.92 %</span>
+<span class="co">#&gt; attitudepol |      5.60 %</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ROPE for the 99% HDI:</span>
@@ -401,7 +401,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; Parameter   | inside ROPE</span>
 <span class="co">#&gt; -------------------------</span>
 <span class="co">#&gt; Intercept   |      0.00 %</span>
-<span class="co">#&gt; attitudepol |      8.23 %</span>
+<span class="co">#&gt; attitudepol |      7.52 %</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">rope_on_mod02</span><span class="op">)</span></code></pre></div>
 <p><img src="ex_06_files/figure-html/rope-5-1.png" width="480" style="display: block; margin: auto;"></p>
 <p><br></p>
