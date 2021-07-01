@@ -19,15 +19,15 @@ navbar:
       menu:
       - text: "Day 1"
       - text: 0. Introduction
-        href: https://learnb4ss.github.io/slides/00_intro/index.html
+        href: https://learnb4ss.github.io/slides/00_intro/index.pdf
       - text: 1. Application to regression I — Demo
         href: https://learnb4ss.github.io/slides/01_a2r_initial_demo/index.html
       - text: 2. Bayes theorem — How does it work?
-        href: https://learnb4ss.github.io/slides/02_bayes_theorem/index.html
+        href: https://learnb4ss.github.io/slides/02_bayes_theorem/index.pdf
       - text: 3. Application to regression II — Priors and Bayesian updating
         href: https://learnb4ss.github.io/slides/03_a2r_priors_and_bayesian_updating/index.html
       - text: 4. NHST vs. Bayesian inference
-        href: https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/index.html
+        href: https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/index.pdf
       - text: -------
       - text: "Day 2"
       - text: 5. Interim review
@@ -37,7 +37,7 @@ navbar:
       - text: 7. More on priors
         href: https://learnb4ss.github.io/slides/07_more_priors/index.html
       - text: 8. Application to regression IV — Leveling up
-        href: https://learnb4ss.github.io/slides/08_a2r_leveling_up/index.html
+        href: https://learnb4ss.github.io/slides/08_a2r_leveling_up/index.pdf
       - text: 9. Sampling from the posterior
         href: https://learnb4ss.github.io/slides/09_sample_the_posterior/index.html
       - text: 10. Wrap up
