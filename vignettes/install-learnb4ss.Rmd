@@ -26,7 +26,7 @@ install.packages("remotes")
 Then, simply ran the following line.
 
 ```{r learnb4ss}
-remotes::install_github("learnB4SS/learnB4SS@v1.0.0", build_vignettes = TRUE)
+remotes::install_github("learnB4SS/learnB4SS", build_vignettes = TRUE)
 ```
 
 🎉 You are now ready for your Bayesian adventure!
