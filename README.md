@@ -1,17 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Learn Bayesian Analysis for the Speech Sciences
+# Learn Bayesian Analysis for the Speech Sciences <a href='https://learnb4ss.github.io/learnB4SS'><img src='man/figures/logo.png' align="right" height="138" /></a>
 
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/version-1.0.0-FFA70B.svg)
 <!-- badges: end -->
 
-<img src='man/figures/logo.png' align="right" height="200" /> Here you
-can find the learning materials for the workshop **Learn Bayesian
-Analysis for the Speech Sciences** (learnB4SS), in the form of an R
-package.
+Here you can find the learning materials for the workshop **Learn
+Bayesian Analysis for the Speech Sciences** (learnB4SS), in the form of
+an R package.
 
 We will add more info here soon and instructions to install this
 package, so stay tuned!
