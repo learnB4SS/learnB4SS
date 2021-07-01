@@ -29,7 +29,7 @@ page](https://github.com/learnB4SS/learnB4SS-kit).
 The download page also contains instructions to get you set up.
 
 *Alternative*. If you prefer not to use the Starter Kit, then you can
-just follow the [installation instructions for the learB4SS
+just follow the [installation instructions for the learnB4SS
 package](https://learnb4ss.github.io/learnB4SS/articles/install-learnb4ss.html).
 Note that the package and materials are best used from RStudio.
 
