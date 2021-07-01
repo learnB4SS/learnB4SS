@@ -4,7 +4,7 @@
 \name{learnB4SS-package}
 \alias{learnB4SS}
 \alias{learnB4SS-package}
-\title{learnB4SS: Learning materials for the learnB4SS Workshop}
+\title{learnB4SS: Learning materials for the learnB4SS workshop}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 

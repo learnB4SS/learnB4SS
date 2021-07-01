@@ -132,7 +132,7 @@ my_priors <- c(
 And now let's fit the model using our priors!
 
 ```{r fit}
-m1 <- brm(
+b_mod_01 <- brm(
   articulation_rate ~ attitude,
   data = polite,
   prior = my_priors
