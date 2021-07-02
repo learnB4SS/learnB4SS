@@ -3,14 +3,19 @@
 
 # Learn Bayesian Analysis for the Speech Sciences <a href='https://learnb4ss.github.io/learnB4SS'><img src='man/figures/logo.png' align="right" height="138" /></a>
 
+### Learning materials
+
 <!-- badges: start -->
 
 ![](https://img.shields.io/badge/version-1.0.0-FFA70B.svg)
 <!-- badges: end -->
 
-Here you can find the learning materials for the workshop **Learn
-Bayesian Analysis for the Speech Sciences**
+Here you can find the **learning materials** for the workshop *Learn
+Bayesian Analysis for the Speech Sciences*
 ([learnB4SS](https://learnb4ss.github.io)), in the form of an R package.
+
+For dates and other info, see the workshop
+[homepage](https://learnb4ss.github.io).
 
 ## Let’s get started!
 

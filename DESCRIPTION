@@ -2,7 +2,7 @@ Package: learnB4SS
 Type: Package
 Title: Learning materials for the learnB4SS workshop
 Version: 1.0.0
-Date: 2021-07-01
+Date: 2021-07-02
 Authors@R: c(
     person(given = "Stefano",
            family = "Coretta",
