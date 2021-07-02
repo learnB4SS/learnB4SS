@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -137,6 +137,9 @@
 </li>
 <li>
   <a href="../articles/faqs.html">FAQs</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -525,8 +528,8 @@ One reason for this is that f0 is also bound to zero and very low values are vir
 Again, a lognormal link function is probably more appropriate.
 
 priors_ex_log <- c(
-  prior(normal(0, 3), class = Intercept),
-  prior(normal(0, 2), class = b, coef = attitudepol),
+  prior(normal(0, 6), class = Intercept),
+  prior(normal(0, 3), class = b, coef = attitudepol),
   # specify weakly informative prior for the random effects (slopes)
   prior(cauchy(0, .1), class = sd, coef = Intercept, group = subject),
   prior(cauchy(0, .1), class = sd, coef = attitudeinf, group = subject),

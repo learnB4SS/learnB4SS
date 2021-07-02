@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -138,6 +138,9 @@
 <li>
   <a href="../articles/faqs.html">FAQs</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -172,11 +175,13 @@
 <div id="load-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#load-data" class="anchor"></a>Load data</h1>
-<p>Let’s load the data we are going to use.</p>
+<p>Let’s load the packages and data we are going to use.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms">brms</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/learnB4SS/learnB4SS">learnB4SS</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/twolodzko/extraDistr">extraDistr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 
 <span class="co"># Data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"polite"</span><span class="op">)</span></code></pre></div>
@@ -256,15 +261,30 @@
 <li>
 <code>sigma</code>: a Half-Cauchy distribution with mean = 0 and sd = 1.</li>
 </ul>
-<p>Go ahead and fill in the following code snippet with the right parameters and arguments:</p>
+<p>The Half Cauchy distribution is something we haven’t seen yet. This distribution is helpful for estimating measures like standard deviations. It’s “half” because only the positive values are taken into consideration, since the standard deviation can only ever be positive.</p>
+<p>This is how a Half Cauchy distribution with mean 0 and standard deviation 1 looks like:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/HalfCauchy.html">dhcauchy</a></span><span class="op">(</span><span class="va">x</span>, sigma <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">aes</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_line</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>
+    x <span class="op">=</span> <span class="st">"Articulation rate (syl/s)"</span>, y <span class="op">=</span> <span class="st">"Density"</span>,
+    title <span class="op">=</span> <span class="st">"Half Cauchy distribution"</span>,
+    subtitle <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">mu</span>, <span class="st">"=0"</span>, <span class="st">", "</span>, <span class="va">sigma</span>, <span class="st">"=1"</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="ex_03_files/figure-html/half-cauchy-1.png" width="700"></p>
+<p>As you can see, the probability of getting bigger values drops very quickly while moving away from 0. This ensures that the prior for the standard deviation has a “regularising” effect (we will talk about regularising priors tomorrow), which helps brms to estimate the standard deviation.</p>
+<p>Now go ahead and fill in the following code snippet with the right parameters and arguments:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="va">...</span>, <span class="va">...</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="va">...</span>, <span class="va">...</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">...</span><span class="op">)</span>,
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="va">...</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">...</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p>And now let’s fit the model using our priors!</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">b_mod_01</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span>,
   data <span class="op">=</span> <span class="va">polite</span>,
