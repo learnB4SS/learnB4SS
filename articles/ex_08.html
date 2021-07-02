@@ -191,7 +191,7 @@
 <div id="a-simple-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#a-simple-model" class="anchor"></a>A simple model</h2>
-<p>Okay let’s think about this. Here is the model and its priors that we have so far looked at:</p>
+<p>Okay let’s think about this. Here is the model that we have so far looked at alongside its priors:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify priors</span>
 <span class="va">priors_simple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
@@ -201,37 +201,68 @@
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
   <span class="co"># prior for the residual variance</span>
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
-<span class="op">)</span>
-
-
-<span class="co"># specify model</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># specify model</span>
 <span class="va">simple_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span>,  
   data <span class="op">=</span> <span class="va">polite</span>,
-  prior <span class="op">=</span> <span class="va">priors_simple</span>
+  prior <span class="op">=</span> <span class="va">priors_simple</span>,
+  family <span class="op">=</span> <span class="va">gaussian</span>
 <span class="op">)</span></code></pre></div>
-<p>Brms uses a gaussian link function by default, i.e. we assume that the model residuals are normally distributed. But is that really the case? We have a measurement that is bound by 0, because there can’t be negative values for articulation rate, right? It is likely that articulate rate data are skewed to the right, because values can vary more towards higher values than toward lower values. Brms allows us to critically evaluate our model fit by comparing the model using so-called posterior predictive checks. Posterior predictive checks are, in simple words, “simulating replicated data under the fitted model and then comparing these to the observed data” (Gelman and Hill, 2007, p. 158). So, you use posterior predictive to check if there are systematic discrepancies between real and simulated data.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>Brms uses a gaussian link function by default (we made that explicit above), i.e. we assume that the model residuals are normally distributed. But is that really the case? We have a measurement that is bound by 0, because there can’t be negative values for articulation rate, right? It is likely that articulate rate data are skewed to the right, because values can vary more toward higher values than toward lower values. Brms allows us to critically evaluate our model fit by comparing the model using so-called posterior predictive checks. Posterior predictive checks are, in simple words, “simulating replicated data under the fitted model and then comparing these to the observed data” (<a href="http://www.stat.columbia.edu/~gelman/arm/">Gelman &amp; Hill 2007: 158</a>). So, you use posterior predictive checks to investigate whether there are systematic discrepancies between the observed and simulated data.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># posterior predictive check</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/pp_check.brmsfit.html">pp_check</a></span><span class="op">(</span><span class="va">simple_model</span>, nsamples <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
-<p>Looking at the plot, you see a thick dark blue line which is the data, and bunch of light blue lines which are random draws from the posterior. The model assumes a normal distribution, so the posterior draws are much more symmetric than the actual data. So there is a discrepancy between model and data. A more appropriate model would use a log normal distribution for articulation rate. Let’s refit the model and add log</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Looking at the plot, you see a thick dark blue line which is the data, and bunch of light blue lines which are simulated data based on your model. The model assumes a normal distribution, so the posterior draws are much more symmetric than the actual data, thus we notice a discrepancy between model and data. These situations are common for measurements that are bound by zero (e.g. duration or response latency). To account for this, we can use a different link function (specified with the <code>family</code> argument). A more appropriate model would use a log normal distribution for articulation rate.</p>
+<p>When we change the family, the model will fit the measurement in log space, so we will have to change the priors. Let’s throw in some numbers and run a prior_predictive check, i.e. running the model with only the prior information (<code>sample_prior = "only"</code>). We also need to specify the <code>lognormal</code> family when running the model.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># specify priors in log space</span>
+<span class="va">priors_simple_log</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  <span class="co"># prior for the Intercept (= the reference level)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
+  <span class="co"># prior for the fixed effect coefficient for polite attitude</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.25</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
+  <span class="co"># prior for the residual variance</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify model</span>
+<span class="va">simple_model2_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+  <span class="va">articulation_rate</span> <span class="op">~</span> 
+    <span class="va">attitude</span>,  
+    data <span class="op">=</span> <span class="va">polite</span>,
+    prior <span class="op">=</span> <span class="va">priors_simple_log</span>,
+    <span class="co"># specify that the model should only estimate the posterior based on the information in the prior</span>
+    sample_prior <span class="op">=</span> <span class="st">"only"</span>,
+    <span class="co"># specify lognormal family function</span>
+    family <span class="op">=</span> <span class="va">lognormal</span>
+  <span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># quick and dirty plot on the original scale</span>
+<span class="fu"><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects</a></span><span class="op">(</span><span class="va">simple_model2_prior</span><span class="op">)</span></code></pre></div>
+<p>Well, our priors are very weakly informative and cover more than what we consider a possible range for articulation rate. However it constraints the parameter space substantially already. Good enough.</p>
+<p>Let’s refit the model and specify the <code>lognormal</code> family.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># specify model</span>
 <span class="va">simple_model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> 
     <span class="va">attitude</span>,  
     data <span class="op">=</span> <span class="va">polite</span>,
-    prior <span class="op">=</span> <span class="va">priors_simple</span>,
+    prior <span class="op">=</span> <span class="va">priors_simple_log</span>,
     family <span class="op">=</span> <span class="va">lognormal</span>
   <span class="op">)</span></code></pre></div>
 <p>And check the model fit again:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># posterior predictive check</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/pp_check.brmsfit.html">pp_check</a></span><span class="op">(</span><span class="va">simple_model2</span>, nsamples <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></code></pre></div>
-<p>Much much better, right? So by critically evaluating our model assumptions and the actual data we discovered that a lognormal distribution is a much better underlying generative model (i.e. how the data came to be). Fantastic! Let’s have a look at the results (remember that the results are now log transformed)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Much better, right? So by critically evaluating our model assumptions and the actual data we discovered that a <code>lognormal</code> distribution is a much better assumption about the underlying generative model (i.e. how the data came to be).</p>
+<p>Fantastic! Let’s have a look at the results (remember that the results are now log transformed)</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extract posterior coefficient and plot</span>
-<span class="va">simple_model</span> <span class="op">%&gt;%</span> 
+<span class="va">simple_model2</span> <span class="op">%&gt;%</span> 
  <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/spread_draws.html">spread_draws</a></span><span class="op">(</span><span class="va">b_attitudepol</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="co"># plot</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">b_attitudepol</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -239,7 +270,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"log(articulation rate)"</span><span class="op">)</span></code></pre></div>
 <p>If you want to plot something more traditional, i.e. the posterior values for polite and informal speech productions, we can use some neat functions from other packages. This way we can plot the data in log space and compare the two conditions immediately.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extract posterior and plot predicted values for both levels</span>
 <span class="va">polite</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://modelr.tidyverse.org/reference/data_grid.html">data_grid</a></span><span class="op">(</span><span class="va">attitude</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -253,24 +284,23 @@
 <div id="adding-predictors" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-predictors" class="anchor"></a>Adding predictors</h2>
-<p>This model estimates the effect of <code>attitude</code> on articulation rate (<code>articulation_rate</code>). That-is-it. But what if we also want to estimate the differences between attitude across different experimental tasks? Let’s add <code>task</code> as a predictor and add a prior for it as well. Let’s stick to weakly informative priors again, centered on zero (we expect no difference of articulation rate between different tasks and acknowledge the possibility of some variance around that value).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>This model estimates the effect of <code>attitude</code> on articulation rate (<code>articulation_rate</code>). That.is.it. But what if we also want to estimate the differences between attitude across different experimental tasks? Let’s add <code>task</code> as a predictor and add a prior for it as well. Let’s stick to weakly informative priors again, centered on zero (we expect no difference of articulation rate between different tasks and acknowledge the possibility of some variance around that value).</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get prior</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior</a></span><span class="op">(</span>
  formula <span class="op">=</span> <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span> <span class="op">+</span> <span class="va">task</span>,
-  data <span class="op">=</span> <span class="va">polite</span>
-<span class="op">)</span>
-
-<span class="co"># specify priors</span>
+  data <span class="op">=</span> <span class="va">polite</span>, family <span class="op">=</span> <span class="va">lognormal</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># specify priors</span>
 <span class="va">priors_multiple</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">tasknot</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
-<span class="op">)</span>
-
-
-<span class="co"># Run model</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.25</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.25</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">tasknot</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># tun model</span>
 <span class="va">multiple_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span> <span class="op">+</span> <span class="va">task</span>,
   data <span class="op">=</span> <span class="va">polite</span>,
@@ -280,7 +310,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">multiple_model</span><span class="op">)</span></code></pre></div>
 <p>Looking at the summary of the model, we get a table with two coefficients for the population parameters <code>attitudepol</code> and <code>tasknot</code>. Let’s remind ourselves that these reflect the change in articulation rate from the reference level (attitude = informal (<code>inf</code>), task = dialog completion task (<code>dct</code>)) to attitude = polite (<code>attitudepol</code>) and to task = note (<code>tasknot</code>), respectively.</p>
 <p>We can inspect posteriors for both predictors just like we did before:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extract posterior coefficient attitudepol</span>
 <span class="va">post_multiple_attitude</span> <span class="op">&lt;-</span> <span class="va">multiple_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/spread_draws.html">spread_draws</a></span><span class="op">(</span><span class="va">b_attitudepol</span>, <span class="va">b_tasknot</span><span class="op">)</span>
@@ -297,34 +327,26 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"posterior for effect of task"</span>,
          x <span class="op">=</span> <span class="st">"log(articulation rate)"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></code></pre></div>
+<p>Both posterior distributions are very clearly located to the left of zero, suggesting that there is both attitude and task affect articulation-rate to some extend (given the model, the data, and the prior assumptions)</p>
 </div>
 <div id="adding-random-effects" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-random-effects" class="anchor"></a>Adding random effects</h2>
-<p>So running Bayesian regression models is really not much different from running frequentist regression models. Practically, the only difference so far is that we specify prior knowledge. Conceptually, we obviously interpret the output differently in terms of the inference we draw, but practically this should be business as usual for you.</p>
-<p>Now, we all know that this model is not taking into account the fact that data points are not independent from each other. There were multiple speakers that produced multiple data points, so observations from these speakers are not independent and we need to take that into account for robust inference. So let’s also add an appropriate random effect structure, including a by-subject random intercept as well as a by-subject random slope for attitude.</p>
-<p>We can write down the code to run this model easily, because we are all familiar with the <code>lme4</code> syntax. <code>brms</code> syntax handles random effect structure exactly like <code>lme4</code> like so:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<p>So running Bayesian regression models is really not much different from running frequentist regression models. Practically, the only difference so far is that we specify prior knowledge. Conceptually, we obviously interpret the output differently in terms of the inference we draw, but this should be business as usual for you.</p>
+<p>Now, we probably all suspect that this model is not quite appropriate for the data, right? It does not take into account the fact that data points are not independent from each other. There were multiple speakers that produced multiple data points, so observations from these speakers are not independent and we need to take that into account for robust inference. So let’s also add an appropriate random effect structure, including a by-subject random intercept as well as a by-subject random slope for attitude.</p>
+<p>We can write down the code to run this model easily, because we should be familiar with the <code>lme4</code> syntax. <code>brms</code> syntax handles random effect structure exactly like <code>lme4</code> like so:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># model specification</span>
-<span class="va">complex_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+<span class="va">complex_model_formula</span> <span class="op">=</span> 
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span> <span class="op">+</span> <span class="va">task</span> <span class="op">+</span>
     <span class="co"># add random intercept</span>
     <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">subject</span><span class="op">)</span> <span class="op">+</span>
     <span class="co"># add random slope</span>
-    <span class="op">(</span><span class="fl">0</span> <span class="op">+</span> <span class="va">attitude</span> <span class="op">|</span> <span class="va">subject</span><span class="op">)</span>,  
-   data <span class="op">=</span> <span class="va">polite</span>,
-   prior <span class="op">=</span> <span class="va">priors_simple</span>,
-   family <span class="op">=</span> <span class="va">lognormal</span>,
-   seed <span class="op">=</span> <span class="fl">999</span>
-<span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">complex_model</span><span class="op">)</span></code></pre></div>
+    <span class="op">(</span><span class="fl">0</span> <span class="op">+</span> <span class="va">attitude</span> <span class="op">|</span> <span class="va">subject</span><span class="op">)</span></code></pre></div>
 <p>Looks familiar?</p>
-<p>Let us walk through the summary here. We now have one part of the table called “Group-Level Effects”. This part of the table gives us the models estimates of four parameters: How much subjects vary in general (<code><a href="https://rdrr.io/r/stats/sd.html">sd(Intercept)</a></code>), how much they differ in the informal condition (<code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudeinf)</a></code>), how much subjects vary in the polite condition (<code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudepol)</a></code>), and what the correlation between <code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudeinf)</a></code> and <code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudepol)</a></code> is. As before, for all of these parameters, we receive an <code>Estimate</code> which is the mean of the posterior distribution and a range of plausible values within the 95% Credible Interval (<code>l-95% CI</code> - <code>u-95% CI</code>). Except for the correlation, the estimates are bound by 0, i.e. the variance can only be positive. The correlation coefficient can vary between -1 and 1.</p>
-<p>The second part of the summary table, i.e. the Population-Level Effects, did not change and summarizes our regression coefficients for the fixed effects. Just like before.</p>
 <p>But what about priors? Do we need to specify priors for these new elements as well? And if so how?</p>
-<p>Generally, we encourage you to specify priors for all elements of your model, so let us try this as well. We need to specify the four parameters for the Group-Level Effects. Three of them are variance components that we will specify with half-cauchy distributions, just like we did for the residual variance. The final parameter is a correlation coefficient of the group level effects and will be specified using the Lewandowski-Kurowicka-Joe prior (LKJ).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>Generally, we encourage you to specify priors for all elements of your model, so let us try this as well.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get prior</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span> <span class="op">+</span> <span class="va">task</span> <span class="op">+</span>
@@ -332,24 +354,25 @@
     <span class="op">(</span><span class="fl">0</span> <span class="op">+</span> <span class="va">attitude</span> <span class="op">|</span> <span class="va">subject</span><span class="op">)</span>,  
    data <span class="op">=</span> <span class="va">polite</span>,
    family <span class="op">=</span> <span class="va">lognormal</span>
-<span class="op">)</span>
-
-<span class="co"># specify priors</span>
+<span class="op">)</span></code></pre></div>
+<p>We need to specify four parameters for the Group-Level Effects. Three of them are variance components that we will specify with half-cauchy distributions, just like we did for the residual variance. The final parameter is a correlation coefficient of the group level effects and will be specified using the Lewandowski-Kurowicka-Joe prior (LKJ).</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># specify priors</span>
 <span class="va">priors_complex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">tasknot</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.25</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">attitudepol</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.25</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span>, coef <span class="op">=</span> <span class="va">tasknot</span><span class="op">)</span>,
   <span class="co"># specify weakly informative prior for the random effects (slopes)</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">Intercept</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudeinf</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudepol</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">Intercept</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudeinf</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span>, coef <span class="op">=</span> <span class="va">attitudepol</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
   <span class="co"># specify weakly informative prior for the correlation between random intercept and slope</span>
   <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">lkj</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">cor</span>, group <span class="op">=</span> <span class="va">subject</span><span class="op">)</span>,
-  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
-<span class="op">)</span>
-
-
-<span class="co"># Run model</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sigma</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<p>That is it. Now we can run the model. And we will add one new argument to the <code><a href="https://rdrr.io/pkg/brms/man/brm.html">brm()</a></code> function: The <code>seed</code> argument allows us to set a random seed. The sampling procedure has a random initial state, so if you run this model on your machine, you will get slightly different results from someone else. With <code>seed</code> we can fix this initial state and obtain the exact same results. This is great, because we can make our results fully reproducible that way.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Run model</span>
 <span class="va">complex_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   <span class="va">articulation_rate</span> <span class="op">~</span> <span class="va">attitude</span> <span class="op">+</span> <span class="va">task</span> <span class="op">+</span>
     <span class="co"># add random intercept</span>
@@ -359,12 +382,15 @@
    data <span class="op">=</span> <span class="va">polite</span>,
    prior <span class="op">=</span> <span class="va">priors_complex</span>,
    family <span class="op">=</span> <span class="va">lognormal</span>,
+  <span class="co"># set seed</span>
    seed <span class="op">=</span> <span class="fl">999</span>
 <span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">complex_model</span><span class="op">)</span></code></pre></div>
+<p>Let us walk through the summary here. We now have one part of the table called “Group-Level Effects”. This part of the table gives us the models estimates for four parameters: How much subjects’ baseline varies (<code><a href="https://rdrr.io/r/stats/sd.html">sd(Intercept)</a></code>), how much they vary in the informal condition (<code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudeinf)</a></code>), how much subjects vary in the polite condition (<code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudepol)</a></code>), and what the correlation between <code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudeinf)</a></code> and <code><a href="https://rdrr.io/r/stats/sd.html">sd(attitudepol)</a></code> is. As before, for all of these parameters, we receive an <code>Estimate</code> which is the mean of the posterior distribution and a range of plausible values within the 95% Credible Interval (<code>l-95% CI</code> - <code>u-95% CI</code>). Except for the correlation, the estimates are bound by 0, i.e. the variance can only be positive. The correlation coefficient can vary between -1 and 1.</p>
+<p>The second part of the summary table, i.e. the Population-Level Effects, did not change and summarizes our regression coefficients for the fixed effects. Just like before.</p>
 <p>There we go. We have run a linear mixed effects model within the Bayesian framework. We specified priors for both random and fixed effects. What is left is interpreting the output.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extract posterior coefficient politeness</span>
 <span class="va">post_complex</span> <span class="op">&lt;-</span> <span class="va">complex_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/spread_draws.html">spread_draws</a></span><span class="op">(</span><span class="va">b_attitudepol</span>, <span class="va">b_tasknot</span><span class="op">)</span> 
@@ -379,13 +405,13 @@
 <h2 class="hasAnchor">
 <a href="#making-inference" class="anchor"></a>Making inference</h2>
 <p>Now let’s use these posteriors to draw probability inferences. What is the 95% credible interval for the <code>attitudepol</code> coefficient and what is its probability of direction?</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># extract 95% HDI</span>
 <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/point_interval.html">hdi</a></span><span class="op">(</span><span class="va">post_complex</span><span class="op">$</span><span class="va">b_attitudepol</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span>
 <span class="co"># extract probability of direction</span>
 <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/p_direction.html">p_direction</a></span><span class="op">(</span><span class="va">post_complex</span><span class="op">$</span><span class="va">b_attitudepol</span><span class="op">)</span></code></pre></div>
-<p>Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.12, 0.00] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still plausible, given the data, the model, and the priors.</p>
+<p>Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.12, -0.01] and a 0.98 probability of being negative. Although the majority of plausible values are negative, positive values are still plausible (given the data, the model, and the priors).</p>
 </div>
 </div>
 <div id="exercise" class="section level1">
@@ -393,9 +419,9 @@
 <a href="#exercise" class="anchor"></a>Exercise</h1>
 <p>Now it’s your turn: Our goal is it to run the following model: <code>f0mn ~ attitude + (1 | subject) + (0 + attitude | subject)</code></p>
 <ol style="list-style-type: lower-alpha">
-<li>First, see which parameters we need to specify with priors using the <code><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior()</a></code> function. (If you are unsure, see our code examples above)</li>
+<li>First, see which priors we need to specify using the <code><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior()</a></code> function. (If you are unsure, see our code examples above)</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get prior</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior</a></span><span class="op">(</span>
  formula <span class="op">=</span> <span class="va">...</span>,
@@ -404,7 +430,7 @@
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Now specify weakly informative priors for all parameters. For the intercept, chose a normal prior with mean = 0 and sd = 500. For simplicity sake, let us just go for normally distributed priors for all other parameters (mean = 0, sd = 100)</li>
 </ol>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify priors</span>
 <span class="va">priors_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
   <span class="va">...</span>
@@ -412,7 +438,7 @@
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Now run the model with your specified priors. Use <code>seed = 1111</code> in order for all of you to get the same results.</li>
 </ol>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Run model</span>
 <span class="va">ex_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
   formular <span class="op">=</span> <span class="va">...</span>,
@@ -423,7 +449,7 @@
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Extract the posteriors for the coefficient attitudepol and plot it.</li>
 </ol>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Extract posterior coefficient politeness</span>
 <span class="va">ex_post</span> <span class="op">&lt;-</span> <span class="va">ex_model</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/spread_draws.html">spread_draws</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
@@ -434,12 +460,15 @@
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Now let’s use the posteriors to draw probability inferences. What is the 95% credible interval for the <code>attitudepol</code> coefficient and what is its probability of direction?</li>
 </ol>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># extract 95% HDI</span>
 <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/point_interval.html">hdi</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
 
 <span class="co"># extract probability of direction</span>
 <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/p_direction.html">p_direction</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>But hold on. Is the model fit okay? Critically check the model fit with <code><a href="https://rdrr.io/pkg/brms/man/pp_check.brmsfit.html">pp_check()</a></code>. Do you think the model and the priors capture the generative process appropriately? What might be the issue? Can you fix it?</li>
+</ol>
 <p><br></p>
 <!-- Solutions -->
 <!-- (a) 
@@ -473,7 +502,7 @@ ex_model <- brm(
     (0 + attitude | subject),  
    data = polite,
    prior = priors_ex,
-   seed = 1111
+   seed = 1111,
 )
 -->
 <!-- (d)
@@ -487,6 +516,59 @@ ggplot(ex_post) +
 <!-- (e)
 hdi(ex_post$b_attitudepol)
 p_direction(ex_post$b_attitudepol)
+-->
+<!-- (f)
+pp_check(ex_model, nsamples = 100)
+
+Doesn't capture bimodality well and over estimates the probability of value between 0 and 50.
+One reason for this is that f0 is also bound to zero and very low values are virtually impossible.
+Again, a lognormal link function is probably more appropriate.
+
+priors_ex_log <- c(
+  prior(normal(0, 3), class = Intercept),
+  prior(normal(0, 2), class = b, coef = attitudepol),
+  # specify weakly informative prior for the random effects (slopes)
+  prior(cauchy(0, .1), class = sd, coef = Intercept, group = subject),
+  prior(cauchy(0, .1), class = sd, coef = attitudeinf, group = subject),
+  prior(cauchy(0, .1), class = sd, coef = attitudepol, group = subject),
+  # specify weakly informative prior for the correlation between random intercept and slope
+  prior(lkj(2), class = cor, group = subject),
+  prior(cauchy(0, .1), class = sigma)
+)
+
+Run model for priors only
+
+ex_model_log_priors <- brm(
+  f0mn ~ 
+    attitude +
+    (1 | subject) +
+    (0 + attitude | subject),  
+   data = polite,
+   sample_prior = "only",
+   family = lognormal,
+   prior = priors_ex_log,
+   seed = 1111
+)
+
+conditional_effects(ex_model_log_priors)
+
+Run model
+
+ex_model_log <- brm(
+  f0mn ~ 
+    attitude +
+    (1 | subject) +
+    (0 + attitude | subject),  
+   data = polite,
+   family = lognormal,
+   prior = priors_ex_log,
+   seed = 1111
+)
+
+pp_check(ex_model_log, nsamples = 100)
+
+Much better!
+
 -->
 </div>
   </div>
