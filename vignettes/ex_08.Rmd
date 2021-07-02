@@ -250,7 +250,7 @@ So let's also add an appropriate random effect structure, including a by-subject
 We can write down the code to run this model easily, because we should be familiar with the `lme4` syntax.
 `brms` syntax handles random effect structure exactly like `lme4` like so:
 
-```{r complexModel}
+```{r complexModel_formula}
 # model specification
 complex_model_formula = 
   articulation_rate ~ attitude + task +
