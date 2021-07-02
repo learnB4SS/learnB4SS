@@ -41,7 +41,7 @@ navbar:
       - text: 9. Sampling from the posterior
         href: https://learnb4ss.github.io/slides/09_sample_the_posterior/index.html
       - text: 10. Wrap up
-        href: https://learnb4ss.github.io/slides/10_wrap_up/index.html
+        href: https://learnb4ss.github.io/slides/10_wrap_up/index.pdf
     articles:
       text: Exercises
       menu:
