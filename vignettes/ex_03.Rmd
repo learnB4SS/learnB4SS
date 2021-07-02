@@ -17,17 +17,26 @@ knitr::opts_chunk$set(
 
 # Load data
 
-Let's load the data we are going to use.
+Let's load the packages and data we are going to use.
 
-```{r setup}
+```{r setup, eval=TRUE, message=FALSE}
 # Packages
 library(brms)
 library(learnB4SS)
+library(extraDistr)
+library(tidyverse)
 
 # Data
 data("polite")
 ```
 
+```{r plot-setup, include=F}
+theme_set(theme_bw(base_size = 12))
+theme_update(
+  panel.grid.minor = element_line(colour = "grey90", size = 0.1), 
+  panel.grid.major = element_line(colour = "grey90", size = 0.1) 
+  )
+```
 
 # Which priors?
 
@@ -119,7 +128,29 @@ We'll give you a head start by telling you which priors we can use in this model
 - `attitudepol`: a Normal distribution with mean = 0 and sd = 10.
 - `sigma`: a Half-Cauchy distribution with mean = 0 and sd = 1.
 
-Go ahead and fill in the following code snippet with the right parameters and arguments:
+The Half Cauchy distribution is something we haven't seen yet.
+This distribution is helpful for estimating measures like standard deviations.
+It's "half" because only the positive values are taken into consideration, since the standard deviation can only ever be positive.
+
+This is how a Half Cauchy distribution with mean 0 and standard deviation 1 looks like:
+
+```{r half-cauchy, eval=TRUE}
+x <- seq(0, 10, by = 0.1)
+y <- dhcauchy(x, sigma = 1)
+ggplot() +
+  aes(x, y) +
+  geom_line(size = 2) +
+  labs(
+    x = "Articulation rate (syl/s)", y = "Density",
+    title = "Half Cauchy distribution",
+    subtitle = expression(paste(mu, "=0", ", ", sigma, "=1"))
+  )
+```
+
+As you can see, the probability of getting bigger values drops very quickly while moving away from 0.
+This ensures that the prior for the standard deviation has a "regularising" effect (we will talk about regularising priors tomorrow), which helps brms to estimate the standard deviation.
+
+Now go ahead and fill in the following code snippet with the right parameters and arguments:
 
 ```{r set-priors}
 my_priors <- c(
