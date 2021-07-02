@@ -16,7 +16,7 @@ open_slides <- function(session) {
   num <- stringr::str_pad(session, 2, pad = '0')
   sesh <- session + 1
 
-  if (sesh > 0 & sesh < 11) {
+  if (sesh > 0 & sesh < 12) {
     utils::browseURL(slides[sesh])
   } else {
     cli::cli_alert_danger(
@@ -77,11 +77,11 @@ slides <- c(
   "https://learnb4ss.github.io/slides/01_a2r_initial_demo/index.html",
   "https://learnb4ss.github.io/slides/02_bayes_theorem/index.pdf",
   "https://learnb4ss.github.io/slides/03_a2r_priors_and_bayesian_updating/index.html",
-  "https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/pdf.html",
+  "https://learnb4ss.github.io/slides/04_nhst_vs_bayesian_inference/index.pdf",
   "https://learnb4ss.github.io/slides/05_review/index.html",
   "https://learnb4ss.github.io/slides/06_a2r_inference_over_posterior/index.html",
   "https://learnb4ss.github.io/slides/07_more_priors/index.html",
   "https://learnb4ss.github.io/slides/08_a2r_leveling_up/index.pdf",
   "https://learnb4ss.github.io/slides/09_sample_the_posterior/index.html",
-  "https://learnb4ss.github.io/slides/10_wrap_up/index.html"
+  "https://learnb4ss.github.io/slides/10_wrap_up/index.pdf"
 )
