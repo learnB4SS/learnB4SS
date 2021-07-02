@@ -1,3 +1,15 @@
+# learnB4SS v1.0.3
+
+## Added
+
+* Info about recordings of live sessions.
+
+## Fixed
+
+* Add yet another missing dependecy.
+
+
+
 # learnB4SS v1.0.2
 
 ## Fixed

@@ -36,13 +36,13 @@ For an easy-to-follow introduction, we highly recommend Bodo Winter's book *Stat
 
 We are sorry we could not accommodate all time-zones, but we will provide you with captioned recordings so that you can watch them and follow along.
 
-We are still finalising the practical aspects of how we will share the recordings and in what form. We will update this FAQ as soon as possible.
+We will record the live sessions and send a link to download the recordings to all registrants one or two days after each of the first two days. (We won't records the third day, since it will be 1:1 meetings).
 
 ## 3. Software
 
 ### On macOS, I get errors related to the Command Line Tools. What can I do?
 
-The following might work (but no garantee). Open the Terminal and run the following code.
+The following might work (but no guarantee). Open the Terminal and run the following code.
 
 ```shell
 sudo rm -rf /Library/Developer/CommandLineTools
