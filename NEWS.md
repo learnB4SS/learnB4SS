@@ -1,3 +1,11 @@
+# learnB4SS v1.0.2
+
+## Fixed
+
+* Add missing dependency.
+
+
+
 # learnB4SS v1.0.1
 
 ## Added
