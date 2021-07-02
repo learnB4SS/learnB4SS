@@ -20,7 +20,7 @@ The first step is to install brms and its dependencies. If you haven’t
 yet done so, check out the installation instructions
 [here](https://learnb4ss.github.io/learnB4SS/articles/install-brms.html).
 
-### Download the Starter Kit (optional)
+### Workshop materials
 
 To save you some hassle, we created a Starter Kit, which you can
 download from here: [Go to download
