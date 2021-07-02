@@ -43,9 +43,9 @@ After this session you will be much closer to being an operational Bayesian for 
 
 ## A simple model
 
-Okay let's think about this. Here is the model and its priors that we have so far looked at:
+Okay let's think about this. Here is the model that we have so far looked at alongside its priors:
 
-```{r simpleModel}
+```{r simpleModel_priors}
 # specify priors
 priors_simple <- c(
   # prior for the Intercept (= the reference level)
@@ -55,44 +55,82 @@ priors_simple <- c(
   # prior for the residual variance
   prior(cauchy(0, 1), class = sigma)
 )
+```
 
-
+```{r simpleModel}
 # specify model
 simple_model <- brm(
   articulation_rate ~ attitude,  
   data = polite,
-  prior = priors_simple
+  prior = priors_simple,
+  family = gaussian
 )
 ```
 
-Brms uses a gaussian link function by default, i.e. we assume that the model residuals
-are normally distributed. 
+Brms uses a gaussian link function by default (we made that explicit above), i.e. we assume that the model residuals are normally distributed. 
 But is that really the case? 
 We have a measurement that is bound by 0, because there can't be negative values for articulation rate, right? 
-It is likely that articulate rate data are skewed to the right, because values can vary more towards higher values than toward lower values. 
+It is likely that articulate rate data are skewed to the right, because values can vary more toward higher values than toward lower values. 
 Brms allows us to critically evaluate our model fit by comparing the model using so-called posterior predictive checks. 
-Posterior predictive checks are, in simple words, "simulating replicated data under the fitted model and then comparing these to the observed data" (Gelman and Hill, 2007, p. 158). 
-So, you use posterior predictive to check if there are systematic discrepancies between real and simulated data.
+Posterior predictive checks are, in simple words, "simulating replicated data under the fitted model and then comparing these to the observed data" ([Gelman & Hill 2007: 158](http://www.stat.columbia.edu/~gelman/arm/)). 
+So, you use posterior predictive checks to investigate whether there are systematic discrepancies between the observed and simulated data.
 
 ```{r pp_check}
 # posterior predictive check
 pp_check(simple_model, nsamples = 100)
 ```
 
-Looking at the plot, you see a thick dark blue line which is the data, and bunch of light blue lines which are random draws from the posterior. 
-The model assumes a normal distribution, so the posterior draws are much more symmetric than the actual data.
-So there is a discrepancy between model and data. 
+Looking at the plot, you see a thick dark blue line which is the data, and bunch of light blue lines which are simulated data based on your model. 
+The model assumes a normal distribution, so the posterior draws are much more symmetric than the actual data, thus we notice a discrepancy between model and data. 
+These situations are common for measurements that are bound by zero (e.g. duration or response latency). To account for this, we can use a different link function (specified with the `family` argument).
 A more appropriate model would use a log normal distribution for articulation rate.
-Let's refit the model and add log
 
+When we change the family, the model will fit the measurement in log space, so we will have to change the priors. Let's throw in some numbers and run a prior_predictive check, i.e. running the model with only the prior information (`sample_prior = "only"`). We also need to specify the `lognormal` family when running the model.
+
+```{r simpleModel_priors_log}
+
+# specify priors in log space
+priors_simple_log <- c(
+  # prior for the Intercept (= the reference level)
+  prior(normal(0, 2), class = Intercept),
+  # prior for the fixed effect coefficient for polite attitude
+  prior(normal(0, .25), class = b, coef = attitudepol),
+  # prior for the residual variance
+  prior(cauchy(0, 0.1), class = sigma)
+)
+```
+
+```{r simpleModel_priors_log_prediction}
+# specify model
+simple_model2_prior <- brm(
+  articulation_rate ~ 
+    attitude,  
+    data = polite,
+    prior = priors_simple_log,
+    # specify that the model should only estimate the posterior based on the information in the prior
+    sample_prior = "only",
+    # specify lognormal family function
+    family = lognormal
+  )
+```
+
+```{r simpleModel_priors_log_plot}
+# quick and dirty plot on the original scale
+conditional_effects(simple_model2_prior)
+```
+
+Well, our priors are very weakly informative and cover more than what we consider a possible range for articulation rate. However it constraints the parameter space substantially already. Good enough. 
+
+Let's refit the model and specify the `lognormal` family.
 
 ```{r simpleModel_lognormal}
+
 # specify model
 simple_model2 <- brm(
   articulation_rate ~ 
     attitude,  
     data = polite,
-    prior = priors_simple,
+    prior = priors_simple_log,
     family = lognormal
   )
 ```
@@ -104,15 +142,16 @@ And check the model fit again:
 pp_check(simple_model2, nsamples = 100)
 ```
 
-Much much better, right? 
+Much better, right? 
 So by critically evaluating our model assumptions and the actual data we discovered that
-a lognormal distribution is a much better underlying generative model (i.e. how the data came to be).
+a `lognormal` distribution is a much better assumption about the underlying generative model (i.e. how the data came to be).
+
 Fantastic!
 Let's have a look at the results (remember that the results are now log transformed) 
 
 ```{r simpleModel_post}
 # Extract posterior coefficient and plot
-simple_model %>% 
+simple_model2 %>% 
  spread_draws(b_attitudepol) %>% 
   # plot
   ggplot(aes(x = b_attitudepol)) +
@@ -139,28 +178,31 @@ polite %>%
 ## Adding predictors 
 
 This model estimates the effect of `attitude` on articulation rate (`articulation_rate`). 
-That-is-it. 
+That.is.it. 
 But what if we also want to estimate the differences between attitude across different experimental tasks?
 Let's add `task` as a predictor and add a prior for it as well. 
 Let's stick to weakly informative priors again, centered on zero (we expect no difference of articulation rate between different tasks and acknowledge the possibility of some variance around that value).
 
-```{r multiple_model}
+```{r multiple_model_get_prior}
 # get prior
 get_prior(
  formula = articulation_rate ~ attitude + task,
-  data = polite
+  data = polite, family = lognormal
 )
+```
 
+```{r multiple_model_priors}
 # specify priors
 priors_multiple <- c(
-  prior(normal(0, 15), class = Intercept),
-  prior(normal(0, 10), class = b, coef = attitudepol),
-  prior(normal(0, 10), class = b, coef = tasknot),
-  prior(cauchy(0, 1), class = sigma)
+  prior(normal(0, 2), class = Intercept),
+  prior(normal(0, .25), class = b, coef = attitudepol),
+  prior(normal(0, .25), class = b, coef = tasknot),
+  prior(cauchy(0, .1), class = sigma)
 )
+```
 
-
-# Run model
+```{r multiple_model_run}
+# tun model
 multiple_model <- brm(
   articulation_rate ~ attitude + task,
   data = polite,
@@ -193,59 +235,41 @@ ggplot(post_multiple_attitude) +
          x = "log(articulation rate)") +
   geom_vline(xintercept = 0, lty = "dashed")
 ```
+Both posterior distributions are very clearly located to the left of zero, suggesting that there is both attitude and task affect articulation-rate to some extend (given the model, the data, and the prior assumptions)
 
 ## Adding random effects
 
 So running Bayesian regression models is really not much different from running frequentist regression models. 
 Practically, the only difference so far is that we specify prior knowledge. 
-Conceptually, we obviously interpret the output differently in terms of the inference we draw, but practically this should be business as usual for you.
+Conceptually, we obviously interpret the output differently in terms of the inference we draw, but this should be business as usual for you.
 
-Now, we all know that this model is not taking into account the fact that data points are not independent from each other. 
+Now, we probably all suspect that this model is not quite appropriate for the data, right? It does not take into account the fact that data points are not independent from each other. 
 There were multiple speakers that produced multiple data points, so observations from these speakers are not independent and we need to take that into account for robust inference. 
 So let's also add an appropriate random effect structure, including a by-subject random intercept as well as a by-subject random slope for attitude.
 
-We can write down the code to run this model easily, because we are all familiar with the `lme4` syntax.
+We can write down the code to run this model easily, because we should be familiar with the `lme4` syntax.
 `brms` syntax handles random effect structure exactly like `lme4` like so:
 
 ```{r complexModel}
 # model specification
-complex_model <- brm(
+complex_model_formula = 
   articulation_rate ~ attitude + task +
     # add random intercept
     (1 | subject) +
     # add random slope
-    (0 + attitude | subject),  
-   data = polite,
-   prior = priors_simple,
-   family = lognormal,
-   seed = 999
-)
+    (0 + attitude | subject)
 
-summary(complex_model)
 ```
 
 Looks familiar? 
-
-Let us walk through the summary here. 
-We now have one part of the table called "Group-Level Effects". 
-This part of the table gives us the models estimates of four parameters:
-How much subjects vary in general (`sd(Intercept)`), how much they differ in the informal condition (`sd(attitudeinf)`), how much subjects vary in the polite condition (`sd(attitudepol)`), and what the correlation between `sd(attitudeinf)` and `sd(attitudepol)` is. 
-As before, for all of these parameters, we receive an `Estimate` which is the mean of the posterior distribution and a range of plausible values within the 95% Credible Interval (`l-95% CI` - `u-95% CI`). Except for the correlation, the estimates are bound by 0, i.e. the variance can only be positive. 
-The correlation coefficient can vary between -1 and 1.
-
-The second part of the summary table, i.e. the Population-Level Effects, did not change and summarizes our regression coefficients for the fixed effects.
-Just like before.
 
 But what about priors? 
 Do we need to specify priors for these new elements as well? 
 And if so how?
 
 Generally, we encourage you to specify priors for all elements of your model, so let us try this as well. 
-We need to specify the four parameters for the Group-Level Effects. 
-Three of them are variance components that we will specify with half-cauchy distributions, just like we did for the residual variance. 
-The final parameter is a correlation coefficient of the group level effects and will be specified using the Lewandowski-Kurowicka-Joe prior (LKJ).
 
-```{r complexModel_priors}
+```{r complexModel_get_priors}
 # get prior
 get_prior(
   articulation_rate ~ attitude + task +
@@ -254,22 +278,31 @@ get_prior(
    data = polite,
    family = lognormal
 )
+```
 
+We need to specify four parameters for the Group-Level Effects. 
+Three of them are variance components that we will specify with half-cauchy distributions, just like we did for the residual variance. 
+The final parameter is a correlation coefficient of the group level effects and will be specified using the Lewandowski-Kurowicka-Joe prior (LKJ).
+
+```{r complexModel_priors}
 # specify priors
 priors_complex <- c(
-  prior(normal(0, 15), class = Intercept),
-  prior(normal(0, 10), class = b, coef = attitudepol),
-  prior(normal(0, 10), class = b, coef = tasknot),
+  prior(normal(0, 2), class = Intercept),
+  prior(normal(0, 0.25), class = b, coef = attitudepol),
+  prior(normal(0, 0.25), class = b, coef = tasknot),
   # specify weakly informative prior for the random effects (slopes)
-  prior(cauchy(0, 1), class = sd, coef = Intercept, group = subject),
-  prior(cauchy(0, 1), class = sd, coef = attitudeinf, group = subject),
-  prior(cauchy(0, 1), class = sd, coef = attitudepol, group = subject),
+  prior(cauchy(0, 0.1), class = sd, coef = Intercept, group = subject),
+  prior(cauchy(0, 0.1), class = sd, coef = attitudeinf, group = subject),
+  prior(cauchy(0, 0.1), class = sd, coef = attitudepol, group = subject),
   # specify weakly informative prior for the correlation between random intercept and slope
   prior(lkj(2), class = cor, group = subject),
-  prior(cauchy(0, 1), class = sigma)
+  prior(cauchy(0, 0.1), class = sigma)
 )
+```
 
+That is it. Now we can run the model. And we will add one new argument to the `brm()` function: The `seed` argument allows us to set a random seed. The sampling procedure has a random initial state, so if you run this model on your machine, you will get slightly different results from someone else. With `seed` we can fix this initial state and obtain the exact same results. This is great, because we can make our results fully  reproducible that way.
 
+```{r complexModel}
 # Run model
 complex_model <- brm(
   articulation_rate ~ attitude + task +
@@ -280,11 +313,22 @@ complex_model <- brm(
    data = polite,
    prior = priors_complex,
    family = lognormal,
+  # set seed
    seed = 999
 )
 
 summary(complex_model)
 ```
+
+Let us walk through the summary here. 
+We now have one part of the table called "Group-Level Effects". 
+This part of the table gives us the models estimates for four parameters:
+How much subjects' baseline varies (`sd(Intercept)`), how much they vary in the informal condition (`sd(attitudeinf)`), how much subjects vary in the polite condition (`sd(attitudepol)`), and what the correlation between `sd(attitudeinf)` and `sd(attitudepol)` is. 
+As before, for all of these parameters, we receive an `Estimate` which is the mean of the posterior distribution and a range of plausible values within the 95% Credible Interval (`l-95% CI` - `u-95% CI`). Except for the correlation, the estimates are bound by 0, i.e. the variance can only be positive. 
+The correlation coefficient can vary between -1 and 1.
+
+The second part of the summary table, i.e. the Population-Level Effects, did not change and summarizes our regression coefficients for the fixed effects.
+Just like before.
 
 There we go. We have run a linear mixed effects model within the Bayesian framework. 
 We specified priors for both random and fixed effects. 
@@ -315,16 +359,14 @@ cat("\n")
 p_direction(post_complex$b_attitudepol)
 ```
 
-Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.12, 0.00] and a 0.98 probability of being negative. 
-Although the majority of plausible values are negative, positive values are still plausible, given the data, the model, and the priors. 
-
-
+Fantastic! So our best estimate of the effect of attitude has a 95% CrI between [-0.12, -0.01] and a 0.98 probability of being negative. 
+Although the majority of plausible values are negative, positive values are still plausible (given the data, the model, and the priors). 
 
 # Exercise
 
 Now it's your turn: Our goal is it to run the following model: `f0mn ~ attitude + (1 | subject) + (0 + attitude | subject)`
 
-(a) First, see which parameters we need to specify with priors using the `get_prior()` function. 
+(a) First, see which priors we need to specify using the `get_prior()` function. 
 (If you are unsure, see our code examples above)
 
 ```{r get_prior_ex}
@@ -381,6 +423,9 @@ hdi(...)
 # extract probability of direction
 p_direction(...)
 ```
+
+(f) But hold on. Is the model fit okay? Critically check the model fit with `pp_check()`. Do you think the model and the priors capture the generative process appropriately? What might be the issue? Can you fix it?
+
 
 <br>
 
@@ -473,7 +518,7 @@ ex_model <- brm(
     (0 + attitude | subject),  
    data = polite,
    prior = priors_ex,
-   seed = 1111
+   seed = 1111,
 )
 -->
 
@@ -489,4 +534,58 @@ ggplot(ex_post) +
 <!-- (e)
 hdi(ex_post$b_attitudepol)
 p_direction(ex_post$b_attitudepol)
+-->
+
+<!-- (f)
+pp_check(ex_model, nsamples = 100)
+
+Doesn't capture bimodality well and over estimates the probability of value between 0 and 50.
+One reason for this is that f0 is also bound to zero and very low values are virtually impossible.
+Again, a lognormal link function is probably more appropriate.
+
+priors_ex_log <- c(
+  prior(normal(0, 3), class = Intercept),
+  prior(normal(0, 2), class = b, coef = attitudepol),
+  # specify weakly informative prior for the random effects (slopes)
+  prior(cauchy(0, .1), class = sd, coef = Intercept, group = subject),
+  prior(cauchy(0, .1), class = sd, coef = attitudeinf, group = subject),
+  prior(cauchy(0, .1), class = sd, coef = attitudepol, group = subject),
+  # specify weakly informative prior for the correlation between random intercept and slope
+  prior(lkj(2), class = cor, group = subject),
+  prior(cauchy(0, .1), class = sigma)
+)
+
+Run model for priors only
+
+ex_model_log_priors <- brm(
+  f0mn ~ 
+    attitude +
+    (1 | subject) +
+    (0 + attitude | subject),  
+   data = polite,
+   sample_prior = "only",
+   family = lognormal,
+   prior = priors_ex_log,
+   seed = 1111
+)
+
+conditional_effects(ex_model_log_priors)
+
+Run model
+
+ex_model_log <- brm(
+  f0mn ~ 
+    attitude +
+    (1 | subject) +
+    (0 + attitude | subject),  
+   data = polite,
+   family = lognormal,
+   prior = priors_ex_log,
+   seed = 1111
+)
+
+pp_check(ex_model_log, nsamples = 100)
+
+Much better!
+
 -->
