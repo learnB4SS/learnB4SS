@@ -544,8 +544,8 @@ One reason for this is that f0 is also bound to zero and very low values are vir
 Again, a lognormal link function is probably more appropriate.
 
 priors_ex_log <- c(
-  prior(normal(0, 3), class = Intercept),
-  prior(normal(0, 2), class = b, coef = attitudepol),
+  prior(normal(0, 6), class = Intercept),
+  prior(normal(0, 3), class = b, coef = attitudepol),
   # specify weakly informative prior for the random effects (slopes)
   prior(cauchy(0, .1), class = sd, coef = Intercept, group = subject),
   prior(cauchy(0, .1), class = sd, coef = attitudeinf, group = subject),
