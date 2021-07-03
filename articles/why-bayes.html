@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to install the learnB4SS package • learnB4SS</title>
+<title>Why Bayesian? • learnB4SS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="How to install the learnB4SS package">
+<meta property="og:title" content="Why Bayesian?">
 <meta property="og:description" content="learnB4SS">
 <meta property="og:image" content="https://learnb4ss.github.io/learnB4SS/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -162,47 +162,42 @@
 
       
 
-      </header><script src="install-learnb4ss_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="why-bayes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>How to install the learnB4SS package</h1>
+      <h1 data-toc-skip>Why Bayesian?</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/learnB4SS/learnB4SS/blob/master/vignettes/install-learnb4ss.Rmd"><code>vignettes/install-learnb4ss.Rmd</code></a></small>
-      <div class="hidden name"><code>install-learnb4ss.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/learnB4SS/learnB4SS/blob/master/vignettes/why-bayes.Rmd"><code>vignettes/why-bayes.Rmd</code></a></small>
+      <div class="hidden name"><code>why-bayes.Rmd</code></div>
 
     </div>
 
     
     
-<p>All the workshop materials can be conveniently installed as an R package.</p>
-<p>To install the learnB4SS package, you need to install the remotes package first, if not already installed.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></code></pre></div>
-<p>Then, simply ran the following line.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"learnB4SS/learnB4SS"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p>🎉 You are now ready for your Bayesian adventure!</p>
-<div id="usage" class="section level2">
+<p>Here are a few practical and conceptual reasons for why you should consider switching to Bayesian statistics for your research.</p>
+<div id="practical-reasons" class="section level2">
 <h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<p>During the workshop, you will be able to follow along by attaching the package learnB4SS:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/learnB4SS/learnB4SS">learnB4SS</a></span><span class="op">)</span></code></pre></div>
-<p>Now you can use the function <code><a href="../reference/open_slides.html">open_slides()</a></code> to open the session slides in your browser and <code><a href="../reference/open_exercise.html">open_exercise()</a></code> to open the exercise files.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Open slides of session 00</span>
-<span class="fu"><a href="../reference/open_slides.html">open_slides</a></span><span class="op">(</span><span class="fl">00</span><span class="op">)</span>
-
-<span class="co"># Open exercise of session 03</span>
-<span class="fu"><a href="../reference/open_exercise.html">open_exercise</a></span><span class="op">(</span><span class="fl">03</span><span class="op">)</span></code></pre></div>
-<p>We will use the <code>polite</code> data throughout the workshop.</p>
-<p>You can load the data with:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"polite"</span><span class="op">)</span>
-
-<span class="co"># Learn about the data</span>
-<span class="op">?</span><span class="va">polite</span></code></pre></div>
+<a href="#practical-reasons" class="anchor"></a>Practical reasons</h2>
+<ul>
+<li><p>Fitting frequentist models can lead to anti-conservative <em>p</em>-values (i.e. increased false positive rates, Type-I error rates: there is no effect but yet you got a significant <em>p</em>-value). An interesting example of this for the non-technically inclined reader can be found here: <a href="https://365datascience.com/bayesian-vs-frequentist-approach/" class="uri">https://365datascience.com/bayesian-vs-frequentist-approach/</a>. LMER tends to be more sensitive to small sample sizes than Bayesian models (with small sample sizes, Bayesian models return estimates with greater uncertainty, which is a more conservative approach).</p></li>
+<li><p>While very simple models will return very similar estimates in frequentist and Bayesian statistics, in most cases more complex models won’t fit if run with frequentist packages like lme4, especially without adequate enough sample sizes. BRMs always converge, while LMERs don’t always do.</p></li>
+<li><p>LMERs require as much work as BRMs, although it is common practice to skip necessary steps when fitting LMERs, which gives the impression of fitting LMERs being a quicker process. Factoring out the time needed to run MCMCs in BRMs, in LMER you still have to perform robust perspective power analyses and post-hoc model checks.</p></li>
+<li><p>With BRMs, you can reuse posterior distributions from previous work and include that knowledge as priors into your Bayesian analysis. This feature effectively speeds up the discovery process (getting to the real value estimate of interest faster). You can embed previous knowledge in BRMs while you can’t in LMERs.</p></li>
+</ul>
+</div>
+<div id="conceptual-reasons" class="section level2">
+<h2 class="hasAnchor">
+<a href="#conceptual-reasons" class="anchor"></a>Conceptual reasons</h2>
+<ul>
+<li><p>LMERs cannot provide evidence for a difference between groups, only evidence to reject the null hypothesis.</p></li>
+<li><p>A frequentist CI can only tell us that, if we run the same study multiple times, <em>n</em> percent of the time the CI will include the real value (but we don’t know whether the CI we got in our study is one from the 100-<em>n</em> percent of CIs that DO NOT CONTAIN the real value). On the other hand, a Bayesian CrI ALWAYS tells us that the real value is within a certain range at <em>n</em> percent probability. (Of course all conditional on model and data, which is true both for frequentist and Bayesian models alike). So, LMER really just gives you a point estimate, while BRMs give a range of values.</p></li>
+<li><p>With BRM you can compare any hypothesis, not just null vs alternative. (Although you can use information criteria with LMER).</p></li>
+<li><p>LMER is based on an imaginary set of experiments that you never actually carry out.</p></li>
+<li><p>BRM will converge towards the true value in the long run. LMER does not.</p></li>
+</ul>
+<p>Of course, there are merits in fitting LMERs, for example in corporate decisions, but you’ll still have to do a lot of work. The main conceptual difference then is that LMER and BRMs answer very different questions and as (basic) scientists we are generally interested in questions that BRMs can answer and LMER cannot.</p>
+<p><br></p>
 </div>
   </div>
 
