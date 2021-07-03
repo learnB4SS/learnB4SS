@@ -1,3 +1,11 @@
+# learnB4SS v1.0.4
+
+## Added
+
+* Vignette with reasons for switching to Bayesian stats.
+
+
+
 # learnB4SS v1.0.3
 
 ## Added

@@ -1,0 +1,43 @@
+---
+title: "Why Bayesian?"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Why Bayesian?}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Here are a few practical and conceptual reasons for why you should consider switching to Bayesian statistics for your research.
+
+## Practical reasons
+
+- Fitting frequentist models can lead to anti-conservative *p*-values (i.e. increased false positive rates, Type-I error rates: there is no effect but yet you got a significant *p*-value). An interesting example of this for the non-technically inclined reader can be found here: https://365datascience.com/bayesian-vs-frequentist-approach/. LMER tends to be more sensitive to small sample sizes than Bayesian models (with small sample sizes, Bayesian models return estimates with greater uncertainty, which is a more conservative approach).
+
+- While very simple models will return very similar estimates in frequentist and Bayesian statistics, in most cases more complex models won't fit if run with frequentist packages like lme4, especially without adequate enough sample sizes. BRMs always converge, while LMERs don't always do.
+
+- LMERs require as much work as BRMs, although it is common practice to skip necessary steps when fitting LMERs, which gives the impression of fitting LMERs being a quicker process. Factoring out the time needed to run MCMCs in BRMs, in LMER you still have to perform robust perspective power analyses and post-hoc model checks.
+
+- With BRMs, you can reuse posterior distributions from previous work and include that knowledge as priors into your Bayesian analysis. This feature effectively speeds up the discovery process (getting to the real value estimate of interest faster). You can embed previous knowledge in BRMs while you can't in LMERs.
+
+## Conceptual reasons
+
+- LMERs cannot provide evidence for a difference between groups, only evidence to reject the null hypothesis.
+
+- A frequentist CI can only tell us that, if we run the same study multiple times, *n* percent of the time the CI will include the real value (but we don't know whether the CI we got in our study is one from the 100-*n* percent of CIs that DO NOT CONTAIN the real value). On the other hand, a Bayesian CrI ALWAYS tells us that the real value is within a certain range at *n* percent probability. (Of course all conditional on model and data, which is true both for frequentist and Bayesian models alike). So, LMER really just gives you a point estimate, while BRMs give a range of values.
+
+- With BRM you can compare any hypothesis, not just null vs alternative. (Although you can use information criteria with LMER).
+
+- LMER is based on an imaginary set of experiments that you never actually carry out.
+
+- BRM will converge towards the true value in the long run. LMER does not.
+
+Of course, there are merits in fitting LMERs, for example in corporate decisions, but you'll still have to do a lot of work. The main conceptual difference then is that LMER and BRMs answer very different questions and as (basic) scientists we are generally interested in questions that BRMs can answer and LMER cannot.
+
+<br>

@@ -4,7 +4,7 @@ template:
   bootswatch: flatly
 navbar:
   structure:
-    left: [home, get-started, slides, articles, reference, faqs]
+    left: [home, get-started, slides, articles, reference, faqs, why-bayes]
     right: [github]
   components:
     get-started:
@@ -60,3 +60,6 @@ navbar:
     faqs:
       text: FAQs
       href: articles/faqs.html
+    why-bayes:
+      text: Why Bayes?
+      href: articles/why-bayes.html
