@@ -1,8 +1,8 @@
 Package: learnB4SS
 Type: Package
 Title: Learning materials for the learnB4SS workshop
-Version: 1.0.4
-Date: 2021-07-03
+Version: 1.0.5
+Date: 2021-07-05
 Authors@R: c(
     person(given = "Stefano",
            family = "Coretta",
@@ -40,11 +40,11 @@ Imports: brms,
     tidybayes,
     tidyverse,
     usethis,
-    utils
+    utils,
+    rmarkdown,
+    knitr
 Suggests: 
-    learnr,
-    knitr,
-    rmarkdown
+    learnr
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.5.0)
