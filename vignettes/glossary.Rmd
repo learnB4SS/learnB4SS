@@ -1,0 +1,38 @@
+---
+title: "Glossary"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Glossary}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Family of distributions
+  : Distributions that can be described by the same set of parameters make up a family of distributions. For example the normal/Gaussian family includes all of the possible distributions that can be described by the two parameters $\mu$ and $\sigma$ alone.
+  : In brms you set the family of the probability distribution of the outcome variable with the argument `family`. For example, `family = gaussian()`, `family = bernoulli()`.
+  : In practice, you can think of the family as the prior probability distribution of the outcome variable.
+
+Likelihood
+  : This is the probability distribution of the outcome variable conditional on the prior(s).
+  : Notation: $p(d|\theta)$.
+
+Outcome/response/dependent variables
+  : These are the variables that appear on the left-hand side of a model formula. For example, `f0` in `f0 ~ attitude`; `F1` and `F2` in `c(F1, F2) ~ stress`.
+
+Parameter
+  : A parameter in a statistical model (for example intercept/mean, standard deviation, slope/$\beta$, etc).
+  : A parameter used to describe a probability distribution (for example $\mu$ and $\sigma$ for normal/Gaussian distributions).
+
+Predictors, independent variables
+  : These are the variable that appear on the right-hand side of a model formula. For example, `novel_word` in `reaction_t ~ novel_word`; `s(longitude, latitude)` in `temperature ~ s(longitude, latitude)`.
+
+Prior probability distribution or simply prior
+  : This is the probability distribution of the values a parameter can take, based on prior knowledge/belief, domain expertise, previous research, pilot data.
+  : Notation: $p(\theta)$.

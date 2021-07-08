@@ -1,0 +1,41 @@
+---
+title: "Understand and explore priors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understand and explore priors}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(tidyverse)
+library(learnB4SS)
+data(emotion)
+```
+
+# Overview
+
+This vignette digs a bit deeper into priors for different types of outcome/response variables.
+We will cover outcome variables that follow these distributions: normal/Gaussian, log-normal, binomial/Bernoulli, poisson, and beta.
+
+
+# Normal/Gaussian
+
+Let's start off with an outcome variable distributed according to a normal/Gaussian distribution.
+
+In fact, we hardly ever work with truly normally distributed variables.
+So for this example we will look at a data set of lexical emotional valence.
+
+```{r}
+emotion
+```
+
+The `emotion` tibble contains a list of 1000 English words and their emotional valence.
+Emotional valence is given as a number between `-4` and `+4`, 
