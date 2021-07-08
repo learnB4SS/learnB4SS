@@ -3,7 +3,7 @@
 \docType{data}
 \name{polite}
 \alias{polite}
-\title{The phonetic profile of Korean formal and informal speech registers.}
+\title{The phonetic profile of Korean formal and informal speech registers}
 \format{
 A \code{\link[tibble]{tibble}} with 224 rows and 29 variables:
   \describe{

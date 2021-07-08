@@ -1,4 +1,4 @@
-#' The phonetic profile of Korean formal and informal speech registers.
+#' The phonetic profile of Korean formal and informal speech registers
 #'
 #' This tibble contains data from the study discussed in Winter and Grawunder 2012.
 #'
@@ -39,3 +39,31 @@
 #'     https://doi.org/10.1016/j.wocn.2012.08.006
 #'
 "polite"
+
+#' Word emotional valence
+#'
+#' This tibble contains data from Warriner 2013.
+#'
+#' @format A \code{\link[tibble]{tibble}} with 1000 rows and 2 variables:
+#'   \describe{
+#'     \item{word}{Word.}
+#'     \item{valency_z}{Emotional valency of word (z-scores).}
+#'   }
+"emotion"
+
+#' Incomplete neutralisation in German
+#'
+#' This tibble contains data from Roettger et al. 2014.
+#'
+#' @format A \code{\link[tibble]{tibble}} with 6144 rows and 8 variables:
+#'   \describe{
+#'     \item{order}{Trial number.}
+#'     \item{speaker_voice}{Speaker voice ID.}
+#'     \item{item_pair}{ID of the lexical pair (voiceless/voiced).}
+#'     \item{RT}{Reaction time.}
+#'     \item{correct}{Whether the listener has correctly categorised the word.}
+#'     \item{correct_voicing}{The underlying voicing category of the word.}
+#'     \item{listener}{The listener ID.}
+#'     \item{repetitiontype}{Whether the word was heard for the first time or subsequent times.}
+#'   }
+"incomplete"
