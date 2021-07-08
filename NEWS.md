@@ -1,3 +1,23 @@
+# learnB4SS v1.0.6.9000
+
+
+
+# learnB4SS v1.0.6
+
+## Fixed
+
+- Installation of package requires `dependencies = TRUE`.
+
+
+
+# learnB4SS v1.0.6
+
+## Changed
+
+- Dependencies in DESCRIPTION.
+
+
+
 # learnB4SS v1.0.4
 
 ## Added
