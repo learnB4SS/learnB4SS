@@ -19,10 +19,21 @@ library(learnB4SS)
 library(tidyverse)
 theme_set(theme_minimal())
 library(extraDistr)
+library(HDInterval)
 library(brms)
 
 
 data("incomplete")
+
+b4ss_colors <- c(purple = "#8970FF", orange = "#FFA70B")
+
+scale_fill_b4ss <- function(...) {
+  scale_fill_manual(..., values = c(b4ss_colors[[1]], b4ss_colors[[2]]))
+}
+
+scale_color_b4ss <- function(...) {
+  scale_color_manual(..., values = c(b4ss_colors[[1]], b4ss_colors[[2]]))
+}
 ```
 
 # Study overview and data
@@ -33,7 +44,7 @@ glimpse(incomplete)
 
 # Model formula
 
-```{r}
+```{r m1-bf}
 m1_bf <- brmsformula(
   correct ~
     correct_voicing *
@@ -51,18 +62,22 @@ m1_bf <- brmsformula(
 
 # Priors and prior predictive checks
 
+## Prior distribution of the outcome variable (likelihood, family)
+
 $$correct_i \sim Bernoulli(p)$$
 
 ```{r bernoulli}
-y <- dbern(c(0, 1), p = 0.7)
+y <- dbern(c(0, 1), p = 0.75)
 
 ggplot() +
   aes(c("0", "1"), y) +
-  geom_point(size = 5) +
-  geom_linerange(aes(ymin = 0, ymax = y), size = 2) +
-  ylim(0, 1)
+  geom_linerange(aes(ymin = 0, ymax = y), size = 2, colour = b4ss_colors) +
+  geom_point(size = 5, colour = b4ss_colors) +
+  ylim(0, 1) +
+  labs(x = "outcome", y = "p")
 ```
 
+## Get priors
 
 ```{r m1-prior-default}
 # get_prior(m1_bf, data = incomplete)
@@ -70,6 +85,155 @@ get_prior(m1_bf, data = incomplete) %>%
   as_tibble() %>%
   select(prior:group)
 ```
+
+## Log-odds space
+
+```{r p-log-odds}
+dots <- tibble(
+  p = seq(0.1, 0.9, by = 0.1),
+  log_odds = qlogis(p)
+)
+
+tibble(
+  p = seq(0, 1, by = 0.001),
+  log_odds = qlogis(p)
+) %>%
+  ggplot(aes(p, log_odds)) +
+  geom_hline(yintercept = 0, alpha = 0.5) +
+  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  geom_line(size = 2, colour = b4ss_colors[2]) +
+  geom_point(data = dots, size = 4, colour = b4ss_colors[1]) +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.1), minor_breaks = NULL) +
+  scale_y_continuous(breaks = seq(-6, 6, by = 2), minor_breaks = NULL) +
+  labs(
+    title = "Correspondence between probabilities and log-odds",
+    x = "probability",
+    y = "log-odds"
+  )
+```
+
+```{r logis}
+# log-odds = 0; get probability
+glue::glue("Log-odds 0 = p(", plogis(0), ")")
+# p = 0.5; get log-odds
+glue::glue("p(0.5) = log-odds ", qlogis(0.5))
+
+cat("\n\n")
+
+# log-odds = 1.5; get probability
+glue::glue("Log-odds 1.5 = p(", round(plogis(1.5), 4), ")")
+# p = 0.5; get log-odds
+glue::glue("p(0.8176) = log-odds ", round(qlogis(0.8175745), 4))
+```
+
+## Prior for the intercept
+
+```{r prior-intercept}
+# Log-odds to p
+plogis(-6) # ~= 0 
+plogis(6) # ~= 1
+```
+
+
+
+```{r prior-intercept-plot}
+x <- seq(-15, 15, by = 0.1)
+# 95% Cri [-6, +6] => SD = 6/2 = 3
+y <- dnorm(x, mean = 0, sd = 3)
+
+ggplot() +
+  aes(x, y) +
+  geom_line(size = 1.5, colour = b4ss_colors[1]) +
+  labs(x = "log-odds")
+```
+
+## Prior for b
+
+```{r prior-b}
+# Log-odds to odds
+exp(-2) # ~= 0
+exp(2) # ~= 7
+```
+
+```{r prior-b-plot}
+x <- seq(-4, 4, by = 0.1)
+# 95% Cri [-2, +2] => SD = 2/2 = 1
+y <- dnorm(x, mean = 0, sd = 1)
+
+ggplot() +
+  aes(x, y) +
+  geom_line(size = 1.5, colour = b4ss_colors[1]) +
+  labs(x = "log-odds")
+```
+
+## Prior for sd
+
+```{r prior-sd}
+inverseCDF(c(0.025, 0.975), phcauchy, sigma = 0.1)
+```
+
+```{r prior-sd-plot}
+x <- seq(0, 3, by = 0.01)
+y <- dhcauchy(x, sigma = 0.1)
+
+ggplot() +
+  aes(x, y) +
+  geom_line(size = 1, colour = b4ss_colors[2]) +
+  labs(x = "log-odds")
+```
+
+## Set priors
+
+```{r priors}
+priors <- c(
+  prior(normal(0, 3), class = Intercept),
+  prior(normal(0, 1), class = b),
+  prior(cauchy(0, 0.1), class = sd),
+  prior(lkj(2), class = cor)
+)
+```
+
+## Prior predictive checks
+
+```{r prior-pc}
+m1_priorpc <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors,
+  sample_prior = "only",
+  cores = 4
+)
+```
+
+```{r prior-pc-plot}
+conditional_effects(m1_priorpc, effects = "correct_voicing:repetitiontype")
+```
+
+## Let's try VERY strong priors for comparison
+
+```{r priors-strong}
+priors_strong <- c(
+  prior(normal(2, 0.1), class = Intercept),
+  prior(normal(1, 0.1), class = b),
+  prior(cauchy(0, 0.1), class = sd),
+  prior(lkj(2), class = cor)
+)
+```
+
+```{r priors-strong-pc}
+m1_priorpc_strong <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors_strong,
+  sample_prior = "only",
+  cores = 4
+)
+```
+
+```{r priors-strong-pc-plot}
+conditional_effects(m1_priorpc_strong, effects = "correct_voicing:repetitiontype")
+```
+
 # Model output and interpretation
 
 # Visual effects
@@ -127,7 +291,7 @@ post_plot
 
 If you want to add the actual aggregated accuracy for each listener to the plot (for example), you can add that information on top. Makes for a very informative plot.
 
-```{r levels_plot, message = FALSE}
+```{r levels_plot-2, message = FALSE}
 
 #aggregate
 incomplete_agg <- incomplete %>% 
@@ -141,5 +305,4 @@ post_plot +
                  fill = correct_voicing),
              pch = 21, alpha = 0.5,
              position = position_nudge(x = -0.1))
-
 ```
