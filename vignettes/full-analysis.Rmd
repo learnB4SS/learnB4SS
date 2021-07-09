@@ -82,8 +82,7 @@ A quick and dirty way to assess the posterior predictions is using the `conditio
 conditional_effects(m1_bf)
 
 ```
-
-We have also already learned how to plot the posterior distributions of our population-level coefficients: 
+We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the `bayesplot` package. 
 
 ```{r forest_plot}
 
@@ -94,11 +93,12 @@ mcmc_areas(posterior,
                     "b_correct_voicingvoiceless", 
                     "b_repetitiontyperepeated", 
                     "b_correct_voicingvoiceless:repetitiontyperepeated"),
+           # arbitrary threshold for shading probability mass
            prob = 0.83) 
 
 ```
 
-
+For more traditional plotting of the actual levels of the predictors, we can use the `data_grid()` and `add_fitted_draws()` functions. Here is an example.
 
 ```{r levels_plot}
 
@@ -125,7 +125,7 @@ post_plot <-
 post_plot
 ```
 
-If you want to add the actual aggregated accuracy for each listener to the plot, you can create a really informative plot.
+If you want to add the actual aggregated accuracy for each listener to the plot (for example), you can add that information on top. Makes for a very informative plot.
 
 ```{r levels_plot, message = FALSE}
 
