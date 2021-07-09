@@ -20,6 +20,8 @@ library(tidyverse)
 theme_set(theme_minimal())
 library(extraDistr)
 library(brms)
+
+
 data("incomplete")
 ```
 
@@ -36,8 +38,12 @@ m1_bf <- brmsformula(
   correct ~
     correct_voicing *
     repetitiontype +
+    # random slopes for interaction across listeners
     (correct_voicing * repetitiontype | listener) +
-    (1 | speaker_voice),
+    # random slopes for interaction across speaker voices
+    (correct_voicing * repetitiontype | speaker_voice) +
+    # random slopes for interaction across minimal pairs
+    (correct_voicing * repetitiontype | item_pair),
   family = bernoulli()
 )
 ```
@@ -64,4 +70,76 @@ get_prior(m1_bf, data = incomplete) %>%
   as_tibble() %>%
   select(prior:group)
 ```
+# Model output and interpretation
 
+# Visual effects
+
+A quick and dirty way to assess the posterior predictions is using the `conditional_effects()` function. It is also useful because it plots the data into the original scale.
+
+```{r conditional_effects}
+
+# quick and dirty plot on the original scale
+conditional_effects(m1_bf)
+
+```
+
+We have also already learned how to plot the posterior distributions of our population-level coefficients: 
+
+```{r forest_plot}
+
+posterior <- as.matrix(m1_bf)
+
+mcmc_areas(posterior,
+           pars = c("b_Intercept", 
+                    "b_correct_voicingvoiceless", 
+                    "b_repetitiontyperepeated", 
+                    "b_correct_voicingvoiceless:repetitiontyperepeated"),
+           prob = 0.83) 
+
+```
+
+
+
+```{r levels_plot}
+
+post_plot <- 
+  incomplete %>% 
+  data_grid(correct_voicing, repetitiontype) %>%
+  add_fitted_draws(m1_bf, n = 4000) %>%
+  # plot
+  ggplot(aes(y = .value, x = correct_voicing, 
+             fill = correct_voicing)) +
+  # density plus CrIs
+  stat_halfeye() +
+  # reference line at chance level = 0.5
+  geom_hline(yintercept = 0.5, lty = "dashed") +
+  # split by repetition type
+  facet_grid(~repetitiontype) +
+  # color code
+  scale_fill_manual(values = c("#8970FF", "#FFA70B")) + 
+  #scale_color_manual(values = c("#8970FF", "#FFA70B")) +
+  # rename y axis
+  labs(y = "probability of correct",
+       x = "underlying voicing")
+
+post_plot
+```
+
+If you want to add the actual aggregated accuracy for each listener to the plot, you can create a really informative plot.
+
+```{r levels_plot, message = FALSE}
+
+#aggregate
+incomplete_agg <- incomplete %>% 
+  group_by(listener, correct_voicing, repetitiontype) %>% 
+  summarise(.value = mean(as.numeric(correct)))
+
+post_plot +
+  geom_point(data = incomplete_agg,
+             aes(y = .value, 
+                 x = correct_voicing, 
+                 fill = correct_voicing),
+             pch = 21, alpha = 0.5,
+             position = position_nudge(x = -0.1))
+
+```
