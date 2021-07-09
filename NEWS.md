@@ -1,5 +1,11 @@
 # learnB4SS v1.0.6.9000
 
+## Added
+
+- `emotion` tibble with lexical emotional valence data from Warriner 2013.
+
+- `incomplete` tibble with perceptual data on incomplete voicing neutralisation from Roettger et al. 2014.
+
 
 
 # learnB4SS v1.0.6

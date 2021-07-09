@@ -1,0 +1,67 @@
+---
+title: "Fully worked-out analysis using a Bayesian regression with brms"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fully worked-out analysis using a Bayesian regression with brms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(learnB4SS)
+library(tidyverse)
+theme_set(theme_minimal())
+library(extraDistr)
+library(brms)
+data("incomplete")
+```
+
+# Study overview and data
+
+```{r incomplete}
+glimpse(incomplete)
+```
+
+# Model formula
+
+```{r}
+m1_bf <- brmsformula(
+  correct ~
+    correct_voicing *
+    repetitiontype +
+    (correct_voicing * repetitiontype | listener) +
+    (1 | speaker_voice),
+  family = bernoulli()
+)
+```
+
+
+# Priors and prior predictive checks
+
+$$correct_i \sim Bernoulli(p)$$
+
+```{r bernoulli}
+y <- dbern(c(0, 1), p = 0.7)
+
+ggplot() +
+  aes(c("0", "1"), y) +
+  geom_point(size = 5) +
+  geom_linerange(aes(ymin = 0, ymax = y), size = 2) +
+  ylim(0, 1)
+```
+
+
+```{r m1-prior-default}
+# get_prior(m1_bf, data = incomplete)
+get_prior(m1_bf, data = incomplete) %>%
+  as_tibble() %>%
+  select(prior:group)
+```
+
