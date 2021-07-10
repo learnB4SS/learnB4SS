@@ -9,7 +9,7 @@ polite <- read_csv(here::here("data-raw/polite.csv")) %>%
 
 usethis::use_data(polite, overwrite = TRUE)
 
-# BRMs ----
+# Exercises model objects (cache) ----
 
 b_mod_00 <- brm(
   articulation_rate ~ 1,
@@ -52,3 +52,60 @@ incomplete <- read_csv("./data-raw/incomplete.csv") %>%
   )
 
 usethis::use_data(incomplete, overwrite = TRUE)
+
+# Full analysis model objects (cache)
+
+m1_bf <- brmsformula(
+  correct ~
+    correct_voicing *
+    repetitiontype +
+    # random slopes for interaction across listeners
+    (correct_voicing * repetitiontype | listener) +
+    # random slopes for interaction across speaker voices
+    (correct_voicing * repetitiontype | speaker_voice) +
+    # random slopes for interaction across minimal pairs
+    (correct_voicing * repetitiontype | item_pair),
+  family = bernoulli()
+)
+
+priors <- c(
+  prior(normal(0, 3), class = Intercept),
+  prior(normal(0, 1), class = b),
+  prior(cauchy(0, 0.1), class = sd),
+  prior(lkj(2), class = cor)
+)
+
+m1_priorpc <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors,
+  sample_prior = "only",
+  file = here::here("inst/extdata/m1_priorpc")
+)
+
+priors_strong <- c(
+  prior(normal(2, 0.1), class = Intercept),
+  prior(normal(1, 0.1), class = b),
+  prior(cauchy(0, 0.1), class = sd),
+  prior(lkj(2), class = cor)
+)
+
+m1_priorpc_strong <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors_strong,
+  sample_prior = "only",
+  cores = 4,
+  file = here::here("inst/extdata/m1_priorpc_strong")
+)
+
+m1_full <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors,
+  cores = parallel::detectCores(),
+  chains = 4,
+  iter = 2000,
+  warmup = 1000,
+  file = here::here("inst/extdata/m1_full")
+)

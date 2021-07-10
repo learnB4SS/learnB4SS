@@ -7,31 +7,31 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
-library(learnB4SS)
+```{r setup, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(bayesplot)
 theme_set(theme_minimal())
+library(learnB4SS)
 library(extraDistr)
 library(HDInterval)
+library(tidybayes)
+library(bayesplot)
+library(modelr)
 library(brms)
-
 
 data("incomplete")
 
+# Set custom b4ss colours
 b4ss_colors <- c(purple = "#8970FF", orange = "#FFA70B")
-
 scale_fill_b4ss <- function(...) {
   scale_fill_manual(..., values = c(b4ss_colors[[1]], b4ss_colors[[2]]))
 }
-
 scale_color_b4ss <- function(...) {
   scale_color_manual(..., values = c(b4ss_colors[[1]], b4ss_colors[[2]]))
 }
@@ -135,8 +135,6 @@ plogis(-6) # ~= 0
 plogis(6) # ~= 1
 ```
 
-
-
 ```{r prior-intercept-plot}
 x <- seq(-15, 15, by = 0.1)
 # 95% Cri [-6, +6] => SD = 6/2 = 3
@@ -202,7 +200,7 @@ m1_priorpc <- brm(
   data = incomplete,
   prior = priors,
   sample_prior = "only",
-  cores = 4
+  file = system.file("extdata/m1_priorpc.rds", package = "learnB4SS")
 )
 ```
 
@@ -227,7 +225,8 @@ m1_priorpc_strong <- brm(
   data = incomplete,
   prior = priors_strong,
   sample_prior = "only",
-  cores = 4
+  cores = 4,
+  file = system.file("extdata/m1_priorpc_strong.rds", package = "learnB4SS")
 )
 ```
 
@@ -235,8 +234,9 @@ m1_priorpc_strong <- brm(
 conditional_effects(m1_priorpc_strong, effects = "correct_voicing:repetitiontype")
 ```
 
-```{r fit-full-model}
-# Added by jvc (Im assuming this is final model... edit/delete as necessary)
+# Run model
+
+```{r m1-full}
 m1_full <- brm(
   m1_bf,
   data = incomplete,
@@ -245,7 +245,7 @@ m1_full <- brm(
   chains = 4, 
   iter = 2000, 
   warmup = 1000, 
-  file = here::here("inst", "extdata", "m1_full")
+  file = system.file("extdata/m1_full.rds", package = "learnB4SS")
 )
 ```
 
@@ -253,24 +253,24 @@ m1_full <- brm(
 
 ## Checks and diagnostics
 
-```{r, posterior-predictive-checks}
+```{r posterior-predictive-checks}
 # Sample data from the generative model and compare with real data
 pp_check(m1_full, nsamples = 200)
 ```
 
-```{r, trace-plots}
+```{r trace-plots}
 # Generate trace and density plots for MCMC samples
 # Only looking at pop-level parameters (no SDs or cor)
 plot(m1_full, pars = "^b_")
 ```
 
-```{r, pairs-plots}
+```{r pairs-plots}
 # Pairs plots to help spot degeneracies (doesn't apply here but 
 # useful if you have divergent transitions)
 pairs(m1_full, pars = "^b_")
 ```
 
-```{r, rhat-ess}
+```{r rhat-ess}
 # Check Rhat and ESS (remove the rest of the output so it doesn't distract)
 summary(m1_full)$fixed[, 5:7]
 ```
@@ -280,16 +280,13 @@ summary(m1_full)$fixed[, 5:7]
 A quick and dirty way to assess the posterior predictions is using the `conditional_effects()` function. It is also useful because it plots the data into the original scale.
 
 ```{r conditional_effects}
-
 # quick and dirty plot on the original scale
-conditional_effects(m1_bf)
-
+plot(conditional_effects(m1_full), ask = FALSE)
 ```
 We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the `bayesplot` package. 
 
 ```{r forest_plot}
-
-posterior <- as.matrix(m1_bf)
+posterior <- as.matrix(m1_full)
 
 mcmc_areas(posterior,
            pars = c("b_Intercept", 
@@ -298,17 +295,16 @@ mcmc_areas(posterior,
                     "b_correct_voicingvoiceless:repetitiontyperepeated"),
            # arbitrary threshold for shading probability mass
            prob = 0.83) 
-
 ```
 
 For more traditional plotting of the actual levels of the predictors, we can use the `data_grid()` and `add_fitted_draws()` functions. Here is an example.
 
 ```{r levels_plot}
-
-post_plot <- 
-  incomplete %>% 
+post_data <- incomplete %>% 
   data_grid(correct_voicing, repetitiontype) %>%
-  add_fitted_draws(m1_bf, n = 4000) %>%
+  add_fitted_draws(m1_full, n = 4000, re_formula = NA)
+
+post_plot <- post_data %>%
   # plot
   ggplot(aes(y = .value, x = correct_voicing, 
              fill = correct_voicing)) +
@@ -324,18 +320,16 @@ post_plot <-
   # rename y axis
   labs(y = "probability of correct",
        x = "underlying voicing")
-
 post_plot
 ```
 
 If you want to add the actual aggregated accuracy for each listener to the plot (for example), you can add that information on top. Makes for a very informative plot.
 
 ```{r levels_plot-2, message = FALSE}
-
 #aggregate
 incomplete_agg <- incomplete %>% 
   group_by(listener, correct_voicing, repetitiontype) %>% 
-  summarise(.value = mean(as.numeric(correct)))
+  summarise(.value = mean(as.numeric(correct)), .groups = "drop")
 
 post_plot +
   geom_point(data = incomplete_agg,
@@ -351,14 +345,14 @@ post_plot +
 
 ## Interpreting model output
 
-```{r, interpret-coef-table}
+```{r interpret-coef-table}
 # Describe posterior using fixef (to get simple, clean output... 
 # focus on understanding each estimate in context and examining CrI's)
 # Use in conjuction with levels_plot-2
 fixef(m1_full)
 ```
 
-```{r, describe-posterior}
+```{r describe-posterior}
 # Focus on describing posterior
 hdi_range <- bayestestR::hdi(m1_full, ci = c(0.65, 0.70, 0.80, 0.89, 0.95))
 hdi_range
