@@ -6,7 +6,7 @@
 
 - `incomplete` tibble with perceptual data on incomplete voicing neutralisation from Roettger et al. 2014.
 
-
+- `full-analyses.Rmd` vignette.
 
 # learnB4SS v1.0.6
 
