@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(learnB4SS)
 library(tidyverse)
+library(bayesplot)
 theme_set(theme_minimal())
 library(extraDistr)
 library(HDInterval)
@@ -234,7 +235,45 @@ m1_priorpc_strong <- brm(
 conditional_effects(m1_priorpc_strong, effects = "correct_voicing:repetitiontype")
 ```
 
+```{r fit-full-model}
+# Added by jvc (Im assuming this is final model... edit/delete as necessary)
+m1_full <- brm(
+  m1_bf,
+  data = incomplete,
+  prior = priors,
+  cores = parallel::detectCores(), 
+  chains = 4, 
+  iter = 2000, 
+  warmup = 1000, 
+  file = here::here("inst", "extdata", "m1_full")
+)
+```
+
 # Model output and interpretation
+
+## Checks and diagnostics
+
+```{r, posterior-predictive-checks}
+# Sample data from the generative model and compare with real data
+pp_check(m1_full, nsamples = 200)
+```
+
+```{r, trace-plots}
+# Generate trace and density plots for MCMC samples
+# Only looking at pop-level parameters (no SDs or cor)
+plot(m1_full, pars = "^b_")
+```
+
+```{r, pairs-plots}
+# Pairs plots to help spot degeneracies (doesn't apply here but 
+# useful if you have divergent transitions)
+pairs(m1_full, pars = "^b_")
+```
+
+```{r, rhat-ess}
+# Check Rhat and ESS (remove the rest of the output so it doesn't distract)
+summary(m1_full)$fixed[, 5:7]
+```
 
 # Visual effects
 
@@ -305,4 +344,24 @@ post_plot +
                  fill = correct_voicing),
              pch = 21, alpha = 0.5,
              position = position_nudge(x = -0.1))
+```
+
+
+# Inference 
+
+## Interpreting model output
+
+```{r, interpret-coef-table}
+# Describe posterior using fixef (to get simple, clean output... 
+# focus on understanding each estimate in context and examining CrI's)
+# Use in conjuction with levels_plot-2
+fixef(m1_full)
+```
+
+```{r, describe-posterior}
+# Focus on describing posterior
+hdi_range <- bayestestR::hdi(m1_full, ci = c(0.65, 0.70, 0.80, 0.89, 0.95))
+hdi_range
+
+plot(hdi_range, show_intercept = T)
 ```
