@@ -7,10 +7,12 @@ articles:
   ex_08: ex_08.html
   faqs: faqs.html
   full-analysis: full-analysis.html
+  glossary: glossary.html
   install-brms: install-brms.html
   install-learnb4ss: install-learnb4ss.html
+  understand-priors: understand-priors.html
   why-bayes: why-bayes.html
-last_built: 2021-07-08T17:31Z
+last_built: 2021-07-10T20:56Z
 urls:
   reference: https://learnb4ss.github.io/learnB4SS//reference
   article: https://learnb4ss.github.io/learnB4SS//articles

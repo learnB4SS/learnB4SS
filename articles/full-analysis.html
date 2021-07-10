@@ -176,37 +176,26 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/learnB4SS/learnB4SS">learnB4SS</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="co">#&gt; ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</span>
-<span class="co">#&gt; ✔ ggplot2 3.3.5     ✔ purrr   0.3.4</span>
-<span class="co">#&gt; ✔ tibble  3.1.2     ✔ dplyr   1.0.7</span>
-<span class="co">#&gt; ✔ tidyr   1.1.3     ✔ stringr 1.4.0</span>
-<span class="co">#&gt; ✔ readr   1.4.0     ✔ forcats 0.5.1</span>
-<span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span>
-<span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span>
-<span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/learnB4SS/learnB4SS">learnB4SS</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/twolodzko/extraDistr">extraDistr</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'extraDistr'</span>
-<span class="co">#&gt; The following object is masked from 'package:purrr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     rdunif</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HDInterval</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/tidybayes/">tidybayes</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/bayesplot/">bayesplot</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelr.tidyverse.org">modelr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms">brms</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: Rcpp</span>
-<span class="co">#&gt; Loading 'brms' package (version 2.15.0). Useful instructions</span>
-<span class="co">#&gt; can be found by typing help('brms'). A more detailed introduction</span>
-<span class="co">#&gt; to the package is available through vignette('brms_overview').</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'brms'</span>
-<span class="co">#&gt; The following objects are masked from 'package:extraDistr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     ddirichlet, dfrechet, pfrechet, qfrechet, rdirichlet, rfrechet</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     ar</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"incomplete"</span><span class="op">)</span></code></pre></div>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"incomplete"</span><span class="op">)</span>
+
+<span class="co"># Set custom b4ss colours</span>
+<span class="va">b4ss_colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>purple <span class="op">=</span> <span class="st">"#8970FF"</span>, orange <span class="op">=</span> <span class="st">"#FFA70B"</span><span class="op">)</span>
+<span class="va">scale_fill_b4ss</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span><span class="va">...</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">b4ss_colors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">b4ss_colors</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="va">scale_color_b4ss</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span><span class="va">...</span>, values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">b4ss_colors</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">b4ss_colors</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
 <div id="study-overview-and-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#study-overview-and-data" class="anchor"></a>Study overview and data</h1>
@@ -231,30 +220,42 @@
   <span class="va">correct</span> <span class="op">~</span>
     <span class="va">correct_voicing</span> <span class="op">*</span>
     <span class="va">repetitiontype</span> <span class="op">+</span>
+    <span class="co"># random slopes for interaction across listeners</span>
     <span class="op">(</span><span class="va">correct_voicing</span> <span class="op">*</span> <span class="va">repetitiontype</span> <span class="op">|</span> <span class="va">listener</span><span class="op">)</span> <span class="op">+</span>
-    <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">speaker_voice</span><span class="op">)</span>,
+    <span class="co"># random slopes for interaction across speaker voices</span>
+    <span class="op">(</span><span class="va">correct_voicing</span> <span class="op">*</span> <span class="va">repetitiontype</span> <span class="op">|</span> <span class="va">speaker_voice</span><span class="op">)</span> <span class="op">+</span>
+    <span class="co"># random slopes for interaction across minimal pairs</span>
+    <span class="op">(</span><span class="va">correct_voicing</span> <span class="op">*</span> <span class="va">repetitiontype</span> <span class="op">|</span> <span class="va">item_pair</span><span class="op">)</span>,
   family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brmsfamily.html">bernoulli</a></span><span class="op">(</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 </div>
 <div id="priors-and-prior-predictive-checks" class="section level1">
 <h1 class="hasAnchor">
 <a href="#priors-and-prior-predictive-checks" class="anchor"></a>Priors and prior predictive checks</h1>
+<div id="prior-distribution-of-the-outcome-variable-likelihood-family" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-distribution-of-the-outcome-variable-likelihood-family" class="anchor"></a>Prior distribution of the outcome variable (likelihood, family)</h2>
 <p><span class="math display">\[correct_i \sim Bernoulli(p)\]</span></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/Bernoulli.html">dbern</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, p <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/Bernoulli.html">dbern</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, p <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"0"</span>, <span class="st">"1"</span><span class="op">)</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_linerange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="fl">0</span>, ymax <span class="op">=</span> <span class="va">y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_linerange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="fl">0</span>, ymax <span class="op">=</span> <span class="va">y</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"outcome"</span>, y <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></code></pre></div>
 <p><img src="full-analysis_files/figure-html/bernoulli-1.png" width="700"></p>
+</div>
+<div id="get-priors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#get-priors" class="anchor"></a>Get priors</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get_prior(m1_bf, data = incomplete)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/brms/man/get_prior.html">get_prior</a></span><span class="op">(</span><span class="va">m1_bf</span>, data <span class="op">=</span> <span class="va">incomplete</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">prior</span><span class="op">:</span><span class="va">group</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 15 x 4</span>
+<span class="co">#&gt; # A tibble: 25 x 4</span>
 <span class="co">#&gt;    prior              class    coef                                 group       </span>
 <span class="co">#&gt;    &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;                                &lt;chr&gt;       </span>
 <span class="co">#&gt;  1 ""                 b        ""                                   ""          </span>
@@ -262,16 +263,303 @@
 <span class="co">#&gt;  3 ""                 b        "correct_voicingvoiceless:repetitio… ""          </span>
 <span class="co">#&gt;  4 ""                 b        "repetitiontyperepeated"             ""          </span>
 <span class="co">#&gt;  5 "lkj(1)"           cor      ""                                   ""          </span>
-<span class="co">#&gt;  6 ""                 cor      ""                                   "listener"  </span>
-<span class="co">#&gt;  7 "student_t(3, 0, … Interce… ""                                   ""          </span>
-<span class="co">#&gt;  8 "student_t(3, 0, … sd       ""                                   ""          </span>
-<span class="co">#&gt;  9 ""                 sd       ""                                   "listener"  </span>
-<span class="co">#&gt; 10 ""                 sd       "correct_voicingvoiceless"           "listener"  </span>
-<span class="co">#&gt; 11 ""                 sd       "correct_voicingvoiceless:repetitio… "listener"  </span>
-<span class="co">#&gt; 12 ""                 sd       "Intercept"                          "listener"  </span>
-<span class="co">#&gt; 13 ""                 sd       "repetitiontyperepeated"             "listener"  </span>
-<span class="co">#&gt; 14 ""                 sd       ""                                   "speaker_vo…</span>
-<span class="co">#&gt; 15 ""                 sd       "Intercept"                          "speaker_vo…</span></code></pre></div>
+<span class="co">#&gt;  6 ""                 cor      ""                                   "item_pair" </span>
+<span class="co">#&gt;  7 ""                 cor      ""                                   "listener"  </span>
+<span class="co">#&gt;  8 ""                 cor      ""                                   "speaker_vo…</span>
+<span class="co">#&gt;  9 "student_t(3, 0, … Interce… ""                                   ""          </span>
+<span class="co">#&gt; 10 "student_t(3, 0, … sd       ""                                   ""          </span>
+<span class="co">#&gt; # … with 15 more rows</span></code></pre></div>
+</div>
+<div id="log-odds-space" class="section level2">
+<h2 class="hasAnchor">
+<a href="#log-odds-space" class="anchor"></a>Log-odds space</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+  p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>,
+  log_odds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+  p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span>,
+  log_odds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">log_odds</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0.5</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dots</span>, size <span class="op">=</span> <span class="fl">4</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>, minor_breaks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>, <span class="fl">6</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, minor_breaks <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>
+    title <span class="op">=</span> <span class="st">"Correspondence between probabilities and log-odds"</span>,
+    x <span class="op">=</span> <span class="st">"probability"</span>,
+    y <span class="op">=</span> <span class="st">"log-odds"</span>
+  <span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/p-log-odds-1.png" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># log-odds = 0; get probability</span>
+<span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"Log-odds 0 = p("</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, <span class="st">")"</span><span class="op">)</span>
+<span class="co">#&gt; Log-odds 0 = p(0.5)</span>
+<span class="co"># p = 0.5; get log-odds</span>
+<span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"p(0.5) = log-odds "</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; p(0.5) = log-odds 0</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span>
+
+<span class="co"># log-odds = 1.5; get probability</span>
+<span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"Log-odds 1.5 = p("</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span>, <span class="st">")"</span><span class="op">)</span>
+<span class="co">#&gt; Log-odds 1.5 = p(0.8176)</span>
+<span class="co"># p = 0.5; get log-odds</span>
+<span class="fu">glue</span><span class="fu">::</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"p(0.8176) = log-odds "</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="fl">0.8175745</span><span class="op">)</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; p(0.8176) = log-odds 1.5</span></code></pre></div>
+</div>
+<div id="prior-for-the-intercept" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-for-the-intercept" class="anchor"></a>Prior for the intercept</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Log-odds to p</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span><span class="op">)</span> <span class="co"># ~= 0 </span>
+<span class="co">#&gt; [1] 0.002472623</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="co"># ~= 1</span>
+<span class="co">#&gt; [1] 0.9975274</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">15</span>, <span class="fl">15</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+<span class="co"># 95% Cri [-6, +6] =&gt; SD = 6/2 = 3</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="va">x</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.5</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"log-odds"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/prior-intercept-plot-1.png" width="700"></p>
+</div>
+<div id="prior-for-b" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-for-b" class="anchor"></a>Prior for b</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Log-odds to odds</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span><span class="op">)</span> <span class="co"># ~= 0</span>
+<span class="co">#&gt; [1] 0.1353353</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="co"># ~= 7</span>
+<span class="co">#&gt; [1] 7.389056</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+<span class="co"># 95% Cri [-2, +2] =&gt; SD = 2/2 = 1</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="va">x</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.5</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"log-odds"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/prior-b-plot-1.png" width="700"></p>
+</div>
+<div id="prior-for-sd" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-for-sd" class="anchor"></a>Prior for sd</h2>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/HDInterval/man/inverseCDF.html">inverseCDF</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span>, <span class="va">phcauchy</span>, sigma <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.003930135 2.545175934</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
+<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/extraDistr/man/HalfCauchy.html">dhcauchy</a></span><span class="op">(</span><span class="va">x</span>, sigma <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span>, colour <span class="op">=</span> <span class="va">b4ss_colors</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"log-odds"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/prior-sd-plot-1.png" width="700"></p>
+</div>
+<div id="set-priors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#set-priors" class="anchor"></a>Set priors</h2>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">priors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">lkj</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">cor</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+</div>
+<div id="prior-predictive-checks" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-predictive-checks" class="anchor"></a>Prior predictive checks</h2>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1_priorpc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+  <span class="va">m1_bf</span>,
+  data <span class="op">=</span> <span class="va">incomplete</span>,
+  prior <span class="op">=</span> <span class="va">priors</span>,
+  sample_prior <span class="op">=</span> <span class="st">"only"</span>,
+  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/m1_priorpc.rds"</span>, package <span class="op">=</span> <span class="st">"learnB4SS"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects</a></span><span class="op">(</span><span class="va">m1_priorpc</span>, effects <span class="op">=</span> <span class="st">"correct_voicing:repetitiontype"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/prior-pc-plot-1.png" width="700"></p>
+</div>
+<div id="lets-try-very-strong-priors-for-comparison" class="section level2">
+<h2 class="hasAnchor">
+<a href="#lets-try-very-strong-priors-for-comparison" class="anchor"></a>Let’s try VERY strong priors for comparison</h2>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">priors_strong</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">Intercept</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">normal</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">b</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">cauchy</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.1</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">sd</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/brms/man/set_prior.html">prior</a></span><span class="op">(</span><span class="fu">lkj</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, class <span class="op">=</span> <span class="va">cor</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1_priorpc_strong</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+  <span class="va">m1_bf</span>,
+  data <span class="op">=</span> <span class="va">incomplete</span>,
+  prior <span class="op">=</span> <span class="va">priors_strong</span>,
+  sample_prior <span class="op">=</span> <span class="st">"only"</span>,
+  cores <span class="op">=</span> <span class="fl">4</span>,
+  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/m1_priorpc_strong.rds"</span>, package <span class="op">=</span> <span class="st">"learnB4SS"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects</a></span><span class="op">(</span><span class="va">m1_priorpc_strong</span>, effects <span class="op">=</span> <span class="st">"correct_voicing:repetitiontype"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/priors-strong-pc-plot-1.png" width="700"></p>
+</div>
+</div>
+<div id="run-model" class="section level1">
+<h1 class="hasAnchor">
+<a href="#run-model" class="anchor"></a>Run model</h1>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html">brm</a></span><span class="op">(</span>
+  <span class="va">m1_bf</span>,
+  data <span class="op">=</span> <span class="va">incomplete</span>,
+  prior <span class="op">=</span> <span class="va">priors</span>,
+  cores <span class="op">=</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html">detectCores</a></span><span class="op">(</span><span class="op">)</span>, 
+  chains <span class="op">=</span> <span class="fl">4</span>, 
+  iter <span class="op">=</span> <span class="fl">2000</span>, 
+  warmup <span class="op">=</span> <span class="fl">1000</span>, 
+  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/m1_full.rds"</span>, package <span class="op">=</span> <span class="st">"learnB4SS"</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+</div>
+<div id="model-output-and-interpretation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#model-output-and-interpretation" class="anchor"></a>Model output and interpretation</h1>
+<div id="checks-and-diagnostics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#checks-and-diagnostics" class="anchor"></a>Checks and diagnostics</h2>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Sample data from the generative model and compare with real data</span>
+<span class="fu"><a href="https://mc-stan.org/bayesplot/reference/pp_check.html">pp_check</a></span><span class="op">(</span><span class="va">m1_full</span>, nsamples <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/posterior-predictive-checks-1.png" width="700"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Generate trace and density plots for MCMC samples</span>
+<span class="co"># Only looking at pop-level parameters (no SDs or cor)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">m1_full</span>, pars <span class="op">=</span> <span class="st">"^b_"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/trace-plots-1.png" width="700"></p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Pairs plots to help spot degeneracies (doesn't apply here but </span>
+<span class="co"># useful if you have divergent transitions)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html">pairs</a></span><span class="op">(</span><span class="va">m1_full</span>, pars <span class="op">=</span> <span class="st">"^b_"</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/pairs-plots-1.png" width="700"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Check Rhat and ESS (remove the rest of the output so it doesn't distract)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span><span class="op">$</span><span class="va">fixed</span><span class="op">[</span>, <span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>
+<span class="co">#&gt;                                                      Rhat Bulk_ESS Tail_ESS</span>
+<span class="co">#&gt; Intercept                                       1.0049467      978     1358</span>
+<span class="co">#&gt; correct_voicingvoiceless                        1.0045582     1227     1982</span>
+<span class="co">#&gt; repetitiontyperepeated                          1.0013905     3885     2915</span>
+<span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated 0.9999375     4264     2502</span></code></pre></div>
+</div>
+</div>
+<div id="visual-effects" class="section level1">
+<h1 class="hasAnchor">
+<a href="#visual-effects" class="anchor"></a>Visual effects</h1>
+<p>A quick and dirty way to assess the posterior predictions is using the <code><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects()</a></code> function. It is also useful because it plots the data into the original scale.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># quick and dirty plot on the original scale</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/conditional_effects-1.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-2.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-3.png" width="700"> We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the <code>bayesplot</code> package.</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">posterior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span>
+
+<span class="fu"><a href="https://mc-stan.org/bayesplot/reference/MCMC-intervals.html">mcmc_areas</a></span><span class="op">(</span><span class="va">posterior</span>,
+           pars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"b_Intercept"</span>, 
+                    <span class="st">"b_correct_voicingvoiceless"</span>, 
+                    <span class="st">"b_repetitiontyperepeated"</span>, 
+                    <span class="st">"b_correct_voicingvoiceless:repetitiontyperepeated"</span><span class="op">)</span>,
+           <span class="co"># arbitrary threshold for shading probability mass</span>
+           prob <span class="op">=</span> <span class="fl">0.83</span><span class="op">)</span> </code></pre></div>
+<p><img src="full-analysis_files/figure-html/forest_plot-1.png" width="700"></p>
+<p>For more traditional plotting of the actual levels of the predictors, we can use the <code><a href="https://modelr.tidyverse.org/reference/data_grid.html">data_grid()</a></code> and <code><a href="http://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_fitted_draws()</a></code> functions. Here is an example.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">post_data</span> <span class="op">&lt;-</span> <span class="va">incomplete</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://modelr.tidyverse.org/reference/data_grid.html">data_grid</a></span><span class="op">(</span><span class="va">correct_voicing</span>, <span class="va">repetitiontype</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_fitted_draws</a></span><span class="op">(</span><span class="va">m1_full</span>, n <span class="op">=</span> <span class="fl">4000</span>, re_formula <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
+
+<span class="va">post_plot</span> <span class="op">&lt;-</span> <span class="va">post_data</span> <span class="op">%&gt;%</span>
+  <span class="co"># plot</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.value</span>, x <span class="op">=</span> <span class="va">correct_voicing</span>, 
+             fill <span class="op">=</span> <span class="va">correct_voicing</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># density plus CrIs</span>
+  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_sample_slabinterval.html">stat_halfeye</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># reference line at chance level = 0.5</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0.5</span>, lty <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># split by repetition type</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">repetitiontype</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># color code</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#8970FF"</span>, <span class="st">"#FFA70B"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="co">#scale_color_manual(values = c("#8970FF", "#FFA70B")) +</span>
+  <span class="co"># rename y axis</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"probability of correct"</span>,
+       x <span class="op">=</span> <span class="st">"underlying voicing"</span><span class="op">)</span>
+<span class="va">post_plot</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/levels_plot-1.png" width="700"></p>
+<p>If you want to add the actual aggregated accuracy for each listener to the plot (for example), you can add that information on top. Makes for a very informative plot.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#aggregate</span>
+<span class="va">incomplete_agg</span> <span class="op">&lt;-</span> <span class="va">incomplete</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">listener</span>, <span class="va">correct_voicing</span>, <span class="va">repetitiontype</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">correct</span><span class="op">)</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span>
+
+<span class="va">post_plot</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">incomplete_agg</span>,
+             <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.value</span>, 
+                 x <span class="op">=</span> <span class="va">correct_voicing</span>, 
+                 fill <span class="op">=</span> <span class="va">correct_voicing</span><span class="op">)</span>,
+             pch <span class="op">=</span> <span class="fl">21</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,
+             position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_nudge.html">position_nudge</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/levels_plot-2-1.png" width="700"></p>
+</div>
+<div id="inference" class="section level1">
+<h1 class="hasAnchor">
+<a href="#inference" class="anchor"></a>Inference</h1>
+<div id="interpreting-model-output" class="section level2">
+<h2 class="hasAnchor">
+<a href="#interpreting-model-output" class="anchor"></a>Interpreting model output</h2>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Describe posterior using fixef (to get simple, clean output... </span>
+<span class="co"># focus on understanding each estimate in context and examining CrI's)</span>
+<span class="co"># Use in conjuction with levels_plot-2</span>
+<span class="fu"><a href="https://rdrr.io/pkg/brms/man/fixef.brmsfit.html">fixef</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span>
+<span class="co">#&gt;                                                    Estimate  Est.Error</span>
+<span class="co">#&gt; Intercept                                        0.01248959 0.23130872</span>
+<span class="co">#&gt; correct_voicingvoiceless                         0.43899959 0.46065151</span>
+<span class="co">#&gt; repetitiontyperepeated                           0.15628813 0.09375277</span>
+<span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated -0.22414533 0.13267918</span>
+<span class="co">#&gt;                                                        Q2.5      Q97.5</span>
+<span class="co">#&gt; Intercept                                       -0.43687340 0.47723123</span>
+<span class="co">#&gt; correct_voicingvoiceless                        -0.45357875 1.33148511</span>
+<span class="co">#&gt; repetitiontyperepeated                          -0.02722672 0.33584627</span>
+<span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated -0.48584540 0.03186847</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Focus on describing posterior</span>
+<span class="va">hdi_range</span> <span class="op">&lt;-</span> <span class="fu">bayestestR</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">m1_full</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.65</span>, <span class="fl">0.70</span>, <span class="fl">0.80</span>, <span class="fl">0.89</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span>
+<span class="va">hdi_range</span>
+<span class="co">#&gt; Highest Density Interval</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Parameter                                       |        65% HDI |        70% HDI |        80% HDI |        89% HDI |       95% HDI</span>
+<span class="co">#&gt; -----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; (Intercept)                                     | [-0.21,  0.21] | [-0.25,  0.23] | [-0.27,  0.32] | [-0.36,  0.37] | [-0.46, 0.45]</span>
+<span class="co">#&gt; correct_voicingvoiceless                        | [ 0.01,  0.87] | [-0.01,  0.93] | [-0.16,  1.02] | [-0.29,  1.16] | [-0.47, 1.31]</span>
+<span class="co">#&gt; repetitiontyperepeated                          | [ 0.07,  0.25] | [ 0.07,  0.26] | [ 0.03,  0.27] | [ 0.00,  0.30] | [-0.03, 0.34]</span>
+<span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated | [-0.35, -0.11] | [-0.36, -0.09] | [-0.39, -0.05] | [-0.42,  0.00] | [-0.49, 0.03]</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">hdi_range</span>, show_intercept <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/describe-posterior-1.png" width="700"></p>
+</div>
 </div>
   </div>
 

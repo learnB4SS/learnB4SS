@@ -37,10 +37,16 @@
     <loc>https://learnb4ss.github.io/learnB4SS//articles/full-analysis.html</loc>
   </url>
   <url>
+    <loc>https://learnb4ss.github.io/learnB4SS//articles/glossary.html</loc>
+  </url>
+  <url>
     <loc>https://learnb4ss.github.io/learnB4SS//articles/install-brms.html</loc>
   </url>
   <url>
     <loc>https://learnb4ss.github.io/learnB4SS//articles/install-learnb4ss.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS//articles/understand-priors.html</loc>
   </url>
   <url>
     <loc>https://learnb4ss.github.io/learnB4SS//articles/why-bayes.html</loc>
