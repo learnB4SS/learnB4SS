@@ -24,10 +24,14 @@ The following sessions have exercises:
 - Session 06.
 
 - Session 08.
+
+You can also open a fully worked-out analysis with `open_exercise("full")`
 }
 \examples{
 \dontrun{
 open_exercise(3)
+
+open_exercise("full")
 }
 # The exercise of Session 03 will open for editing.
 }

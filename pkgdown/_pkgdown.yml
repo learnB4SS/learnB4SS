@@ -4,7 +4,7 @@ template:
   bootswatch: flatly
 navbar:
   structure:
-    left: [home, get-started, slides, articles, reference, faqs, why-bayes]
+    left: [home, get-started, slides, articles, reference, faqs, extra]
     right: [github]
   components:
     get-started:
@@ -54,12 +54,24 @@ navbar:
         href: articles/ex_06.html
       - text: 8. Application to regression IV - Leveling up to hierarchical models
         href: articles/ex_08.html
+      - text: -------
+      - text: "Day 3"
+      - text: "Fully worked-out analysis"
+        href: articles/full-analysis.html
+
     reference:
       text: Documentation
       href: reference/index.html
     faqs:
       text: FAQs
       href: articles/faqs.html
-    why-bayes:
-      text: Why Bayes?
-      href: articles/why-bayes.html
+    extras:
+      text: Extras
+      menu:
+      - text: "Why Bayesian?"
+        href: articles/why-bayes.html
+      - text: "Glossary"
+        href: articles/glossary.html
+      - text: "Understand priors"
+        href: articles/understand-priors.html
+

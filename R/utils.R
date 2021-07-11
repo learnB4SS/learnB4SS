@@ -38,6 +38,8 @@ open_slides <- function(session) {
 #'
 #' - Session 08.
 #'
+#' You can also open a fully worked-out analysis with `open_exercise("full")`
+#'
 #' @param session Session number as a number.
 #'
 #' @return Nothing. Used for its side effects.
@@ -46,13 +48,22 @@ open_slides <- function(session) {
 #' @examples
 #' \dontrun{
 #' open_exercise(3)
+#'
+#' open_exercise("full")
 #' }
 #' # The exercise of Session 03 will open for editing.
 open_exercise <- function(session) {
   num <- stringr::str_pad(session, 2, pad = '0')
   ex_num <- glue::glue("ex_{stringr::str_pad(session, 2, pad = '0')}")
 
-  if (!(num %in% c("03", "06", "08"))) {
+  if (session == "full") {
+    v_path <- get_vignette_path("full-analysis", package = "learnB4SS")
+
+    # The file is not copied if it already exists in the working dir.
+    file.copy(v_path, ".")
+
+    usethis::edit_file(glue::glue("./full-analysis.Rmd"))
+  } else if (!(num %in% c("03", "06", "08"))) {
     cli::cli_alert_danger(
       glue::glue("Session {num} does not have exercises! Choose Session 03, 06, or 08."))
   } else {
