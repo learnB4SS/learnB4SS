@@ -1,0 +1,126 @@
+---
+title: "Factors, dummy coding and contrasts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Factors, dummy coding and contrasts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE, warning=FALSE}
+library(learnB4SS)
+library(tidyverse)
+```
+
+This vignette is an overview of how factors (i.e. categorical variables) are coded under the hood using dummy coding and which types of dummy coding can be set in R.
+
+# Introduction
+
+There's seems to be a bit of terminological mix-up in the wild, so we first present a terminological set that will be used throughout the vignette.
+
+Categorical variables in R are generally stored using factors.
+A **factor** is a vector of values from a categorical variable.
+The possible values in a factor are called **levels** in R.
+
+For each observation in the factor, the vector specifies the level of that observation.
+
+For example, let's assume we have a data set with information on dinosaurs and one column specifies the dinosaur's diet: `carnivore`, `herbivore`, `omnivore`.
+
+In R, this column can be coded as a factor:
+
+```{r diet}
+factor(c("carnivore", "carnivore", "herbivore", "omnivore", "herbivore"))
+```
+
+We are so accustomed to using factors in regression models that sometimes we forget that regressions only work with numbers and cannot work with categorical variables.
+
+To fit a regression model with categorical variables, these are first converted to numbers.
+The process of conversion is called **dummy variable coding** or simply **dummy coding**.
+This consists of assigning `0`s or `1`s to the levels in the variable.
+
+Let's go through a simple example of dummy coding of a categorical variable with only 2 levels: `metropolitan` and `rural`.
+
+The most simple way of coding this categorical variable as a number is to assign `0` to one level and `1` to the other level. For example:
+
+```{r location}
+factor(c("rural", "rural", "metropolitan", "rural"))
+# dummy coded
+c(0, 0, 1, 0)
+```
+
+In R, dummy coding is done under the hood for you when using factors, so you don't have to worry about the conversion.
+
+When the categorical variable has 3 levels instead of 2, we need a work-around in order to code the 3-level factor with only `0`s and `1`s (we can't use higher numbers for reasons we will see later).
+
+With three levels, we can code the variable using two numeric variables (instead of just one).
+Going back to the dinosaur's diet example, we can use:
+
+- One variable that codes whether the dinosaur is carnivore `0` or herbivore `1`.
+- One variable that codes whether the dinosaur is carnivore `0` or omnivore `1`.
+
+Let call the first variable `dummy_1` and the second variable `dummy_2`. Then:
+
+- When `dummy_1` is `0` and `dummy_2` is also `0`, the dinosaur is a carnivore.
+- When `dummy_1` is `1` and `dummy_2` is `0`, the dinosaur is a herbivore.
+- When `dummy_1` is `0` and `dummy_2` is `1`, the dinosaur is an omnivore.
+
+So the following factor (repeated from above)
+
+```{r diet-repeated}
+factor(c("carnivore", "carnivore", "herbivore", "omnivore", "herbivore"))
+```
+
+can be coded as:
+
+```{r diet-dummy}
+dummy_1 <- c(0, 0, 1, 0, 1)     # carnivore (0) or herbivore (1)?
+dummy_2 <- c(0, 0, 0, 1, 0)     # carnivore (0) or omnivore (1)?
+
+tibble(
+  dummy_1, dummy_2
+)
+```
+
+If this doesn't make much sense, try and figure it out by checking the value of the two columns for each row with the following code:
+
+```{r diet-case, eval=FALSE}
+# case_when() is a very helpful function from dplyr!
+
+case_when(
+  dummy_1 == 0 & dummy_2 == 0 ~ "carnivore",
+  dummy_1 == 1 & dummy_2 == 0 ~ "herbivore",
+  dummy_1 == 0 & dummy_2 == 1 ~ "omnivore",
+)
+```
+
+What if the factor has 4 levels? Then you can code it with 3 dummy variables. And what about 5 levels? Use 4 dummy variables. The number of dummy variables needed is equal to the number of levels minus 1 ($n_{dummy} = n_{levels} - 1$).
+
+## Summing up
+
+To sum up:
+
+- **Factors** are vectors that code categorical variables.
+- The values in a factor are called **levels**.
+- Regression models cannot work directly with factors, so these are dummy coded.
+- **Dummy coding** means converting a factor into one or more numeric variables of `0`s and `1`s.
+
+# Dummy coding and contrasts
+
+Now. We've seen that dummy coding is simply using dummy numeric variables with `0`s and `1`s.
+
+In fact, this is **one way** of dummy coding.
+Different ways of doing dummy coding in R are called **contrasts**.
+The type of contrasts we have seen so far are called **treatment contrasts**.
+
+This term comes from the medical science where you test, for example, the efficacy of a medical intervention (a drug, surgery, etc...) by comparing a **control group** (which has not received the "treatment") with a group that has received the medical intervention (the **treatment group**).
+
+The control group can be used as the reference group to see if the treatment group has benefited from the medical treatment (i.e. if the treatment group's health has improved after the intervention relative to the control group, then one can infer that the treatment was effective).
+
+<br>
