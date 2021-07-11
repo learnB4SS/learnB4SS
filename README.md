@@ -7,7 +7,7 @@
 
 <!-- badges: start -->
 
-![](https://img.shields.io/badge/version-1.0.6.9000-FFA70B.svg)
+![](https://img.shields.io/badge/version-1.0.7-FFA70B.svg)
 <!-- badges: end -->
 
 Here you can find the **learning materials** for the workshop *Learn
