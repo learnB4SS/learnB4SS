@@ -17,12 +17,14 @@ knitr::opts_chunk$set(
 ```{r setup, message=FALSE, warning=FALSE}
 library(tidyverse)
 theme_set(theme_minimal())
+library(ggrepel)
 library(learnB4SS)
 library(extraDistr)
 library(HDInterval)
 library(tidybayes)
 library(bayesplot)
 library(modelr)
+library(broom.mixed)
 library(brms)
 
 data("incomplete")
@@ -275,6 +277,55 @@ pairs(m1_full, pars = "^b_")
 summary(m1_full)$fixed[, 5:7]
 ```
 
+## Prior sensitivity analysis
+
+```{r m1-fixed}
+m1_fixed <- tidy(m1_full, effects = "fixed", conf.level = 0.95, fix.intercept = FALSE) %>%
+  mutate(
+    ci_width = abs(conf.low - conf.high)
+  )
+m1_fixed
+```
+
+```{r m1-sensitivity}
+m1_fixed %>%
+  mutate(
+    theta = c(0, 0, 0, 0),
+    sigma_prior = c(3, 1, 1, 1),
+    z = abs((estimate - theta) / std.error), # it's called here std.error but is the standard deviation
+    s = 1 - (std.error^2 / sigma_prior^2)
+  ) %>%
+  ggplot(aes(s, z, label = term)) +
+  geom_point() +
+  geom_label_repel(arrow = arrow()) +
+  xlim(0, 1) + ylim(0, 5)
+```
+
+```{r m1-sensitivity-interpr}
+labels <- tibble(
+  x = c(0.25, 0.25, 0.6, 0.75),
+  y = c(1.25, 3.75, 1.25, 3.75),
+  labs = c("Poorly identified", "Prior/Posterior\nconflict", "Ideal", "Overfit")
+)
+
+m1_fixed %>%
+  mutate(
+    theta = c(0, 0, 0, 0),
+    sigma_prior = c(3, 1, 1, 1),
+    z = abs((estimate - theta) / std.error), # it's called here std.error but is the standard deviation
+    s = 1 - (std.error^2 / sigma_prior^2)
+  ) %>%
+  ggplot(aes(s, z, label = term)) +
+  annotate("rect", xmin = 0, ymin = 0, xmax = 0.5, ymax = 2.5, alpha = 0.5, fill = "#e66101") +
+  annotate("rect", xmin = 0, ymin = 2.5, xmax = 0.5, ymax = 5, alpha = 0.5, fill = "#fdb863") +
+  annotate("rect", xmin = 0.5, ymin = 0, xmax = 1, ymax = 2.5, alpha = 0.5, fill = "#b2abd2") +
+  annotate("rect", xmin = 0.5, ymin = 2.5, xmax = 1, ymax = 5, alpha = 0.5, fill = "#5e3c99") +
+  geom_label(data = labels, aes(x, y, label = labs), colour = "white", fill = "black") +
+  geom_label_repel(fill = NA) +
+  geom_point() +
+  xlim(0, 1) + ylim(0, 5)
+```
+
 # Visual effects
 
 A quick and dirty way to assess the posterior predictions is using the `conditional_effects()` function. It is also useful because it plots the data into the original scale.
@@ -283,6 +334,7 @@ A quick and dirty way to assess the posterior predictions is using the `conditio
 # quick and dirty plot on the original scale
 plot(conditional_effects(m1_full), ask = FALSE)
 ```
+
 We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the `bayesplot` package. 
 
 ```{r forest_plot}
