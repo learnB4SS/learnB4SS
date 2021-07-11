@@ -22,6 +22,7 @@ library(HDInterval)
 library(extraDistr)
 library(brms)
 data(emotion)
+data(vowels)
 ```
 
 # Overview
@@ -103,11 +104,11 @@ For $\sigma$, one can choose from a normal distribution, a Student-t distributio
 
 We will go with the latter.
 
-$$HalfCauchy(x, \gamma)$$
+$$\sigma \sim HalfCauchy(x, \gamma)$$
 
 With Half-Cauchy distributions you can safely set $x = 0$.
 
-$$HalfCauchy(0, \gamma)$$
+$$\sigma \sim HalfCauchy(0, \gamma)$$
 
 We cannot use the empirical rule to decide what value $\gamma$ should have, because the rule works only with normal distributions.
 
@@ -187,6 +188,34 @@ m1 <- brm(
   prior = priors_1
 )
 ```
+
+# Log-normal
+
+Several measures that can only take on positive values, like segment duration, tend to have a skewed probability distribution.
+One such type of distribution is the **log-normal** distribution.
+
+To illustrate how to run a Bayesian regression model with log-normal data, we will use a data set of vowel duration.
+
+```{r vowels}
+glimpse(vowels)
+```
+
+
+```{r vow-duration}
+vowels %>%
+  ggplot(aes(v1_duration)) +
+  geom_density() +
+  geom_rug()
+```
+
+
+The right skew is quite evident in the plot above.
+
+So, vowel duration (and segment duration in general) follows a log-normal distribution.
+
+$$vow\_dur_i \sim Lognormal(\mu, \sigma)$$
+
+This time we want to estimate the effect of consonant voicing on vowel duration
 
 To be continued...
 
