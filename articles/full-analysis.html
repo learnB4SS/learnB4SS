@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
       </span>
     </div>
 
@@ -198,12 +198,14 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme_get.html">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/slowkow/ggrepel">ggrepel</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/learnB4SS/learnB4SS">learnB4SS</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/twolodzko/extraDistr">extraDistr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HDInterval</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mjskay.github.io/tidybayes/">tidybayes</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/bayesplot/">bayesplot</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://modelr.tidyverse.org">modelr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bbolker/broom.mixed">broom.mixed</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms">brms</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"incomplete"</span><span class="op">)</span>
@@ -483,16 +485,74 @@
 <span class="co">#&gt; repetitiontyperepeated                          1.0013905     3885     2915</span>
 <span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated 0.9999375     4264     2502</span></code></pre></div>
 </div>
+<div id="prior-sensitivity-analysis" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prior-sensitivity-analysis" class="anchor"></a>Prior sensitivity analysis</h2>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1_fixed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">m1_full</span>, effects <span class="op">=</span> <span class="st">"fixed"</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, fix.intercept <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    ci_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">conf.low</span> <span class="op">-</span> <span class="va">conf.high</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="co">#&gt; Warning in tidy.brmsfit(m1_full, effects = "fixed", conf.level = 0.95,</span>
+<span class="co">#&gt; fix.intercept = FALSE): some parameter names contain underscores: term naming</span>
+<span class="co">#&gt; may be unreliable!</span>
+<span class="va">m1_fixed</span>
+<span class="co">#&gt; # A tibble: 4 x 8</span>
+<span class="co">#&gt;   effect component term           estimate std.error conf.low conf.high ci_width</span>
+<span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 fixed  cond      Intercept        0.0125    0.231   -0.437     0.477     0.914</span>
+<span class="co">#&gt; 2 fixed  cond      correct_voici…   0.439     0.461   -0.454     1.33      1.79 </span>
+<span class="co">#&gt; 3 fixed  cond      repetitiontyp…   0.156     0.0938  -0.0272    0.336     0.363</span>
+<span class="co">#&gt; 4 fixed  cond      correct_voici…  -0.224     0.133   -0.486     0.0319    0.518</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1_fixed</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
+    sigma_prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+    z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="op">(</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">std.error</span><span class="op">)</span>, <span class="co"># it's called here std.error but is the standard deviation</span>
+    s <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">std.error</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">sigma_prior</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">z</span>, label <span class="op">=</span> <span class="va">term</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_label_repel</a></span><span class="op">(</span>arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/m1-sensitivity-1.png" width="700"></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>
+  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.6</span>, <span class="fl">0.75</span><span class="op">)</span>,
+  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.25</span>, <span class="fl">3.75</span>, <span class="fl">1.25</span>, <span class="fl">3.75</span><span class="op">)</span>,
+  labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Poorly identified"</span>, <span class="st">"Prior/Posterior\nconflict"</span>, <span class="st">"Ideal"</span>, <span class="st">"Overfit"</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">m1_fixed</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    theta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
+    sigma_prior <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,
+    z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="op">(</span><span class="va">estimate</span> <span class="op">-</span> <span class="va">theta</span><span class="op">)</span> <span class="op">/</span> <span class="va">std.error</span><span class="op">)</span>, <span class="co"># it's called here std.error but is the standard deviation</span>
+    s <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="op">(</span><span class="va">std.error</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="va">sigma_prior</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>
+  <span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">z</span>, label <span class="op">=</span> <span class="va">term</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, ymin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">0.5</span>, ymax <span class="op">=</span> <span class="fl">2.5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="st">"#e66101"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0</span>, ymin <span class="op">=</span> <span class="fl">2.5</span>, xmax <span class="op">=</span> <span class="fl">0.5</span>, ymax <span class="op">=</span> <span class="fl">5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="st">"#fdb863"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0.5</span>, ymin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1</span>, ymax <span class="op">=</span> <span class="fl">2.5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="st">"#b2abd2"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"rect"</span>, xmin <span class="op">=</span> <span class="fl">0.5</span>, ymin <span class="op">=</span> <span class="fl">2.5</span>, xmax <span class="op">=</span> <span class="fl">1</span>, ymax <span class="op">=</span> <span class="fl">5</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, fill <span class="op">=</span> <span class="st">"#5e3c99"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_label</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">labels</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, label <span class="op">=</span> <span class="va">labs</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"white"</span>, fill <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_label_repel</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<p><img src="full-analysis_files/figure-html/m1-sensitivity-interpr-1.png" width="700"></p>
+</div>
 </div>
 <div id="visual-effects" class="section level1">
 <h1 class="hasAnchor">
 <a href="#visual-effects" class="anchor"></a>Visual effects</h1>
 <p>A quick and dirty way to assess the posterior predictions is using the <code><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects()</a></code> function. It is also useful because it plots the data into the original scale.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># quick and dirty plot on the original scale</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/brms/man/conditional_effects.brmsfit.html">conditional_effects</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p><img src="full-analysis_files/figure-html/conditional_effects-1.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-2.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-3.png" width="700"> We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the <code>bayesplot</code> package.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<p><img src="full-analysis_files/figure-html/conditional_effects-1.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-2.png" width="700"><img src="full-analysis_files/figure-html/conditional_effects-3.png" width="700"></p>
+<p>We can also plot the posterior distributions of our population-level coefficients. This can be conveniently done with the <code>bayesplot</code> package.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">posterior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">m1_full</span><span class="op">)</span>
 
 <span class="fu"><a href="https://mc-stan.org/bayesplot/reference/MCMC-intervals.html">mcmc_areas</a></span><span class="op">(</span><span class="va">posterior</span>,
@@ -504,7 +564,7 @@
            prob <span class="op">=</span> <span class="fl">0.83</span><span class="op">)</span> </code></pre></div>
 <p><img src="full-analysis_files/figure-html/forest_plot-1.png" width="700"></p>
 <p>For more traditional plotting of the actual levels of the predictors, we can use the <code><a href="https://modelr.tidyverse.org/reference/data_grid.html">data_grid()</a></code> and <code><a href="http://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_fitted_draws()</a></code> functions. Here is an example.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">post_data</span> <span class="op">&lt;-</span> <span class="va">incomplete</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://modelr.tidyverse.org/reference/data_grid.html">data_grid</a></span><span class="op">(</span><span class="va">correct_voicing</span>, <span class="va">repetitiontype</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="http://mjskay.github.io/tidybayes/reference/add_predicted_draws.html">add_fitted_draws</a></span><span class="op">(</span><span class="va">m1_full</span>, n <span class="op">=</span> <span class="fl">4000</span>, re_formula <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
@@ -528,7 +588,7 @@
 <span class="va">post_plot</span></code></pre></div>
 <p><img src="full-analysis_files/figure-html/levels_plot-1.png" width="700"></p>
 <p>If you want to add the actual aggregated accuracy for each listener to the plot (for example), you can add that information on top. Makes for a very informative plot.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#aggregate</span>
 <span class="va">incomplete_agg</span> <span class="op">&lt;-</span> <span class="va">incomplete</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">listener</span>, <span class="va">correct_voicing</span>, <span class="va">repetitiontype</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -549,7 +609,7 @@
 <div id="interpreting-model-output" class="section level2">
 <h2 class="hasAnchor">
 <a href="#interpreting-model-output" class="anchor"></a>Interpreting model output</h2>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Describe posterior using fixef (to get simple, clean output... </span>
 <span class="co"># focus on understanding each estimate in context and examining CrI's)</span>
 <span class="co"># Use in conjuction with levels_plot-2</span>
@@ -564,7 +624,7 @@
 <span class="co">#&gt; correct_voicingvoiceless                        -0.45357875 1.33148511</span>
 <span class="co">#&gt; repetitiontyperepeated                          -0.02722672 0.33584627</span>
 <span class="co">#&gt; correct_voicingvoiceless:repetitiontyperepeated -0.48584540 0.03186847</span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Focus on describing posterior</span>
 <span class="va">hdi_range</span> <span class="op">&lt;-</span> <span class="fu">bayestestR</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">m1_full</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.65</span>, <span class="fl">0.70</span>, <span class="fl">0.80</span>, <span class="fl">0.89</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span>
 <span class="va">hdi_range</span>

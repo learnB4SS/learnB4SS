@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
       </span>
     </div>
 
@@ -225,14 +225,14 @@
 <span class="co"># Use quantile function on posterior</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">posterior</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;      2.5%     97.5% </span>
-<span class="co">#&gt; -1.056419 11.299802</span></code></pre></div>
-<p>We can see that the 95% CI for our posterior is -1.0564188, 11.2998015.</p>
+<span class="co">#&gt; -0.777444 10.526280</span></code></pre></div>
+<p>We can see that the 95% CI for our posterior is -0.777444, 10.5262803.</p>
 <p>We can simplify the process even more using the <code>hdi</code> function from the <code>bayestestR</code> package. This has some other benefits that we will see in a bit.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># bayesTestR::hdi</span>
 <span class="va">hdi_ex1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span>
 <span class="va">hdi_ex1</span>
-<span class="co">#&gt; 95% HDI: [-0.40, 11.60]</span></code></pre></div>
+<span class="co">#&gt; 95% HDI: [-0.87, 10.44]</span></code></pre></div>
 <p>Notice that the ranges are slightly different. This is because the HDI, highest density interval, is a special type of credible interval. There are several methods for calculating a CI, but we won’t go into that now. For our purposes we will stick with the HDI.</p>
 <p>One advantage to using the <code>hdi</code> function from the <code>bayestestR</code> package is that it also has print methods. This means we can wrap the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function around our <code>hdi</code> object, like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -368,7 +368,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; </span>
 <span class="co">#&gt; inside ROPE</span>
 <span class="co">#&gt; -----------</span>
-<span class="co">#&gt; 1.26 %</span></code></pre></div>
+<span class="co">#&gt; 0.74 %</span></code></pre></div>
 <p>We can set the range of the ROPE and the size of the HDI using the arguments <code>range</code> and <code>ci</code>, respectively.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Calculate % of HDI within rope w/ specific settings</span>
@@ -377,7 +377,7 @@ In other words, positive values are still a possibility, given the data, the mod
 <span class="co">#&gt; </span>
 <span class="co">#&gt; inside ROPE</span>
 <span class="co">#&gt; -----------</span>
-<span class="co">#&gt; 1.21 %</span></code></pre></div>
+<span class="co">#&gt; 0.71 %</span></code></pre></div>
 <p>The default sets the CI to 95% and the ROPE range to ±0.1, unless the input is a Bayesian model. In that case, the function <code>rope_range</code> is used to calculate a ROPE (following Kruschke 2018, see <code><a href="https://easystats.github.io/bayestestR/reference/rope_range.html">?rope_range</a></code>).</p>
 <p><span class="math display">\[\color{black}{\frac{\mu_{1} - \mu_{2}}{\sqrt{\frac{\sigma^2_{1} + \sigma^2_{2}}{2}}}}\]</span></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
