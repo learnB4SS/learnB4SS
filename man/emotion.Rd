@@ -11,6 +11,12 @@ A \code{\link[tibble]{tibble}} with 1000 rows and 2 variables:
     \item{valency_z}{Emotional valency of word (z-scores).}
   }
 }
+\source{
+Warriner, A. B., Kuperman, V., & Brysbaert, M. 2013. Norms of
+    valence, arousal, and dominance for 13,915 English lemmas. Behavior
+    research methods, 45(4), 1191–1207.
+    https://doi.org/10.3758/s13428-012-0314-x
+}
 \usage{
 emotion
 }

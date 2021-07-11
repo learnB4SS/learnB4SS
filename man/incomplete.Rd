@@ -17,6 +17,12 @@ A \code{\link[tibble]{tibble}} with 6144 rows and 8 variables:
     \item{repetitiontype}{Whether the word was heard for the first time or subsequent times.}
   }
 }
+\source{
+T.B. Roettger, B. Winter, S. Grawunder, J. Kirby, M. Grice. 2014.
+    Assessing incomplete neutralization of final devoicing in German.
+    Journal of Phonetics 43. 11-25
+    https://doi.org/10.1016/j.wocn.2014.01.002.
+}
 \usage{
 incomplete
 }

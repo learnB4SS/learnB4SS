@@ -53,7 +53,7 @@ incomplete <- read_csv("./data-raw/incomplete.csv") %>%
 
 usethis::use_data(incomplete, overwrite = TRUE)
 
-# Full analysis model objects (cache)
+# Full analysis model objects (cache) ----
 
 m1_bf <- brmsformula(
   correct ~
@@ -109,3 +109,15 @@ m1_full <- brm(
   warmup = 1000,
   file = here::here("inst/extdata/m1_full")
 )
+
+# Vowel duration data ----
+
+vowels <- read_csv("https://raw.githubusercontent.com/stefanocoretta/coretta2018itapol/master/data-raw/aggregated/token-measures.csv") %>%
+  filter(
+    language == "Italian"
+  ) %>%
+  select(item, speaker, word, v1_duration, c2_voicing = c2_phonation,
+         vowel, c2_place, speech_rate, speech_rate_c) %>%
+  drop_na()
+
+usethis::use_data(vowels, overwrite = TRUE)

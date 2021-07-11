@@ -49,6 +49,10 @@
 #'     \item{word}{Word.}
 #'     \item{valency_z}{Emotional valency of word (z-scores).}
 #'   }
+#' @source Warriner, A. B., Kuperman, V., & Brysbaert, M. 2013. Norms of
+#'     valence, arousal, and dominance for 13,915 English lemmas. Behavior
+#'     research methods, 45(4), 1191–1207.
+#'     https://doi.org/10.3758/s13428-012-0314-x
 "emotion"
 
 #' Incomplete neutralisation in German
@@ -66,4 +70,28 @@
 #'     \item{listener}{The listener ID.}
 #'     \item{repetitiontype}{Whether the word was heard for the first time or subsequent times.}
 #'   }
+#' @source T.B. Roettger, B. Winter, S. Grawunder, J. Kirby, M. Grice. 2014.
+#'     Assessing incomplete neutralization of final devoicing in German.
+#'     Journal of Phonetics 43. 11-25
+#'     https://doi.org/10.1016/j.wocn.2014.01.002.
 "incomplete"
+
+#' Vowel duration and consonant voicing in Italian
+#'
+#' This tibble contains data from Coretta 2020.
+#'
+#' @format A \code{\link[tibble]{tibble}} with 6144 rows and 8 variables:
+#'   \describe{
+#'     \item{item}{Trial number.}
+#'     \item{speaker}{Speaker ID.}
+#'     \item{word}{Target word.}
+#'     \item{v1_duration}{Duration of V1 in milliseconds.}
+#'     \item{c2_voicing}{Voicing of C2 (voiceless, voiced).}
+#'     \item{vowel}{Target vowel.}
+#'     \item{c2_place}{Place of articulation of C2.}
+#'     \item{speech_rate}{Number of syllables per second.}
+#'     \item{speech_rate_c}{Centred speech rate.}
+#'   }
+#' @source Coretta, Stefano. 2020. Vowel duration and consonant voicing: A production study.
+#'     PhD Thesis. University of Manchester. https://doi.org/10.17605/OSF.IO/W92ME
+"vowels"
