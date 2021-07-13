@@ -115,12 +115,47 @@ To sum up:
 
 Now. We've seen that dummy coding is simply using dummy numeric variables with `0`s and `1`s.
 
-In fact, this is **one way** of dummy coding.
+In fact, this is **one way** of doing dummy coding.
 Different ways of doing dummy coding in R are called **contrasts**.
 The type of contrasts we have seen so far are called **treatment contrasts**.
 
-This term comes from the medical science where you test, for example, the efficacy of a medical intervention (a drug, surgery, etc...) by comparing a **control group** (which has not received the "treatment") with a group that has received the medical intervention (the **treatment group**).
+## Treatment contrasts
+
+The term **treatment contrasts** comes from the clinical sciences where you test, for example, the efficacy of a medical intervention (a drug, surgery, etc...) by comparing a **control group** (which has not received the "treatment") with a group that has received the medical intervention (the **treatment group**).
 
 The control group can be used as the reference group to see if the treatment group has benefited from the medical treatment (i.e. if the treatment group's health has improved after the intervention relative to the control group, then one can infer that the treatment was effective).
+
+Let's look at treatment contrasts in R.
+
+In the previous section, we've been illustrating dummy coding by assigning `0`s and `1`s using one or more dummy variables.
+In practice, you do not need to do that to run real analyses, because R does that under the hood for you.
+
+Factors in R are coded with treatment contrasts by default.
+Also by default, the first level is set as the reference level (the order is alphabetical by default).
+The reference level is the level that gets coded only with `0`s, as we have seen above for the dinosaur's diet factor (`carnivorous` had `dummy_1 = 0` and `dummy_2 = 0`).
+
+For example, the following factor has three levels, and `broad-focus` is chosen as the reference level because it would be the first level if we sorted the levels alphabetically.
+
+```{r}
+fo <- factor(c("narrow-focus", "broad-focus", "polar-question", "narrow-focus", "broad-focus"))
+fo
+```
+
+The other levels are ordered alphabetically as well.
+
+To get a sense of how a factor would be coded with treatment contrasts, we can print a dummy coding table with the `contr.treatment()` function.
+
+```{r}
+fo_levs <- levels(fo)
+contr.treatment(fo_levs)
+```
+
+When you run a regression model which include a factor that is coded with treatment contrasts, the reference level is "included" in the model intercept, and the other levels are compared against the reference level.
+
+In other words, when you print the summary of a regression, you will see the estimated difference between the reference level and each of the other levels.
+
+## Sum contrasts
+
+
 
 <br>
