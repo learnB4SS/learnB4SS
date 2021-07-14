@@ -195,11 +195,16 @@ Several measures that can only take on positive values, like segment duration, t
 One such type of distribution is the **log-normal** distribution.
 
 To illustrate how to run a Bayesian regression model with log-normal data, we will use a data set of vowel duration.
+Segment durations are known to follow a log-normal distribution, since durations can only be positive.
+This characteristics produces the typical right skew of log-normal data.
+
+Let's have a look at the data.
 
 ```{r vowels}
 glimpse(vowels)
 ```
 
+And let's plot the raw vowel duration.
 
 ```{r vow-duration}
 vowels %>%
@@ -208,14 +213,29 @@ vowels %>%
   geom_rug()
 ```
 
+We can start off with this simple formula:
 
-The right skew is quite evident in the plot above.
+$$vow\_dur_i \sim Lognormal(\mu_i, \sigma)$$
 
-So, vowel duration (and segment duration in general) follows a log-normal distribution.
+Vowel duration is distributed according to a log-normal distribution, which has a mean $\mu$ and a standard deviation $\sigma$.
+We want to estimate $\mu$ and $\sigma$ from the data.
 
-$$vow\_dur_i \sim Lognormal(\mu, \sigma)$$
+This time though, we also have a few predictors we are interested in: C2 voicing (voiceless, voiced), C2 place of articulation (coronal, velar), vowel (/a/, /o/, /u/), and speech rate (syllables per second).
 
-This time we want to estimate the effect of consonant voicing on vowel duration
+The predictors of a linear model are assumed to have an effect on $\mu$.
+The following formula for $\mu$ from above should make this evident:
+
+$$
+\begin{aligned}
+\mu_i & = \alpha + \beta_1 \times c2voicing_i + \beta_2 \times c2poa_i \\
+& + \beta_3 \times vowelO_i + \beta_4 \times vowelU_i \\
+& + \beta_5 \times srate_i
+\end{aligned}
+$$
+
+$\alpha$ is the parameter of the model intercept, while the $\beta$ parameters are the coefficients of the predictors.
+
+For each of these parameters we need to set a prior.
 
 To be continued...
 
