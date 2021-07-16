@@ -119,7 +119,7 @@ In fact, this is **one way** of doing dummy coding.
 Different ways of doing dummy coding in R are called **contrasts**.
 The type of contrasts we have seen so far are called **treatment contrasts**.
 
-## Treatment contrasts
+## Treatment contrast
 
 The term **treatment contrasts** comes from the clinical sciences where you test, for example, the efficacy of a medical intervention (a drug, surgery, etc...) by comparing a **control group** (which has not received the "treatment") with a group that has received the medical intervention (the **treatment group**).
 
@@ -154,7 +154,39 @@ When you run a regression model which include a factor that is coded with treatm
 
 In other words, when you print the summary of a regression, you will see the estimated difference between the reference level and each of the other levels.
 
-## Sum contrasts
+## Sum contrast
+
+Another helpful type of contrast is the so-called **sum contrast**.
+
+In this contrast, the levels in a factor are coded using `1`s, `-1`s and `0`s if there are more than 2 levels.
+If you sum the values of each dummy variable you always get `0` (hence the name "sum" contrast).
+
+Let's see an example in R.
+
+Let's imagine we have a factor with 2 levels: `voiced` and `voiceless`.
+
+This is how sum coding would look like for this factor:
+
+```{r}
+levs <- c("voiced", "voiceless")
+contr.sum(levs)
+```
+
+So `voiced` is coded as `1` and `voiceless` as `-1`.
+What this means for the interpretation of regression model summaries is that the intercept now corresponds to the mean calculated across `voiced` and `voiceless` tokens and the returned effect for the factor corresponds to the difference between this mean and the `voiced` tokens (the first level in the factor).
+
+Sum coding is useful when you want to include a factor with a few levels in the model together with another factor and you want an estimate of the effect of this second factor **averaged across all levels from the first factor**.
+The first factor can be coded using sum contrasts so that the model would return the average effect of the second factor.
+
+A good example is a factor which codes vowels.
+
+```{r}
+vowels <- c("a", "u", "i")
+contr.sum(vowels)
+```
+
+Let's run a simple regression with vowel duration as the outcome variable, voicing of the following stop and type of vowel as predictors.
+
 
 
 
