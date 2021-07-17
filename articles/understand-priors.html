@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7.9000</span>
       </span>
     </div>
 
@@ -202,7 +202,8 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">HDInterval</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/twolodzko/extraDistr">extraDistr</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms">brms</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">emotion</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">emotion</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">vowels</span><span class="op">)</span></code></pre></div>
 <div id="overview" class="section level1">
 <h1 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h1>
@@ -265,9 +266,9 @@
 <p>So now we know which prior we will set for <span class="math inline">\(\mu\)</span>.</p>
 <p>For <span class="math inline">\(\sigma\)</span>, one can choose from a normal distribution, a Student-t distribution, or a Half-Cauchy distribution.</p>
 <p>We will go with the latter.</p>
-<p><span class="math display">\[HalfCauchy(x, \gamma)\]</span></p>
+<p><span class="math display">\[\sigma \sim HalfCauchy(x, \gamma)\]</span></p>
 <p>With Half-Cauchy distributions you can safely set <span class="math inline">\(x = 0\)</span>.</p>
-<p><span class="math display">\[HalfCauchy(0, \gamma)\]</span></p>
+<p><span class="math display">\[\sigma \sim HalfCauchy(0, \gamma)\]</span></p>
 <p>We cannot use the empirical rule to decide what value <span class="math inline">\(\gamma\)</span> should have, because the rule works only with normal distributions.</p>
 <p>Instead, we can use the <code><a href="https://rdrr.io/pkg/HDInterval/man/inverseCDF.html">inverseCDF()</a></code> function from the HDInterval package (see the function documentation for a full explanation).</p>
 <p>We don’t really have an idea of what the standard deviation for the <code>valence</code> scores might be, and we cannot calculate the standard deviation from the data (that would be cheating!).</p>
@@ -325,6 +326,47 @@ valence_i &amp; \sim Normal(\mu, \sigma)\\
   family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span><span class="op">)</span>,
   prior <span class="op">=</span> <span class="va">priors_1</span>
 <span class="op">)</span></code></pre></div>
+</div>
+<div id="log-normal" class="section level1">
+<h1 class="hasAnchor">
+<a href="#log-normal" class="anchor"></a>Log-normal</h1>
+<p>Several measures that can only take on positive values, like segment duration, tend to have a skewed probability distribution. One such type of distribution is the <strong>log-normal</strong> distribution.</p>
+<p>To illustrate how to run a Bayesian regression model with log-normal data, we will use a data set of vowel duration. Segment durations are known to follow a log-normal distribution, since durations can only be positive. This characteristics produces the typical right skew of log-normal data.</p>
+<p>Let’s have a look at the data.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">vowels</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 886</span>
+<span class="co">#&gt; Columns: 9</span>
+<span class="co">#&gt; $ item          &lt;dbl&gt; 20, 2, 11, 1, 15, 10, 13, 3, 14, 19, 4, 6, 16, 17, 5, 23…</span>
+<span class="co">#&gt; $ speaker       &lt;chr&gt; "it01", "it01", "it01", "it01", "it01", "it01", "it01", …</span>
+<span class="co">#&gt; $ word          &lt;chr&gt; "pugu", "pada", "poco", "pata", "boco", "podo", "boto", …</span>
+<span class="co">#&gt; $ v1_duration   &lt;dbl&gt; 95.23720, 138.96844, 126.93226, 127.49888, 132.33310, 12…</span>
+<span class="co">#&gt; $ c2_voicing    &lt;chr&gt; "voiced", "voiced", "voiceless", "voiceless", "voiceless…</span>
+<span class="co">#&gt; $ vowel         &lt;chr&gt; "u", "a", "o", "a", "o", "o", "o", "a", "o", "u", "a", "…</span>
+<span class="co">#&gt; $ c2_place      &lt;chr&gt; "velar", "coronal", "velar", "coronal", "velar", "corona…</span>
+<span class="co">#&gt; $ speech_rate   &lt;dbl&gt; 4.893206, 5.015636, 4.819541, 5.031662, 5.063435, 5.0632…</span>
+<span class="co">#&gt; $ speech_rate_c &lt;dbl&gt; -0.55937531, -0.43694485, -0.63303978, -0.42091937, -0.3…</span></code></pre></div>
+<p>And let’s plot the raw vowel duration.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">vowels</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">v1_duration</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html">geom_rug</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="understand-priors_files/figure-html/vow-duration-1.png" width="700"></p>
+<p>We can start off with this simple formula:</p>
+<p><span class="math display">\[vow\_dur_i \sim Lognormal(\mu_i, \sigma)\]</span></p>
+<p>Vowel duration is distributed according to a log-normal distribution, which has a mean <span class="math inline">\(\mu\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. We want to estimate <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> from the data.</p>
+<p>This time though, we also have a few predictors we are interested in: C2 voicing (voiceless, voiced), C2 place of articulation (coronal, velar), vowel (/a/, /o/, /u/), and speech rate (syllables per second).</p>
+<p>The predictors of a linear model are assumed to have an effect on <span class="math inline">\(\mu\)</span>. The following formula for <span class="math inline">\(\mu\)</span> from above should make this evident:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu_i &amp; = \alpha + \beta_1 \times c2voicing_i + \beta_2 \times c2poa_i \\
+&amp; + \beta_3 \times vowelO_i + \beta_4 \times vowelU_i \\
+&amp; + \beta_5 \times srate_i
+\end{aligned}
+\]</span></p>
+<p><span class="math inline">\(\alpha\)</span> is the parameter of the model intercept, while the <span class="math inline">\(\beta\)</span> parameters are the coefficients of the predictors.</p>
+<p>For each of these parameters we need to set a prior.</p>
 <p>To be continued…</p>
 <p><br></p>
 </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>learnB4SS: Learning materials for the learnB4SS workshop — learnB4SS-package • learnB4SS</title>
+<title>Vowel duration and consonant voicing in Italian — vowels • learnB4SS</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,10 +48,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="learnB4SS: Learning materials for the learnB4SS workshop — learnB4SS-package" />
-<meta property="og:description" content="
-It provides the learning materials from the workshop 'Learn Bayesian
-    Analysis for the Speech Sciences'." />
+<meta property="og:title" content="Vowel duration and consonant voicing in Italian — vowels" />
+<meta property="og:description" content="This tibble contains data from Coretta 2020." />
 <meta property="og:image" content="https://learnb4ss.github.io/learnB4SS/logo.png" />
 
 
@@ -230,36 +228,37 @@ It provides the learning materials from the workshop 'Learn Bayesian
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>learnB4SS: Learning materials for the learnB4SS workshop</h1>
-    <small class="dont-index">Source: <a href='https://github.com/learnB4SS/learnB4SS/blob/master/R/learnB4SS-package.R'><code>R/learnB4SS-package.R</code></a></small>
-    <div class="hidden name"><code>learnB4SS-package.Rd</code></div>
+    <h1>Vowel duration and consonant voicing in Italian</h1>
+    <small class="dont-index">Source: <a href='https://github.com/learnB4SS/learnB4SS/blob/master/R/data.R'><code>R/data.R</code></a></small>
+    <div class="hidden name"><code>vowels.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><img src='figures/logo.png' align='right' alt='logo' width='120' /></p>
-<p>It provides the learning materials from the workshop 'Learn Bayesian
-    Analysis for the Speech Sciences'.</p>
+    <p>This tibble contains data from Coretta 2020.</p>
     </div>
 
+    <pre class="usage"><span class='va'>vowels</span></pre>
 
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <div class='dont-index'><p>Useful links:</p><ul>
-<li><p><a href='https://github.com/learnB4SS/learnB4SS'>https://github.com/learnB4SS/learnB4SS</a></p></li>
-<li><p>Report bugs at <a href='https://github.com/learnB4SS/learnB4SS/issues'>https://github.com/learnB4SS/learnB4SS/issues</a></p></li>
-</ul>
+    <p>A <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code> with 6144 rows and 8 variables:</p><dl>
+    <dt>item</dt><dd><p>Trial number.</p></dd>
+    <dt>speaker</dt><dd><p>Speaker ID.</p></dd>
+    <dt>word</dt><dd><p>Target word.</p></dd>
+    <dt>v1_duration</dt><dd><p>Duration of V1 in milliseconds.</p></dd>
+    <dt>c2_voicing</dt><dd><p>Voicing of C2 (voiceless, voiced).</p></dd>
+    <dt>vowel</dt><dd><p>Target vowel.</p></dd>
+    <dt>c2_place</dt><dd><p>Place of articulation of C2.</p></dd>
+    <dt>speech_rate</dt><dd><p>Number of syllables per second.</p></dd>
+    <dt>speech_rate_c</dt><dd><p>Centred speech rate.</p></dd>
+  
+</dl>
 
-</div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p><strong>Maintainer</strong>: Stefano Coretta <a href='mailto:stefano.coretta@gmail.com'>stefano.coretta@gmail.com</a> (<a href='https://orcid.org/0000-0001-9627-5532'>ORCID</a>)</p>
-<p>Authors:</p><ul>
-<li><p>Joseph V. Casillas (<a href='https://orcid.org/0000-0001-8735-9910'>ORCID</a>)</p></li>
-<li><p>Timo Roettger (<a href='https://orcid.org/0000-0003-1400-2739'>ORCID</a>)</p></li>
-</ul>
-
-
+    <p>Coretta, Stefano. 2020. Vowel duration and consonant voicing: A production study.
+    PhD Thesis. University of Manchester. https://doi.org/10.17605/OSF.IO/W92ME</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

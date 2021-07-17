@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">learnB4SS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7.9000</span>
       </span>
     </div>
 
@@ -224,15 +224,15 @@
 
 <span class="co"># Use quantile function on posterior</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">posterior</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;      2.5%     97.5% </span>
-<span class="co">#&gt; -0.777444 10.526280</span></code></pre></div>
-<p>We can see that the 95% CI for our posterior is -0.777444, 10.5262803.</p>
+<span class="co">#&gt;       2.5%      97.5% </span>
+<span class="co">#&gt; -0.8164805 10.5047472</span></code></pre></div>
+<p>We can see that the 95% CI for our posterior is -0.8164805, 10.5047472.</p>
 <p>We can simplify the process even more using the <code>hdi</code> function from the <code>bayestestR</code> package. This has some other benefits that we will see in a bit.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># bayesTestR::hdi</span>
 <span class="va">hdi_ex1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/bayestestR/reference/hdi.html">hdi</a></span><span class="op">(</span><span class="va">posterior</span><span class="op">)</span>
 <span class="va">hdi_ex1</span>
-<span class="co">#&gt; 95% HDI: [-0.87, 10.44]</span></code></pre></div>
+<span class="co">#&gt; 95% HDI: [-0.82, 10.50]</span></code></pre></div>
 <p>Notice that the ranges are slightly different. This is because the HDI, highest density interval, is a special type of credible interval. There are several methods for calculating a CI, but we won’t go into that now. For our purposes we will stick with the HDI.</p>
 <p>One advantage to using the <code>hdi</code> function from the <code>bayestestR</code> package is that it also has print methods. This means we can wrap the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function around our <code>hdi</code> object, like this:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
