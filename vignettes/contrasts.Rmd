@@ -119,7 +119,7 @@ In fact, this is **one way** of doing dummy coding.
 Different ways of doing dummy coding in R are called **contrasts**.
 The type of contrasts we have seen so far are called **treatment contrasts**.
 
-## Treatment contrast
+## Treatment contrasts
 
 The term **treatment contrasts** comes from the clinical sciences where you test, for example, the efficacy of a medical intervention (a drug, surgery, etc...) by comparing a **control group** (which has not received the "treatment") with a group that has received the medical intervention (the **treatment group**).
 
@@ -134,60 +134,114 @@ Factors in R are coded with treatment contrasts by default.
 Also by default, the first level is set as the reference level (the order is alphabetical by default).
 The reference level is the level that gets coded only with `0`s, as we have seen above for the dinosaur's diet factor (`carnivorous` had `dummy_1 = 0` and `dummy_2 = 0`).
 
-For example, the following factor has three levels, and `broad-focus` is chosen as the reference level because it would be the first level if we sorted the levels alphabetically.
+Let's see an example using a data table with measurements of vowel duration.
 
-```{r}
-fo <- factor(c("narrow-focus", "broad-focus", "polar-question", "narrow-focus", "broad-focus"))
-fo
+```{r vowels}
+data("vowels")
+glimpse(vowels)
 ```
 
-The other levels are ordered alphabetically as well.
+For example, let's take the `vowel` column.
+This column indicates which vowel the measurement was taken from, and that can be /a/, /o/, or /u/.
+
+If we convert the `vowel` column into a factor, the levels will be `a`, `o` and `u`, and `a` will be the reference level.
+
+```{r}
+vowels <- vowels %>%
+  mutate(vowel = as.factor(vowel))
+
+levels(vowels$vowel)
+```
 
 To get a sense of how a factor would be coded with treatment contrasts, we can print a dummy coding table with the `contr.treatment()` function.
 
 ```{r}
-fo_levs <- levels(fo)
-contr.treatment(fo_levs)
+contr.treatment(levels(vowels$vowel))
 ```
 
-When you run a regression model which include a factor that is coded with treatment contrasts, the reference level is "included" in the model intercept, and the other levels are compared against the reference level.
+Now, let's run a regression model with `v1_duration` as the outcome variable and `vowel` as the predictor.
 
-In other words, when you print the summary of a regression, you will see the estimated difference between the reference level and each of the other levels.
+```{r}
+vow_lm <- lm(v1_duration ~ vowel, data = vowels)
 
-## Sum contrast
+summary(vow_lm)
+```
 
-Another helpful type of contrast is the so-called **sum contrast**.
+The summary returns three coefficients:
 
-In this contrast, the levels in a factor are coded using `1`s, `-1`s and `0`s if there are more than 2 levels.
+- An `Intercept`.
+- `vowelo`.
+- `vowelu`.
+
+Since `a` is the reference level of `vowel`, the `Intercept` corresponds to the mean duration of the vowel `a`, i.e. 128 ms.
+
+The coefficient of `o` is the **difference between the mean duration of `o` and the mean duration of the reference level `a`** (i.e. the `Intercept`).
+So `o` is 5.6 ms shorter than `a` on average (shorter because the coefficient is negative).
+
+Finally, the coefficient of `u` is the **difference between the mean duration of `u` and the mean duration of the reference level `a`**
+So `u` is 29.7 ms shorter than `a`.
+
+This is how treatment contrasts work.
+
+## Sum contrasts
+
+Another type of contrast are the so-called **sum contrasts**.
+
+When using sum contrasts, the levels in a factor are coded using `1`s, `-1`s and `0`s.
 If you sum the values of each dummy variable you always get `0` (hence the name "sum" contrast).
 
-Let's see an example in R.
-
-Let's imagine we have a factor with 2 levels: `voiced` and `voiceless`.
+Let's see what happens to the factor `vowel` when using sum contrasts (remember that factors use treatment contrasts by default).
 
 This is how sum coding would look like for this factor:
 
 ```{r}
-levs <- c("voiced", "voiceless")
-contr.sum(levs)
+contr.sum(levels(vowels$vowel))
 ```
 
-So `voiced` is coded as `1` and `voiceless` as `-1`.
-What this means for the interpretation of regression model summaries is that the intercept now corresponds to the mean calculated across `voiced` and `voiceless` tokens and the returned effect for the factor corresponds to the difference between this mean and the `voiced` tokens (the first level in the factor).
+Since there are 3 levels, we need two dummy variables.
+So `a` is coded as `1, 0`, `o` is coded as `0, 1`, and `u` as `-1, -1`.
 
-Sum coding is useful when you want to include a factor with a few levels in the model together with another factor and you want an estimate of the effect of this second factor **averaged across all levels from the first factor**.
-The first factor can be coded using sum contrasts so that the model would return the average effect of the second factor.
-
-A good example is a factor which codes vowels.
+To set the contrasts of a factor to sum coding, we can run the following:
 
 ```{r}
-vowels <- c("a", "u", "i")
-contr.sum(vowels)
+contrasts(vowels$vowel) <- "contr.sum"
+# If you want to change it back to treatment contrasts you can run
+# contrasts(vowels$vowel) <- "contr.treatment"
 ```
 
-Let's run a simple regression with vowel duration as the outcome variable, voicing of the following stop and type of vowel as predictors.
+With sum contrasts the reference level is in fact the grand mean.
 
+In our model of vowel duration this means that the `Intercept` coefficient will be the grand mean of vowel duration.
 
+Let's rerun the model and look at the output.
 
+```{r}
+vow_lm <- lm(v1_duration ~ vowel, data = vowels)
+
+summary(vow_lm)
+```
+
+The `Intercept` now is 116 ms, which mean that the mean of vowel duration across the three vowels is 116 ms.
+
+We can check this by taking the mean:
+
+```{r}
+mean(vowels$v1_duration)
+```
+
+Yup, pretty close (small differences are fine).
+
+So what are now the coefficients called `vowel1` and `vowel2`?
+
+These are, respectively, the difference between the mean duration of `a` and the grand mean, and the difference between the mean duration of `o` and the grand mean.
+
+So `a` is 11.8 ms longer than the grand mean, and `o` is 6.1 ms longer than the grand mean.
+
+What about `u` then?
+
+Easy.
+You just subtract the coefficients of both `a` and `o` from the grand mean: $116.8 - 11.8 - 6.1 = 98.9$.
+
+If you want to check that this is correct, the mean duration of `u` according to the model above where we used treatment contrasts was $128.616 - 29.763 = 98.853$.
 
 <br>

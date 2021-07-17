@@ -1,5 +1,9 @@
 # learnB4SS v1.0.7.9000
 
+## Added
+
+- `contrasts.Rmd` vignette on dummy coding and factor contrasts.
+
 
 
 # learnB4SS v1.0.7
