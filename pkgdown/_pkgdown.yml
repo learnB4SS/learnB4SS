@@ -72,7 +72,7 @@ navbar:
         href: articles/why-bayes.html
       - text: "Glossary"
         href: articles/glossary.html
-      - text: "Factors, dummy coding and contrasts"
+      - text: "Factors, coding and contrasts"
         href: articles/contrasts.html
       - text: "Understand priors"
         href: articles/understand-priors.html

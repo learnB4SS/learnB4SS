@@ -1,5 +1,5 @@
 ---
-title: "Factors, dummy coding and contrasts"
+title: "Factors, coding and contrasts"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Factors, dummy coding and contrasts}
@@ -42,7 +42,9 @@ factor(c("carnivore", "carnivore", "herbivore", "omnivore", "herbivore"))
 We are so accustomed to using factors in regression models that sometimes we forget that regressions only work with numbers and cannot work with categorical variables.
 
 To fit a regression model with categorical variables, these are first converted to numbers.
-The process of conversion is called **dummy variable coding** or simply **dummy coding**.
+The process of conversion is called **coding**.
+
+One type of coding is the **dummy variable coding** or simply **dummy coding**.
 This consists of assigning `0`s or `1`s to the levels in the variable.
 
 Let's go through a simple example of dummy coding of a categorical variable with only 2 levels: `metropolitan` and `rural`.
@@ -62,8 +64,8 @@ When the categorical variable has 3 levels instead of 2, we need a work-around i
 With three levels, we can code the variable using two numeric variables (instead of just one).
 Going back to the dinosaur's diet example, we can use:
 
-- One variable that codes whether the dinosaur is carnivore `0` or herbivore `1`.
-- One variable that codes whether the dinosaur is carnivore `0` or omnivore `1`.
+- One variable that codes whether the dinosaur is a carnivore `0` or a herbivore `1`.
+- One variable that codes whether the dinosaur is a carnivore `0` or an omnivore `1`.
 
 Let call the first variable `dummy_1` and the second variable `dummy_2`. Then:
 
@@ -71,7 +73,7 @@ Let call the first variable `dummy_1` and the second variable `dummy_2`. Then:
 - When `dummy_1` is `1` and `dummy_2` is `0`, the dinosaur is a herbivore.
 - When `dummy_1` is `0` and `dummy_2` is `1`, the dinosaur is an omnivore.
 
-So the following factor (repeated from above)
+So the following factor (repeated from above):
 
 ```{r diet-repeated}
 factor(c("carnivore", "carnivore", "herbivore", "omnivore", "herbivore"))
@@ -82,6 +84,8 @@ can be coded as:
 ```{r diet-dummy}
 dummy_1 <- c(0, 0, 1, 0, 1)     # carnivore (0) or herbivore (1)?
 dummy_2 <- c(0, 0, 0, 1, 0)     # carnivore (0) or omnivore (1)?
+
+library(tidyverse)
 
 tibble(
   dummy_1, dummy_2
@@ -108,16 +112,16 @@ To sum up:
 
 - **Factors** are vectors that code categorical variables.
 - The values in a factor are called **levels**.
-- Regression models cannot work directly with factors, so these are dummy coded.
-- **Dummy coding** means converting a factor into one or more numeric variables of `0`s and `1`s.
+- Regression models cannot work directly with factors, so these are coded using numbers.
+- **Dummy coding** is one way of coding factors as numbers using one or more numeric variables of `0`s and `1`s.
 
-# Dummy coding and contrasts
+# Coding and contrasts
 
 Now. We've seen that dummy coding is simply using dummy numeric variables with `0`s and `1`s.
 
-In fact, this is **one way** of doing dummy coding.
-Different ways of doing dummy coding in R are called **contrasts**.
-The type of contrasts we have seen so far are called **treatment contrasts**.
+In fact, this is **one way** of coding factors, or one coding scheme.^[You can learn about more coding schemes here: <https://stats.idre.ucla.edu/spss/webbooks/reg/chapter5/regression-with-spsschapter-5-additional-coding-systems-for-categorical-variables-in-regressionanalysis/>.]
+Different coding schemes in R are called **contrasts**.
+Dummy coding is called **treatment contrasts** in R.
 
 ## Treatment contrasts
 
@@ -169,7 +173,7 @@ summary(vow_lm)
 
 The summary returns three coefficients:
 
-- An `Intercept`.
+- `Intercept`.
 - `vowelo`.
 - `vowelu`.
 
@@ -185,7 +189,8 @@ This is how treatment contrasts work.
 
 ## Sum contrasts
 
-Another type of contrast are the so-called **sum contrasts**.
+Another type of coding is **effect coding**.
+In R, the corresponding contrast type are the so-called **sum contrasts**.
 
 When using sum contrasts, the levels in a factor are coded using `1`s, `-1`s and `0`s.
 If you sum the values of each dummy variable you always get `0` (hence the name "sum" contrast).
@@ -243,5 +248,32 @@ Easy.
 You just subtract the coefficients of both `a` and `o` from the grand mean: $116.8 - 11.8 - 6.1 = 98.9$.
 
 If you want to check that this is correct, the mean duration of `u` according to the model above where we used treatment contrasts was $128.616 - 29.763 = 98.853$.
+
+## Sum contrasts and interactions
+
+Sum contrasts can be very handy when the model contains interactions between factors.
+
+Let's say we want to include in our model of vowel duration a predictor that specifies the voicing of the stop following the vowel.
+We also add an interaction between vowel and voicing, so that we can model differences in the effect of voicing across vowels.
+
+```{r}
+vow_lm_2 <- lm(v1_duration ~ c2_voicing + vowel + c2_voicing:vowel, data = vowels)
+
+summary(vow_lm_2)
+```
+
+Now the `Intercept` is the mean vowel duration when the following stop is voiced (the reference level of `c2_voicing`).
+This means that the average vowel followed by a voiced stop is 123 ms long in our data.
+
+The coefficient of `c2_voicingvoiceless` tells us the mean effect of `c2_voicing` on vowel duration, averaged across all vowels.
+So, on average, a vowel is about 13 ms shorter when followed by a voiceless stop.
+
+The coefficients of `vowel1` and `vowel2` indicate the difference between the average vowel duration before a voiced stop (the `Intercept`) and `a` and `o` respectively.
+As before, to get the difference between the average vowel duration of `u` before a voiceless stop and the mean vowel duration, you just need to subtract the coefficients of `vowel1` and `vowel2` from the `Intercept`: $123.5 - 14.6 - 8.5 = 100.4$.
+
+The last two coefficients, `c2_voicingvoiceless:vowel1` and `c2_voicingvoiceless:vowel2` correspond to the difference in the effect of voicing between the average effect of voicing (`c2_voicingvoiceless`, i.e. -13 ms) and the effect of voicing in `a` and `o` respectively.
+That is, the decrease of vowel duration for `a` is 5.6 ms greater than the average effect, while the decrease of vowel duration for `o` is 4.8 ms greater than the average effect.
+
+Following the usual formula, the effect of voicing for `u` is $-13.309 - (-5.6) - (-4.8) = -2.9$.
 
 <br>
