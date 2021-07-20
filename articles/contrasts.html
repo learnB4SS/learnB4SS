@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Factors, dummy coding and contrasts • learnB4SS</title>
+<title>Factors, coding and contrasts • learnB4SS</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="Factors, dummy coding and contrasts">
+<meta property="og:title" content="Factors, coding and contrasts">
 <meta property="og:description" content="learnB4SS">
 <meta property="og:image" content="https://learnb4ss.github.io/learnB4SS/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -160,7 +160,7 @@
       <a href="../articles/glossary.html">Glossary</a>
     </li>
     <li>
-      <a href="../articles/contrasts.html">Factors, dummy coding and contrasts</a>
+      <a href="../articles/contrasts.html">Factors, coding and contrasts</a>
     </li>
     <li>
       <a href="../articles/understand-priors.html">Understand priors</a>
@@ -188,7 +188,7 @@
       </header><script src="contrasts_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Factors, dummy coding and contrasts</h1>
+      <h1 data-toc-skip>Factors, coding and contrasts</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/learnB4SS/learnB4SS/blob/master/vignettes/contrasts.Rmd"><code>vignettes/contrasts.Rmd</code></a></small>
@@ -215,7 +215,8 @@
 <span class="co">#&gt; [1] carnivore carnivore herbivore omnivore  herbivore</span>
 <span class="co">#&gt; Levels: carnivore herbivore omnivore</span></code></pre></div>
 <p>We are so accustomed to using factors in regression models that sometimes we forget that regressions only work with numbers and cannot work with categorical variables.</p>
-<p>To fit a regression model with categorical variables, these are first converted to numbers. The process of conversion is called <strong>dummy variable coding</strong> or simply <strong>dummy coding</strong>. This consists of assigning <code>0</code>s or <code>1</code>s to the levels in the variable.</p>
+<p>To fit a regression model with categorical variables, these are first converted to numbers. The process of conversion is called <strong>coding</strong>.</p>
+<p>One type of coding is the <strong>dummy variable coding</strong> or simply <strong>dummy coding</strong>. This consists of assigning <code>0</code>s or <code>1</code>s to the levels in the variable.</p>
 <p>Let’s go through a simple example of dummy coding of a categorical variable with only 2 levels: <code>metropolitan</code> and <code>rural</code>.</p>
 <p>The most simple way of coding this categorical variable as a number is to assign <code>0</code> to one level and <code>1</code> to the other level. For example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -229,8 +230,8 @@
 <p>When the categorical variable has 3 levels instead of 2, we need a work-around in order to code the 3-level factor with only <code>0</code>s and <code>1</code>s (we can’t use higher numbers for reasons we will see later).</p>
 <p>With three levels, we can code the variable using two numeric variables (instead of just one). Going back to the dinosaur’s diet example, we can use:</p>
 <ul>
-<li>One variable that codes whether the dinosaur is carnivore <code>0</code> or herbivore <code>1</code>.</li>
-<li>One variable that codes whether the dinosaur is carnivore <code>0</code> or omnivore <code>1</code>.</li>
+<li>One variable that codes whether the dinosaur is a carnivore <code>0</code> or a herbivore <code>1</code>.</li>
+<li>One variable that codes whether the dinosaur is a carnivore <code>0</code> or an omnivore <code>1</code>.</li>
 </ul>
 <p>Let call the first variable <code>dummy_1</code> and the second variable <code>dummy_2</code>. Then:</p>
 <ul>
@@ -238,7 +239,7 @@
 <li>When <code>dummy_1</code> is <code>1</code> and <code>dummy_2</code> is <code>0</code>, the dinosaur is a herbivore.</li>
 <li>When <code>dummy_1</code> is <code>0</code> and <code>dummy_2</code> is <code>1</code>, the dinosaur is an omnivore.</li>
 </ul>
-<p>So the following factor (repeated from above)</p>
+<p>So the following factor (repeated from above):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"carnivore"</span>, <span class="st">"carnivore"</span>, <span class="st">"herbivore"</span>, <span class="st">"omnivore"</span>, <span class="st">"herbivore"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] carnivore carnivore herbivore omnivore  herbivore</span>
@@ -247,6 +248,8 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dummy_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>     <span class="co"># carnivore (0) or herbivore (1)?</span>
 <span class="va">dummy_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>     <span class="co"># carnivore (0) or omnivore (1)?</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 
 <span class="fu">tibble</span><span class="op">(</span>
   <span class="va">dummy_1</span>, <span class="va">dummy_2</span>
@@ -277,17 +280,17 @@
 <li>
 <strong>Factors</strong> are vectors that code categorical variables.</li>
 <li>The values in a factor are called <strong>levels</strong>.</li>
-<li>Regression models cannot work directly with factors, so these are dummy coded.</li>
+<li>Regression models cannot work directly with factors, so these are coded using numbers.</li>
 <li>
-<strong>Dummy coding</strong> means converting a factor into one or more numeric variables of <code>0</code>s and <code>1</code>s.</li>
+<strong>Dummy coding</strong> is one way of coding factors as numbers using one or more numeric variables of <code>0</code>s and <code>1</code>s.</li>
 </ul>
 </div>
 </div>
-<div id="dummy-coding-and-contrasts" class="section level1">
+<div id="coding-and-contrasts" class="section level1">
 <h1 class="hasAnchor">
-<a href="#dummy-coding-and-contrasts" class="anchor"></a>Dummy coding and contrasts</h1>
+<a href="#coding-and-contrasts" class="anchor"></a>Coding and contrasts</h1>
 <p>Now. We’ve seen that dummy coding is simply using dummy numeric variables with <code>0</code>s and <code>1</code>s.</p>
-<p>In fact, this is <strong>one way</strong> of doing dummy coding. Different ways of doing dummy coding in R are called <strong>contrasts</strong>. The type of contrasts we have seen so far are called <strong>treatment contrasts</strong>.</p>
+<p>In fact, this is <strong>one way</strong> of coding factors, or one coding scheme.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Different coding schemes in R are called <strong>contrasts</strong>. Dummy coding is called <strong>treatment contrasts</strong> in R.</p>
 <div id="treatment-contrasts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#treatment-contrasts" class="anchor"></a>Treatment contrasts</h2>
@@ -352,7 +355,8 @@
 <span class="co">#&gt; F-statistic: 72.99 on 2 and 883 DF,  p-value: &lt; 2.2e-16</span></code></pre></div>
 <p>The summary returns three coefficients:</p>
 <ul>
-<li>An <code>Intercept</code>.</li>
+<li>
+<code>Intercept</code>.</li>
 <li>
 <code>vowelo</code>.</li>
 <li>
@@ -366,7 +370,7 @@
 <div id="sum-contrasts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sum-contrasts" class="anchor"></a>Sum contrasts</h2>
-<p>Another type of contrast are the so-called <strong>sum contrasts</strong>.</p>
+<p>Another type of coding is <strong>effect coding</strong>. In R, the corresponding contrast type are the so-called <strong>sum contrasts</strong>.</p>
 <p>When using sum contrasts, the levels in a factor are coded using <code>1</code>s, <code>-1</code>s and <code>0</code>s. If you sum the values of each dummy variable you always get <code>0</code> (hence the name “sum” contrast).</p>
 <p>Let’s see what happens to the factor <code>vowel</code> when using sum contrasts (remember that factors use treatment contrasts by default).</p>
 <p>This is how sum coding would look like for this factor:</p>
@@ -420,8 +424,52 @@
 <p>What about <code>u</code> then?</p>
 <p>Easy. You just subtract the coefficients of both <code>a</code> and <code>o</code> from the grand mean: <span class="math inline">\(116.8 - 11.8 - 6.1 = 98.9\)</span>.</p>
 <p>If you want to check that this is correct, the mean duration of <code>u</code> according to the model above where we used treatment contrasts was <span class="math inline">\(128.616 - 29.763 = 98.853\)</span>.</p>
+</div>
+<div id="sum-contrasts-and-interactions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sum-contrasts-and-interactions" class="anchor"></a>Sum contrasts and interactions</h2>
+<p>Sum contrasts can be very handy when the model contains interactions between factors.</p>
+<p>Let’s say we want to include in our model of vowel duration a predictor that specifies the voicing of the stop following the vowel. We also add an interaction between vowel and voicing, so that we can model differences in the effect of voicing across vowels.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">vow_lm_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">v1_duration</span> <span class="op">~</span> <span class="va">c2_voicing</span> <span class="op">+</span> <span class="va">vowel</span> <span class="op">+</span> <span class="va">c2_voicing</span><span class="op">:</span><span class="va">vowel</span>, data <span class="op">=</span> <span class="va">vowels</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">vow_lm_2</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = v1_duration ~ c2_voicing + vowel + c2_voicing:vowel, </span>
+<span class="co">#&gt;     data = vowels)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -64.905 -23.262  -2.033  18.134 115.813 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                            Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)                 123.469      1.449  85.232  &lt; 2e-16 ***</span>
+<span class="co">#&gt; c2_voicingvoiceless         -13.309      2.049  -6.496 1.37e-10 ***</span>
+<span class="co">#&gt; vowel1                       14.606      2.037   7.171 1.57e-12 ***</span>
+<span class="co">#&gt; vowel2                        8.564      2.033   4.212 2.79e-05 ***</span>
+<span class="co">#&gt; c2_voicingvoiceless:vowel1   -5.609      2.880  -1.947   0.0518 .  </span>
+<span class="co">#&gt; c2_voicingvoiceless:vowel2   -4.808      2.876  -1.672   0.0949 .  </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 30.47 on 880 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.1937, Adjusted R-squared:  0.1891 </span>
+<span class="co">#&gt; F-statistic: 42.29 on 5 and 880 DF,  p-value: &lt; 2.2e-16</span></code></pre></div>
+<p>Now the <code>Intercept</code> is the mean vowel duration when the following stop is voiced (the reference level of <code>c2_voicing</code>). This means that the average vowel followed by a voiced stop is 123 ms long in our data.</p>
+<p>The coefficient of <code>c2_voicingvoiceless</code> tells us the mean effect of <code>c2_voicing</code> on vowel duration, averaged across all vowels. So, on average, a vowel is about 13 ms shorter when followed by a voiceless stop.</p>
+<p>The coefficients of <code>vowel1</code> and <code>vowel2</code> indicate the difference between the average vowel duration before a voiced stop (the <code>Intercept</code>) and <code>a</code> and <code>o</code> respectively. As before, to get the difference between the average vowel duration of <code>u</code> before a voiceless stop and the mean vowel duration, you just need to subtract the coefficients of <code>vowel1</code> and <code>vowel2</code> from the <code>Intercept</code>: <span class="math inline">\(123.5 - 14.6 - 8.5 = 100.4\)</span>.</p>
+<p>The last two coefficients, <code>c2_voicingvoiceless:vowel1</code> and <code>c2_voicingvoiceless:vowel2</code> correspond to the difference in the effect of voicing between the average effect of voicing (<code>c2_voicingvoiceless</code>, i.e. -13 ms) and the effect of voicing in <code>a</code> and <code>o</code> respectively. That is, the decrease of vowel duration for <code>a</code> is 5.6 ms greater than the average effect, while the decrease of vowel duration for <code>o</code> is 4.8 ms greater than the average effect.</p>
+<p>Following the usual formula, the effect of voicing for <code>u</code> is <span class="math inline">\(-13.309 - (-5.6) - (-4.8) = -2.9\)</span>.</p>
 <p><br></p>
 </div>
+</div>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>You can learn about more coding schemes here: <a href="https://stats.idre.ucla.edu/spss/webbooks/reg/chapter5/regression-with-spsschapter-5-additional-coding-systems-for-categorical-variables-in-regressionanalysis/" class="uri">https://stats.idre.ucla.edu/spss/webbooks/reg/chapter5/regression-with-spsschapter-5-additional-coding-systems-for-categorical-variables-in-regressionanalysis/</a>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
   </div>
 
