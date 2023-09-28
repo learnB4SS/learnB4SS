@@ -6,15 +6,15 @@
 \alias{learnB4SS-package}
 \title{learnB4SS: Learning materials for the learnB4SS workshop}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-It provides the learning materials from the workshop 'Learn Bayesian
-    Analysis for the Speech Sciences'.
+It provides the learning materials from the workshop 'Learn Bayesian Analysis for the Speech Sciences'.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/learnB4SS/learnB4SS}
+  \item \url{https://learnb4ss.github.io/learnB4SS/}
   \item Report bugs at \url{https://github.com/learnB4SS/learnB4SS/issues}
 }
 
