@@ -1,60 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//index.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/404.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/emotion.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/incomplete.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/learnB4SS-package.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/contrasts.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/open_exercise.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/ex_03.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/open_slides.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/ex_06.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/polite.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/ex_08.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//reference/vowels.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/faqs.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/contrasts.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/full-analysis.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/ex_03.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/glossary.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/ex_06.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/ex_08.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/install-brms.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/faqs.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/install-learnb4ss.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/full-analysis.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/understand-priors.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/glossary.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/articles/why-bayes.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/install-brms.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/authors.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/install-learnb4ss.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/index.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/understand-priors.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/news/index.html</loc>
   </url>
   <url>
-    <loc>https://learnb4ss.github.io/learnB4SS//articles/why-bayes.html</loc>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/emotion.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/incomplete.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/learnB4SS-package.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/open_exercise.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/open_slides.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/polite.html</loc>
+  </url>
+  <url>
+    <loc>https://learnb4ss.github.io/learnB4SS/reference/vowels.html</loc>
   </url>
 </urlset>

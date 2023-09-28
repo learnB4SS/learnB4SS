@@ -1,5 +1,5 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   contrasts: contrasts.html
@@ -13,8 +13,8 @@ articles:
   install-learnb4ss: install-learnb4ss.html
   understand-priors: understand-priors.html
   why-bayes: why-bayes.html
-last_built: 2021-07-20T17:40Z
+last_built: 2023-09-28T15:02Z
 urls:
-  reference: https://learnb4ss.github.io/learnB4SS//reference
-  article: https://learnb4ss.github.io/learnB4SS//articles
+  reference: https://learnb4ss.github.io/learnB4SS/reference
+  article: https://learnb4ss.github.io/learnB4SS/articles
 
