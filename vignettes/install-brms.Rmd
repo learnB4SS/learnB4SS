@@ -84,17 +84,6 @@ You can download the installer from <https://github.com/fxcoudert/gfortran-for-m
 
 If your Mac has an Apple M1 chip, you will need to install **gfortran v11**. You can download it from here: <https://github.com/fxcoudert/gfortran-for-macOS/releases/tag/11-arm-alpha2> (download the `.pkg` package listed under Assets at the bottom of the page).
 
-Now you can set some compiler optimisations to improve compilation speed (optional).
-In the R console, run:
-
-```r
-dotR <- file.path(Sys.getenv("HOME"), ".R")
-if (!file.exists(dotR)) dir.create(dotR)
-M <- file.path(dotR, "Makevars")
-if (!file.exists(M)) file.create(M)
-cat("\nCXX14FLAGS += -O3 -mtune=native -arch x86_64 -ftemplate-depth-256",
-    file = M, sep = "\n", append = FALSE)
-```
 
 ## Install Rstan
 
